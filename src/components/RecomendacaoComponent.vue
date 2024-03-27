@@ -1,64 +1,132 @@
 <template>
-    <div>
-      <div class="description">
-        <label for="option1" class="tab-label">Estação</label>
-      </div>
-      <div class="select-container">
-        <select v-model="selectedOption1" id="option1" class="large-select">
-          <option value="opcao1">Selecione a Estação</option>
-          <option value="opcao2">Maranguape (Funceme)</option>
-          <option value="opcao3">Maracanaú (Funceme)</option>
-        </select>
-      </div>
-      <br>
-      <div class="description">
-        <label for="option2" class="tab-label">Pluviômetro</label>
-      </div>
-      <div class="select-container">
-        <select v-model="selectedOption2" id="option2" class="large-select">
-          <option value="opcaoA">Selecione o Pluviômetro</option>
-          <option value="opcaoB">Maranguape (Funceme)</option>
-          <option value="opcaoC">Maracanaú (Funceme)</option>
-        </select>
-      </div>
-      <br>
-      <div class="description">
-        <label for="option3" class="tab-label">Cultura</label>
-      </div>
-      <div class="select-container">
-        <select v-model="selectedOption3" id="option3" class="large-select">
-          <option value="opcaoX">Selecione a Cultura</option>
-          <option value="opcaoY">Abacate</option>
-          <option value="opcaoZ">Acerola</option>
-        </select>
-      </div>
-      <!-- Inputs na mesma linha -->
-      <div class="inputs-row">
-        <div class="input-container">
-          <div class="description">
-            <label for="input1" class="tab-label">Data de Plantio</label>
-          </div>
-          <input type="text" id="input1" class="large-input" placeholder="Digite a Data">
+  <div>
+    <div class="description">
+      <label
+        for="option1"
+        class="tab-label"
+      >Estação</label>
+    </div>
+    <div class="select-container">
+      <select
+        id="option1"
+        v-model="selectedOption1"
+        class="large-select"
+      >
+        <option value="opcao1">
+          Selecione a Estação
+        </option>
+        <option value="opcao2">
+          Maranguape (Funceme)
+        </option>
+        <option value="opcao3">
+          Maracanaú (Funceme)
+        </option>
+      </select>
+    </div>
+    <br>
+    <div class="description">
+      <label
+        for="option2"
+        class="tab-label"
+      >Pluviômetro</label>
+    </div>
+    <div class="select-container">
+      <select
+        id="option2"
+        v-model="selectedOption2"
+        class="large-select"
+      >
+        <option value="opcaoA">
+          Selecione o Pluviômetro
+        </option>
+        <option value="opcaoB">
+          Maranguape (Funceme)
+        </option>
+        <option value="opcaoC">
+          Maracanaú (Funceme)
+        </option>
+      </select>
+    </div>
+    <br>
+    <div class="description">
+      <label
+        for="option3"
+        class="tab-label"
+      >Cultura</label>
+    </div>
+    <div class="select-container">
+      <select
+        id="option3"
+        v-model="selectedOption3"
+        class="large-select"
+      >
+        <option value="opcaoX">
+          Selecione a Cultura
+        </option>
+        <option value="opcaoY">
+          Abacate
+        </option>
+        <option value="opcaoZ">
+          Acerola
+        </option>
+      </select>
+    </div>
+    <!-- Inputs na mesma linha -->
+    <div class="inputs-row">
+      <div class="input-container">
+        <div class="description">
+          <label
+            for="input1"
+            class="tab-label"
+          >Data de Plantio</label>
         </div>
-        <div class="input-container">
-          <div class="description">
-            <label for="input2" class="tab-label">Eficiência de Irrigação</label>
-          </div>
-          <input type="text" id="input2" class="large-input" placeholder="Digite a Eficiência">
-        </div>
-        <div class="input-container">
-          <div class="description">
-            <label for="input3" class="tab-label">Taxa de Aplicação</label>
-          </div>
-          <input type="text" id="input3" class="large-input" placeholder="Digite a taxa">
-        </div>
+        <input
+          id="input1"
+          type="text"
+          class="large-input"
+          placeholder="Digite a Data"
+        >
       </div>
-      <!-- Botão -->
-      <button class="submit-button" @click="calcularRecomendacao">Calcular Recomendação de Lâmina</button>
+      <div class="input-container">
+        <div class="description">
+          <label
+            for="input2"
+            class="tab-label"
+          >Eficiência de Irrigação</label>
+        </div>
+        <input
+          id="input2"
+          type="text"
+          class="large-input"
+          placeholder="Digite a Eficiência"
+        >
+      </div>
+      <div class="input-container">
+        <div class="description">
+          <label
+            for="input3"
+            class="tab-label"
+          >Taxa de Aplicação</label>
+        </div>
+        <input
+          id="input3"
+          type="text"
+          class="large-input"
+          placeholder="Digite a taxa"
+        >
+      </div>
+    </div>
+    <!-- Botão -->
+    <button
+      class="submit-button"
+      @click="calcularRecomendacao"
+    >
+      Calcular Recomendação de Lâmina
+    </button>
     <!-- Linha -->
     <hr class="line">
-    </div>
-  </template>
+  </div>
+</template>
   
   <script>
 export default {

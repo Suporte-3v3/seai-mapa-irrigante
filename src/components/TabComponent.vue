@@ -1,25 +1,35 @@
 <template>
-    <div class="tab-component">
-      <div class="tab-header">
-        <div class="tab-buttons">
-          <button v-for="(tab, index) in tabs" :key="index" @click="selectTab(index)" :class="{ active: selectedTab === index }">
-            {{ tab.title }}
-          </button>
-        </div>
-        <div class="tab-line"></div>
+  <div class="tab-component">
+    <div class="tab-header">
+      <div class="tab-buttons">
+        <button
+          v-for="(tab, index) in tabs"
+          :key="index"
+          :class="{ active: selectedTab === index }"
+          @click="selectTab(index)"
+        >
+          {{ tab.title }}
+        </button>
       </div>
-      <div class="tab-content">
-        <div v-for="(tab, index) in tabs" :key="index" v-show="selectedTab === index">
-          <template v-if="index === 0"> <!-- Verifica se é a aba 'Recomendação de Lâmina' -->
-            <RecomendacaoComponent />
-          </template>
-          <template v-else>
-            {{ tab.content }}
-          </template>
-        </div>
+      <div class="tab-line" />
+    </div>
+    <div class="tab-content">
+      <div
+        v-for="(tab, index) in tabs"
+        v-show="selectedTab === index"
+        :key="index"
+      >
+        <template v-if="index === 0">
+          <!-- Verifica se é a aba 'Recomendação de Lâmina' -->
+          <RecomendacaoComponent />
+        </template>
+        <template v-else>
+          {{ tab.content }}
+        </template>
       </div>
     </div>
-  </template>
+  </div>
+</template>
   
   <script>
   import RecomendacaoComponent from './RecomendacaoComponent.vue';
