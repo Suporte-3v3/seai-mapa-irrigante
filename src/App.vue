@@ -1,26 +1,47 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <div class="map-container">
+      <!-- Componente do mapa -->
+      <MapView />
+    </div>
+    <div class="tab-container">
+      <!-- Componente de tab -->
+      <TabComponent />
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import MapView from './components/MapView.vue'; // Importe o componente do mapa
+import TabComponent from './components/TabComponent.vue'; // Importe o componente de tab
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    MapView,
+    TabComponent
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+/* Estilos para o contêiner do mapa */
+.map-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 60%; /* Largura do mapa */
+}
+
+/* Estilos para o contêiner da tab */
+.tab-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 60%; /* Largura da tab */
+  background-color: #f0f0f0; /* Cor de fundo opcional */
+  overflow-y: auto; /* Adicione rolagem vertical, se necessário */
 }
 </style>
