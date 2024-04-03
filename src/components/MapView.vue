@@ -53,39 +53,14 @@
           this.handleResize();
         },
         handleResize() {
-          setTimeout(() => {
-            this.map.invalidateSize();
-          }, 100);
+      this.map.invalidateSize(); // Reajusta o tamanho do mapa quando a janela é redimensionada
         }
       }
     };
     </script>
     
     <style scoped>
-    /* Estilos para o contêiner do mapa */
-    .map-container {
-      position: fixed; /* Define a posição fixa */
-      top: 0; /* Alinha o topo */
-      left: 0; /* Alinha a esquerda */
-      bottom: 0; /* Alinha a parte inferior */
-      width: 40%; /* Largura desejada */
-    }
-    
-    /* Remover margens e preenchimentos do corpo da página e esconder a barra de rolagem */
-    body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-    
-    /* Estilos para o restante da página (lado direito) */
-    .page-content {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 40%; /* Largura do mapa */
-      overflow-y: auto; /* Adicione rolagem vertical apenas ao lado direito, se necessário */
-    }
-    </style>
-    
+.map-container {
+  height: 60vh; /* Define a altura do mapa para ocupar 70% da altura da tela */
+}
+</style>

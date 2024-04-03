@@ -1,104 +1,67 @@
 <template>
-  <div class="tab-component">
-    <div class="tab-header">
-      <div class="tab-buttons">
-        <button
-          v-for="(tab, index) in tabs"
-          :key="index"
-          :class="{ active: selectedTab === index }"
-          @click="selectTab(index)"
-        >
-          {{ tab.title }}
-        </button>
-      </div>
-      <div class="tab-line" />
+  <div class="tab-container">
+    <div class="tabs">
+      <div v-for="(tab, index) in tabs" :key="index" @click="changeTab(index)" :class="{ active: activeTab === index }">{{ tab }}</div>
     </div>
-    <div class="tab-content">
-      <div
-        v-for="(tab, index) in tabs"
-        v-show="selectedTab === index"
-        :key="index"
-      >
-        <template v-if="index === 0">
-          <!-- Verifica se é a aba 'Recomendação de Lâmina' -->
-          <RecomendacaoComponent />
-        </template>
-        <template v-else>
-          {{ tab.content }}
-        </template>
-      </div>
+    <div v-show="activeTab === 0"> <!-- Recomendação de Lâmina -->
+      <RecomendacaoComponent />
+    </div>
+    <div v-show="activeTab === 1"> <!-- Notícias -->
+      <!-- Coloque o conteúdo da tab Notícias aqui -->
+    </div>
+    <div v-show="activeTab === 2"> <!-- Ajuda -->
+      <!-- Coloque o conteúdo da tab Ajuda aqui -->
+    </div>
+    <div v-show="activeTab === 3"> <!-- Ajustes -->
+      <!-- Coloque o conteúdo da tab Ajustes aqui -->
     </div>
   </div>
 </template>
-  
-  <script>
-  import RecomendacaoComponent from './RecomendacaoComponent.vue';
-  
-  export default {
-    name: 'TabComponent',
-    components: {
-      RecomendacaoComponent
-    },
-    data() {
-      return {
-        selectedTab: 0, // Índice da aba selecionada
-        tabs: [
-          { title: '💧 Recomendação de Lâmina', content: '' },
-          { title: '📰 Notícias', content: '' },
-          { title: '💬 Ajuda', content: '' },
-          { title: '⚙️ Ajustes', content: '' }
-          // Adicione mais abas conforme necessário
-        ]
-      };
-    },
-    methods: {
-      selectTab(index) {
-        this.selectedTab = index;
-      }
+
+<script>
+/*import RecomendacaoComponent from './RecomendacaoComponent.vue'; */
+
+export default {
+  /*name: 'TabComponent',*/
+  components: {
+    /*RecomendacaoComponent*/
+  },
+  data() {
+    return {
+      activeTab: 0,
+      tabs: ['💧 Recomendação de Lâmina', '📰 Notícias', '📍 Ajuda', ' ⚙️ Ajustes']
+    };
+  },
+  methods: {
+    changeTab(index) {
+      this.activeTab = index;
     }
-  };
-  </script>
-  
-  <style scoped>
-/* Estilos para o componente de tab */
-.tab-component {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: white; /* Defina o fundo como branco */
-}
+  }
+};
+</script>
 
-.tab-header {
-  display: flex;
-  flex-direction: column;
-}
-
-.tab-buttons {
-  display: flex;
-  justify-content: space-around; /* Justifica os botões */
-}
-
-.tab-buttons button {
-  padding: 10px;
-  margin-right: 10px;
-  background-color: white; /* Defina o fundo como branco */
-  border: none;
+<style scoped>
+.tabs div {
+  flex: 1; /* Ocupa todo o espaço disponível horizontalmente */
   cursor: pointer;
-  font-size: 18px; /* Tamanho da fonte */
+  padding: 20px 10px 10px 50px; /* Reduzindo o espaçamento interno */
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  text-align: center; /* Centraliza o texto horizontalmente */
 }
 
-.tab-buttons button.active {
-  background-color: #ccc; /* Altere a cor de fundo da aba ativa */
+.tab-container {
+  display: flex;
+  flex-direction: column;
+  height: 40vh; /* Ocupa toda a altura do pai (App.vue) */
 }
 
-.tab-buttons button:focus {
-  outline: none;
+.tabs {
+  display: flex;
 }
 
-.tab-line {
-  height: 0.1px;
-  width: 100%;
-  background-color: #e2e8f0; /* Cor da linha de grade */
+.tab-content {
+  flex: 1; /* Ocupa todo o espaço disponível verticalmente */
+  overflow-y: auto; /* Adiciona uma barra de rolagem se o conteúdo for maior que a tela */
 }
 </style>

@@ -1,19 +1,17 @@
 <template>
   <div id="app">
     <div class="map-container">
-      <!-- Componente do mapa -->
       <MapView />
     </div>
-    <div class="tab-container">
-      <!-- Componente de tab -->
+    <div class="form-container">
       <TabComponent />
     </div>
   </div>
 </template>
 
 <script>
-import MapView from './components/MapView.vue'; // Importe o componente do mapa
-import TabComponent from './components/TabComponent.vue'; // Importe o componente de tab
+import MapView from './components/MapView.vue';
+import TabComponent from './components/TabComponent.vue';
 
 export default {
   name: 'App',
@@ -25,23 +23,20 @@ export default {
 </script>
 
 <style>
-/* Estilos para o contêiner do mapa */
-.map-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 60%; /* Largura do mapa */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Faz o contêiner ocupar 100% da altura da viewport */
 }
 
-/* Estilos para o contêiner da tab */
-.tab-container {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 60%; /* Largura da tab */
-  background-color: #f0f0f0; /* Cor de fundo opcional */
-  overflow-y: auto; /* Adicione rolagem vertical, se necessário */
+.map-container {
+  flex: 1; /* Ocupa todo o espaço restante na vertical */
+}
+
+.form-container {
+  height: 50%; /* Define a altura do formulário para ocupar 50% da altura da viewport */
+  display: flex;
+  justify-content: center; /* Centraliza o conteúdo do formulário verticalmente */
+  align-items: center; /* Centraliza o conteúdo do formulário horizontalmente */
 }
 </style>
