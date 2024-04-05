@@ -44,7 +44,7 @@ export default {
 .tabs div {
   flex: 1; /* Ocupa todo o espaço disponível horizontalmente */
   cursor: pointer;
-  padding: 20px 10px 10px 50px; /* Reduzindo o espaçamento interno */
+  padding: 15px 50px 15px 50px; /* Reduzindo o espaçamento interno */
   border: 2px solid #ccc;
   border-radius: 10px;
   text-align: center; /* Centraliza o texto horizontalmente */
