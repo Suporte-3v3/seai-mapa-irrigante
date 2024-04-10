@@ -1,7 +1,7 @@
 <template>
   <div class="tab-container">
     <div class="tabs">
-      <div v-for="(tab, index) in tabs" :key="index" @click="changeTab(index)" :class="{ active: activeTab === index }">{{ tab }}</div>
+      <div v-for="(tab, index) in tabs" :key="index" @click="changeTab(index)" :class="{ 'tab-button': true, active: activeTab === index }">{{ tab }}</div>
     </div>
     <div v-show="activeTab === 0"> <!-- Recomendação de Lâmina -->
       <RecomendacaoComponent />
@@ -19,12 +19,12 @@
 </template>
 
 <script>
-/*import RecomendacaoComponent from './RecomendacaoComponent.vue'; */
+import RecomendacaoComponent from './RecomendacaoComponent.vue';
 
 export default {
-  /*name: 'TabComponent',*/
+  name: 'TabComponent',
   components: {
-    /*RecomendacaoComponent*/
+    RecomendacaoComponent
   },
   data() {
     return {
@@ -41,23 +41,33 @@ export default {
 </script>
 
 <style scoped>
-.tabs div {
+.tabs {
+  display: flex;
+}
+
+.tab-button {
   flex: 1; /* Ocupa todo o espaço disponível horizontalmente */
   cursor: pointer;
-  padding: 15px 50px 15px 50px; /* Reduzindo o espaçamento interno */
-  border: 2px solid #ccc;
+  padding: 15px 50px; /* Ajusta o espaçamento interno */
+  border: 1px solid #007bff; /* Define a cor da borda */
   border-radius: 10px;
   text-align: center; /* Centraliza o texto horizontalmente */
+  font-size: 18px; /* Ajusta o tamanho do texto */
+  font-family: "Scorno Semi Bold", sans-serif; /* Define a fonte */
+  font-weight: bold; /* Deixa o texto em negrito */
+  transition: background-color 0.3s, box-shadow 0.3s; /* Adiciona transição suave */
+}
+
+.tab-button.active {
+  background-color: #007bff; /* Altera a cor de fundo quando o tab está ativo */
+  color: #fff; /* Altera a cor do texto quando o tab está ativo */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra sutil */
 }
 
 .tab-container {
   display: flex;
   flex-direction: column;
   height: 40vh; /* Ocupa toda a altura do pai (App.vue) */
-}
-
-.tabs {
-  display: flex;
 }
 
 .tab-content {

@@ -2,11 +2,10 @@
   <div id="app">
     <nav class="navbar">
       <div class="navbar-brand">
-        <strong style="font-family: apple-system; font-size: 24px; color: #003c66; font-weight: bold;">SEAI - IRRIGANTE</strong>
+        <strong style="font-family: Scorno Semi Bold, sans-serif; font-size: 24px; color: #003c66; font-weight: bold;">SEAI - IRRIGANTE</strong>
       </div>
       <div class="user-info">
-        <img src="/icones/user-icon.png" alt="user icon" class="user-icon">
-        <span class="user-name" style="color: #527bff;">admin</span>
+        <span class="user-name" style="color: #527bff; font-family: Scorno Semi Bold, sans-serif; font-weight: bold">admin</span>
       </div>
     </nav>
     <MapView />
@@ -28,12 +27,7 @@ export default {
 </script>
 
 <style>
-/* Removendo espaçamento padrão do corpo da página */
-body {
-  margin: 0;
-  padding: 0;
-}
-
+/* Estilos para dispositivos maiores */
 .navbar {
   background-color: #fff; /* Cor de fundo branca */
   border-bottom: 1px solid #ccc; /* Borda na parte inferior */
@@ -50,6 +44,7 @@ body {
   display: flex;
   align-items: center; /* Centraliza verticalmente os elementos */
   margin-right: 20px; /* Espaço à direita */
+
 }
 
 .user-icon {
@@ -61,5 +56,17 @@ body {
 .user-name {
   color: #527bff; /* Cor do nome do usuário */
   font-weight: bold;
+}
+
+/* Estilos para dispositivos menores */
+@media screen and (max-width: 768px) {
+  .navbar {
+    flex-direction: column; /* Altera a direção do flex para empilhar em coluna */
+  }
+
+  .user-info {
+    margin-right: 0; /* Remove o espaço à direita */
+    margin-top: 10px; /* Adiciona um espaço superior */
+  }
 }
 </style>
