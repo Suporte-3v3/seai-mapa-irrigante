@@ -1,9 +1,9 @@
 <template>
-    <div
-      ref="map"
-      class="map-container"
-    />
-  </template>
+  <div
+    ref="map"
+    class="map-container"
+  />
+</template>
     
     <script>
     import L from 'leaflet';
