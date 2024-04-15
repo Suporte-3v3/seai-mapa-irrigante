@@ -2,10 +2,17 @@
   <div id="app">
     <nav class="navbar">
       <div class="navbar-content">
-        <strong class="navbar-brand">SEAI - IRRIGANTE</strong>
+        <strong class="navbar-brand">SEAI IRRIGANTE</strong>
       </div>
       <div class="tabs">
-        <div v-for="(tab, index) in tabs" :key="index" @click="changeTab(index)" :class="{ 'tab-button': true, active: activeTab === index }">{{ tab }}</div>
+        <div
+          v-for="(tab, index) in tabs"
+          :key="index"
+          :class="{ 'tab-button': true, active: activeTab === index }"
+          @click="changeTab(index)"
+        >
+          {{ tab }}
+        </div>
       </div>
     </nav>
     <div v-show="activeTab === 0">
@@ -82,6 +89,7 @@ body {
   font-family: "Scorno Semi Bold", sans-serif;
   font-weight: bold;
   color: #fff; /* Cor do texto dos tabs */
+  text-align: center; /* Centraliza o texto horizontalmente */
 }
 
 .tab-button.active {
