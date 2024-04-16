@@ -32,6 +32,7 @@
 import MapView from './components/MapView.vue';
 import RecomendacaoComponent from './components/RecomendacaoComponent.vue';
 
+
 export default {
   name: 'App',
   components: {
