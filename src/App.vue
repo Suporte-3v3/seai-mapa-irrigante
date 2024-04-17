@@ -17,27 +17,31 @@
     </nav>
     <div v-show="activeTab === 0">
       <MapView />
-      <div class="recomendacao-container">
-        <RecomendacaoComponent />
+      <div class="recomendation-container">
+        <RecomendationComponent />
       </div>
     </div>
     <div v-show="activeTab === 1">
-      <!-- Conteúdo da aba Notícias -->
+      <NewsComponent />
     </div>
-    <!-- Adicione outros componentes para cada tab conforme necessário -->
+    <FaqComponent />
   </div>
 </template>
 
 <script>
 import MapView from './components/MapView.vue';
-import RecomendacaoComponent from './components/RecomendacaoComponent.vue';
+import RecomendationComponent from './components/RecomendationComponent.vue';
+import NewsComponent from './components/NewsComponent.vue';
+import FaqComponent from './components/FaqComponent.vue';
 
 
 export default {
   name: 'App',
   components: {
     MapView,
-    RecomendacaoComponent
+    RecomendationComponent,
+    NewsComponent,
+    FaqComponent
     // Adicione outros componentes aqui conforme necessário
   },
   data() {
@@ -98,7 +102,7 @@ body {
   color: #007bff; /* Cor do texto dos tabs quando ativo */
 }
 
-.recomendacao-container {
+.recomendation-container {
   padding: 20px;
 }
 </style>

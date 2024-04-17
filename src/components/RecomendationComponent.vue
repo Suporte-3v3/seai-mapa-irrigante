@@ -11,7 +11,7 @@
             <div class="input-group">
               <select
                 id="option1"
-                v-model="selectedOption1"
+                v-model="selectedEstation"
                 class="form-control"
               >
                 <option value="opcao1">
@@ -36,7 +36,7 @@
             <div class="input-group">
               <select
                 id="option2"
-                v-model="selectedOption2"
+                v-model="selectedPluviometer"
                 class="form-control"
               >
                 <option value="opcaoA">
@@ -61,7 +61,7 @@
             <div class="input-group">
               <select
                 id="option3"
-                v-model="selectedOption3"
+                v-model="selectedCulture"
                 class="form-control"
               >
                 <option value="opcaoX">
@@ -104,7 +104,7 @@
             <div class="input-group">
               <select
                 id="option4"
-                v-model="selectedOption4"
+                v-model="selectedSystemIrrigation"
                 class="form-control"
                 @change="toggleAdditionalFields"
               >
@@ -141,6 +141,8 @@
                 id="input2"
                 type="text"
                 class="form-control"
+                v-model="validationIrrigationEfficiency"
+                @input="validateNumberInput($event, 'validationIrrigationEfficiency')"
                 placeholder="Digite a Eficiência"
                 :disabled="isFieldDisabled"
               >
@@ -162,7 +164,7 @@
         class="row"
       >
         <div
-          v-if="selectedOption4 === 'Aspersão'"
+          v-if="selectedSystemIrrigation === 'Aspersão'"
           class="col-md-4"
         >
           <div class="form-group mb-4">
@@ -173,11 +175,13 @@
             <input
               type="text"
               class="form-control"
+              v-model="validationPrecipitationSprinkler"
+            @input="validateNumberInput($event, 'validationPrecipitationSprinkler')"
             >
           </div>
         </div>
         <div
-          v-if="selectedOption4 === 'MicroAspersão'"
+          v-if="selectedSystemIrrigation === 'MicroAspersão'"
           class="col-md-4"
         >
           <div class="form-group mb-4">
@@ -188,6 +192,8 @@
             <input
               type="text"
               class="form-control"
+              v-model="validationFlowSystem"
+            @input="validateNumberInput($event, 'validationFlowSystem')"
             >
           </div>
           <div class="form-group mb-4">
@@ -198,6 +204,8 @@
             <input
               type="text"
               class="form-control"
+              v-model="validationPlantedArea"
+            @input="validateNumberInput($event, 'validationPlantedArea')"
             >
           </div>
           <div class="form-group mb-4">
@@ -208,6 +216,8 @@
             <input
               type="text"
               class="form-control"
+              v-model="validationEffectiveArea"
+            @input="validateNumberInput($event, 'validationEffectiveArea')"
             >
           </div>
           <div class="form-group mb-4">
@@ -218,11 +228,13 @@
             <input
               type="text"
               class="form-control"
+              v-model="validationNumberPlants"
+            @input="validateNumberInput($event, 'validationNumberPlants')"
             >
           </div>
         </div>
         <div
-          v-if="selectedOption4 === 'Gotejamento'"
+          v-if="selectedSystemIrrigation === 'Gotejamento'"
           class="col-md-4"
         >
           <div class="form-group mb-4">
@@ -233,6 +245,8 @@
             <input
               type="text"
               class="form-control"
+              v-model="validationFlowSystem"
+            @input="validateNumberInput($event, 'validationFlowSystem')"
             >
           </div>
           <div class="form-group mb-4">
@@ -243,6 +257,8 @@
             <input
               type="text"
               class="form-control"
+              v-model="validationPlantedArea"
+            @input="validateNumberInput($event, 'validationPlantedArea')"
             >
           </div>
           <div class="form-group mb-4">
@@ -253,6 +269,8 @@
             <input
               type="text"
               class="form-control"
+              v-model="validationEffectiveArea"
+            @input="validateNumberInput($event, 'validationEffectiveArea')"
             >
           </div>
           <div class="form-group mb-4">
@@ -263,11 +281,13 @@
             <input
               type="text"
               class="form-control"
+              v-model="validationNumberPlants"
+            @input="validateNumberInput($event, 'validationNumberPlants')"
             >
           </div>
         </div>
         <div
-          v-if="selectedOption4 === 'Pivô Central'"
+          v-if="selectedSystemIrrigation === 'Pivô Central'"
           class="col-md-4"
         >
           <div class="form-group mb-4">
@@ -278,11 +298,13 @@
             <input
               type="text"
               class="form-control"
+              v-model="validationPrecipitationAround"
+            @input="validateNumberInput($event, 'validationPrecipitationAround')"
             >
           </div>
         </div>
         <div
-          v-if="selectedOption4 === 'Sulcos'"
+          v-if="selectedSystemIrrigation === 'Sulcos'"
           class="col-md-4"
         >
           <div class="form-group mb-4">
@@ -293,6 +315,8 @@
             <input
               type="text"
               class="form-control"
+              v-model="validationFurrowLength"
+            @input="validateNumberInput($event, 'validationFurrowLength')"
             >
           </div>
           <div class="form-group mb-4">
@@ -303,6 +327,8 @@
             <input
               type="text"
               class="form-control"
+              v-model="validationGrooveSpacing"
+            @input="validateNumberInput($event, 'validationGrooveSpacing')"
             >
           </div>
           <div class="form-group mb-4">
@@ -313,6 +339,8 @@
             <input
               type="text"
               class="form-control"
+              v-model="validationFlowGrooves"
+            @input="validateNumberInput($event, 'validationFlowGrooves')"
             >
           </div>
         </div>
@@ -321,13 +349,13 @@
         <div class="col-md-12">
           <button
             class="btn btn-primary"
-            @click="calcularRecomendacao"
+            @click="CalculateRecomendation"
           >
             Simular Lâmina
           </button>
           <button
             class="btn btn-danger mr-2"
-            @click="limparCampos"
+            @click="ClearFields"
           >
             Limpar
           </button>
@@ -340,13 +368,23 @@
 
 <script>
 export default {
-  name: 'RecomendacaoComponent',
+  name: 'RecomendationComponent',
   data() {
     return {
-      selectedOption1: 'opcao1',
-      selectedOption2: 'opcaoA',
-      selectedOption3: 'opcaoX',
-      selectedOption4: 'opcao1',
+      selectedEstation: 'opcao1',
+      selectedPluviometer: 'opcaoA',
+      selectedCulture: 'opcaoX',
+      selectedSystemIrrigation: 'opcao1',
+      validationPrecipitationSprinkler:'',
+      validationFlowSystem:'',
+      validationPlantedArea:'',
+      validationEffectiveArea:'',
+      validationNumberPlants:'',
+      validationPrecipitationAround:'',
+      validationFurrowLength:'',
+      validationGrooveSpacing:'',
+      validationFlowGrooves:'',
+      validationIrrigationEfficiency:'',
       showAdditionalFields: false,
       useDefault: true
     };
@@ -357,22 +395,30 @@ export default {
     }
   },
   methods: {
-    calcularRecomendacao() {
+    CalculateRecomendation() {
       // Implementação do método de cálculo aqui
     },
-    limparCampos() {
-    this.selectedOption1 = 'opcao1';
-    this.selectedOption2 = 'opcaoA';
-    this.selectedOption3 = 'opcaoX';
-    this.selectedOption4 = 'opcao1';
+    ClearFields() {
+    this.selectedEstation = 'opcao1';
+    this.selectedPluviometer = 'opcaoA';
+    this.selectedCulture = 'opcaoX';
+    this.selectedSystemIrrigation = 'opcao1';
     this.input1 = '';
     this.input2 = '';
     // Limpar outros campos adicionais, se houver
   },
     toggleAdditionalFields() {
-      this.showAdditionalFields = ['Aspersão', 'MicroAspersão', 'Gotejamento', 'Pivô Central', 'Sulcos'].includes(this.selectedOption4);
-    }
-    
+      this.showAdditionalFields = ['Aspersão', 'MicroAspersão', 'Gotejamento', 'Pivô Central', 'Sulcos'].includes(this.selectedSystemIrrigation);
+    },
+    validateNumberInput(event, fieldName) {
+      // Expressão regular para aceitar somente números e ponto
+      const regex = /^[0-9.]*$/;
+      // Verifica se o valor do campo corresponde à expressão regular
+      if (!regex.test(event.target.value)) {
+        // Se não corresponder, remove o último caractere inserido
+        this[fieldName] = event.target.value.slice(0, -1);
+      }
+    },
   }
 };
 </script>
@@ -380,5 +426,9 @@ export default {
 <style>
 body {
   background-color: #eff4f7; /* Cor de fundo desejada */
+}
+
+.btn-primary {
+  margin-right: 10px;
 }
 </style>

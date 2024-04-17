@@ -59,9 +59,9 @@ export default {
           this.map.setView([latitude, longitude], 7);
     
           // Adicionar marcador na localização do usuário
-          L.marker([latitude, longitude]).addTo(this.map)
-            .bindPopup('Você está aqui.')
-            .openPopup();
+         /* L.marker([latitude, longitude]).addTo(this.map)*/
+            /*.bindPopup('Você está aqui.')*/
+            /*.openPopup();*/
         }, error => {
           console.error('Erro ao obter a localização do usuário:', error);
         });
