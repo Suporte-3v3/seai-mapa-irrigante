@@ -24,7 +24,9 @@
     <div v-show="activeTab === 1">
       <NewsComponent />
     </div>
-    <FaqComponent />
+    <div v-show="activeTab === 2">
+      <FaqComponent />
+    </div>
   </div>
 </template>
 

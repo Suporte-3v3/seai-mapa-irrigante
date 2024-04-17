@@ -139,12 +139,12 @@
             <div class="input-group">
               <input
                 id="input2"
+                v-model="validationIrrigationEfficiency"
                 type="text"
                 class="form-control"
-                v-model="validationIrrigationEfficiency"
-                @input="validateNumberInput($event, 'validationIrrigationEfficiency')"
                 placeholder="Digite a Eficiência"
                 :disabled="isFieldDisabled"
+                @input="validateNumberInput($event, 'validationIrrigationEfficiency')"
               >
               <div class="input-group-append">
                 <div class="input-group-text">
@@ -173,10 +173,10 @@
               style="color: #007bff;"
             >Precipitação por Aspersor (mm/h)</label>
             <input
+              v-model="validationPrecipitationSprinkler"
               type="text"
               class="form-control"
-              v-model="validationPrecipitationSprinkler"
-            @input="validateNumberInput($event, 'validationPrecipitationSprinkler')"
+              @input="validateNumberInput($event, 'validationPrecipitationSprinkler')"
             >
           </div>
         </div>
@@ -190,10 +190,10 @@
               style="color: #007bff;"
             >Vazão do Sistema (l/h)</label>
             <input
+              v-model="validationFlowSystem"
               type="text"
               class="form-control"
-              v-model="validationFlowSystem"
-            @input="validateNumberInput($event, 'validationFlowSystem')"
+              @input="validateNumberInput($event, 'validationFlowSystem')"
             >
           </div>
           <div class="form-group mb-4">
@@ -202,10 +202,10 @@
               style="color: #007bff;"
             >Área Plantada (m²)</label>
             <input
+              v-model="validationPlantedArea"
               type="text"
               class="form-control"
-              v-model="validationPlantedArea"
-            @input="validateNumberInput($event, 'validationPlantedArea')"
+              @input="validateNumberInput($event, 'validationPlantedArea')"
             >
           </div>
           <div class="form-group mb-4">
@@ -214,10 +214,10 @@
               style="color: #007bff;"
             >Área efetiva de cada planta (m²/planta)</label>
             <input
+              v-model="validationEffectiveArea"
               type="text"
               class="form-control"
-              v-model="validationEffectiveArea"
-            @input="validateNumberInput($event, 'validationEffectiveArea')"
+              @input="validateNumberInput($event, 'validationEffectiveArea')"
             >
           </div>
           <div class="form-group mb-4">
@@ -226,10 +226,10 @@
               style="color: #007bff;"
             >Número de Plantas por área (plantas/m²)</label>
             <input
+              v-model="validationNumberPlants"
               type="text"
               class="form-control"
-              v-model="validationNumberPlants"
-            @input="validateNumberInput($event, 'validationNumberPlants')"
+              @input="validateNumberInput($event, 'validationNumberPlants')"
             >
           </div>
         </div>
@@ -243,10 +243,10 @@
               style="color: #007bff;"
             >Vazão do Sistema (l/h)</label>
             <input
+              v-model="validationFlowSystem"
               type="text"
               class="form-control"
-              v-model="validationFlowSystem"
-            @input="validateNumberInput($event, 'validationFlowSystem')"
+              @input="validateNumberInput($event, 'validationFlowSystem')"
             >
           </div>
           <div class="form-group mb-4">
@@ -255,10 +255,10 @@
               style="color: #007bff;"
             >Área Plantada (m²)</label>
             <input
+              v-model="validationPlantedArea"
               type="text"
               class="form-control"
-              v-model="validationPlantedArea"
-            @input="validateNumberInput($event, 'validationPlantedArea')"
+              @input="validateNumberInput($event, 'validationPlantedArea')"
             >
           </div>
           <div class="form-group mb-4">
@@ -267,10 +267,10 @@
               style="color: #007bff;"
             >Área efetiva de cada planta (m²/planta)</label>
             <input
+              v-model="validationEffectiveArea"
               type="text"
               class="form-control"
-              v-model="validationEffectiveArea"
-            @input="validateNumberInput($event, 'validationEffectiveArea')"
+              @input="validateNumberInput($event, 'validationEffectiveArea')"
             >
           </div>
           <div class="form-group mb-4">
@@ -279,10 +279,10 @@
               style="color: #007bff;"
             >Número de Plantas por área (plantas/m²)</label>
             <input
+              v-model="validationNumberPlants"
               type="text"
               class="form-control"
-              v-model="validationNumberPlants"
-            @input="validateNumberInput($event, 'validationNumberPlants')"
+              @input="validateNumberInput($event, 'validationNumberPlants')"
             >
           </div>
         </div>
@@ -296,10 +296,10 @@
               style="color: #007bff;"
             >Precipitação por volta (mm/volta)</label>
             <input
+              v-model="validationPrecipitationAround"
               type="text"
               class="form-control"
-              v-model="validationPrecipitationAround"
-            @input="validateNumberInput($event, 'validationPrecipitationAround')"
+              @input="validateNumberInput($event, 'validationPrecipitationAround')"
             >
           </div>
         </div>
@@ -313,10 +313,10 @@
               style="color: #007bff;"
             >Comprimento dos Sulcos (m)</label>
             <input
+              v-model="validationFurrowLength"
               type="text"
               class="form-control"
-              v-model="validationFurrowLength"
-            @input="validateNumberInput($event, 'validationFurrowLength')"
+              @input="validateNumberInput($event, 'validationFurrowLength')"
             >
           </div>
           <div class="form-group mb-4">
@@ -325,10 +325,10 @@
               style="color: #007bff;"
             >Espaçamento entre os Sulcos (m)</label>
             <input
+              v-model="validationGrooveSpacing"
               type="text"
               class="form-control"
-              v-model="validationGrooveSpacing"
-            @input="validateNumberInput($event, 'validationGrooveSpacing')"
+              @input="validateNumberInput($event, 'validationGrooveSpacing')"
             >
           </div>
           <div class="form-group mb-4">
@@ -337,10 +337,10 @@
               style="color: #007bff;"
             >Vazão por Sulco (l/h)</label>
             <input
+              v-model="validationFlowGrooves"
               type="text"
               class="form-control"
-              v-model="validationFlowGrooves"
-            @input="validateNumberInput($event, 'validationFlowGrooves')"
+              @input="validateNumberInput($event, 'validationFlowGrooves')"
             >
           </div>
         </div>
