@@ -107,4 +107,19 @@ body {
 .recomendation-container {
   padding: 20px;
 }
+
+@media (max-width: 700px) {
+  .navbar-content {
+    width: 100%;
+    text-align: center;
+  }
+  .tabs {
+    width: 100%;
+    justify-content: space-around;
+  }
+  .tab-button {
+    flex-grow: 1;
+    text-align: center;
+  }
+}
 </style>

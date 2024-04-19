@@ -1,56 +1,129 @@
 <template>
-  <div>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group mb-4">
-            <label
-              for="option1"
-              class="tab-label"
-            >Estação</label>
-            <div class="input-group">
-              <select
-                id="option1"
-                v-model="selectedEstation"
-                class="form-control"
+  <div class="container">
+    <!-- Card para envolver os toogle switches -->
+    <div class="card">
+      <div class="card-body">
+        <!-- Primeiro par de toogle switches -->
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-check form-switch">
+              <input
+                id="toggleSwitch"
+                v-model="toggleSwitchStation"
+                class="form-check-input"
+                type="checkbox"
               >
-                <option value="opcao1">
-                  Selecione a Estação
-                </option>
-                <option value="opcao2">
-                  Maranguape (Funceme)
-                </option>
-                <option value="opcao3">
-                  Maracanaú (Funceme)
-                </option>
-              </select>
+              <label
+                class="form-check-label"
+                for="toggleSwitch"
+              >Utilizar ET0 Automática?</label>
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="form-group mb-4">
-            <label
-              for="option2"
-              class="tab-label"
-            >Pluviômetro</label>
-            <div class="input-group">
-              <select
-                id="option2"
-                v-model="selectedPluviometer"
-                class="form-control"
+        <!-- Segundo par de toogle switches -->
+        <div class="row mt-2">
+          <div class="col-md-12">
+            <div class="form-check form-switch">
+              <input
+                id="toggleSwitch"
+                v-model="toggleSwitchPluviometer"
+                class="form-check-input"
+                type="checkbox"
               >
-                <option value="opcaoA">
-                  Selecione o Pluviômetro
-                </option>
-                <option value="opcaoB">
-                  Maranguape (Funceme)
-                </option>
-                <option value="opcaoC">
-                  Maracanaú (Funceme)
-                </option>
-              </select>
+              <label
+                class="form-check-label"
+                for="toggleSwitch"
+              >Utilizar Precipitação Automática?</label>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-4">
+        <div class="form-group mb-4">
+          <label
+            for="option1"
+            class="tab-label"
+          >Estação</label>
+          <div class="input-group">
+            <select
+              id="option1"
+              v-model="selectedEstation"
+              class="form-control"
+              :disabled="!isStationDisabled"
+            >
+              <option value="opcao1">
+                Selecione a Estação
+              </option>
+              <option value="opcao2">
+                Maranguape (Funceme)
+              </option>
+              <option value="opcao3">
+                Maracanaú (Funceme)
+              </option>
+            </select>
+          </div>
+        </div>
+        <div
+          v-if="!isStationDisabled"
+          class="form-group mb-4"
+        >
+          <label
+            for="newForm"
+            class="tab-label"
+            style="color: #007bff;"
+          >ET0 Manual</label>
+          <input
+            id="newForm"
+            class="form-control"
+            type="number"
+            placeholder="Digite o Valor da ET0"
+          >
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group mb-4">
+          <label
+            for="option2"
+            class="tab-label"
+          >Pluviômetro</label>
+          <div class="input-group">
+            <select
+              id="option2"
+              v-model="selectedPluviometer"
+              class="form-control"
+              :disabled="!isPluviometerDisabled"
+            >
+              <option value="opcaoA">
+                Selecione o Pluviômetro
+              </option>
+              <option value="opcaoB">
+                Maranguape (Funceme)
+              </option>
+              <option value="opcaoC">
+                Maracanaú (Funceme)
+              </option>
+            </select>
+          </div>
+        </div>
+        <div
+          v-if="!isPluviometerDisabled"
+          class="form-group mb-4"
+        >
+          <label
+            for="newForm"
+            class="tab-label"
+            style="color: #007bff;"
+          >Precipitação Manual</label>
+          <input
+            id="newForm"
+            class="form-control"
+            type="number"
+            placeholder="Digite o Valor da Precipitação"
+          >
         </div>
         <div class="col-md-4">
           <div class="form-group mb-4">
@@ -140,11 +213,10 @@
               <input
                 id="input2"
                 v-model="validationIrrigationEfficiency"
-                type="text"
+                type="number"
                 class="form-control"
                 placeholder="Digite a Eficiência"
                 :disabled="isFieldDisabled"
-                @input="validateNumberInput($event, 'validationIrrigationEfficiency')"
               >
               <div class="input-group-append">
                 <div class="input-group-text">
@@ -174,9 +246,9 @@
             >Precipitação por Aspersor (mm/h)</label>
             <input
               v-model="validationPrecipitationSprinkler"
-              type="text"
+              type="number"
               class="form-control"
-              @input="validateNumberInput($event, 'validationPrecipitationSprinkler')"
+              placeholder="Digite a Precipitação por Aspersor"
             >
           </div>
         </div>
@@ -191,9 +263,9 @@
             >Vazão do Sistema (l/h)</label>
             <input
               v-model="validationFlowSystem"
-              type="text"
+              type="number"
               class="form-control"
-              @input="validateNumberInput($event, 'validationFlowSystem')"
+              placeholder="Digite a Vazão do Sistema"
             >
           </div>
           <div class="form-group mb-4">
@@ -203,9 +275,9 @@
             >Área Plantada (m²)</label>
             <input
               v-model="validationPlantedArea"
-              type="text"
+              type="number"
               class="form-control"
-              @input="validateNumberInput($event, 'validationPlantedArea')"
+              placeholder="Digite a Área Plantada"
             >
           </div>
           <div class="form-group mb-4">
@@ -215,9 +287,9 @@
             >Área efetiva de cada planta (m²/planta)</label>
             <input
               v-model="validationEffectiveArea"
-              type="text"
+              type="number"
               class="form-control"
-              @input="validateNumberInput($event, 'validationEffectiveArea')"
+              placeholder="Digite a Área efetiva de cada planta"
             >
           </div>
           <div class="form-group mb-4">
@@ -227,9 +299,9 @@
             >Número de Plantas por área (plantas/m²)</label>
             <input
               v-model="validationNumberPlants"
-              type="text"
+              type="number"
               class="form-control"
-              @input="validateNumberInput($event, 'validationNumberPlants')"
+              placeholder="Digite o Número de Plantas por área"
             >
           </div>
         </div>
@@ -244,9 +316,9 @@
             >Vazão do Sistema (l/h)</label>
             <input
               v-model="validationFlowSystem"
-              type="text"
+              type="number"
               class="form-control"
-              @input="validateNumberInput($event, 'validationFlowSystem')"
+              placeholder="Digite a Vazão do Sistema"
             >
           </div>
           <div class="form-group mb-4">
@@ -256,9 +328,9 @@
             >Área Plantada (m²)</label>
             <input
               v-model="validationPlantedArea"
-              type="text"
+              type="number"
               class="form-control"
-              @input="validateNumberInput($event, 'validationPlantedArea')"
+              placeholder="Digite a Área Plantada"
             >
           </div>
           <div class="form-group mb-4">
@@ -268,9 +340,9 @@
             >Área efetiva de cada planta (m²/planta)</label>
             <input
               v-model="validationEffectiveArea"
-              type="text"
+              type="number"
               class="form-control"
-              @input="validateNumberInput($event, 'validationEffectiveArea')"
+              placeholder="Digite a Área efetiva de cada planta"
             >
           </div>
           <div class="form-group mb-4">
@@ -280,9 +352,9 @@
             >Número de Plantas por área (plantas/m²)</label>
             <input
               v-model="validationNumberPlants"
-              type="text"
+              type="number"
               class="form-control"
-              @input="validateNumberInput($event, 'validationNumberPlants')"
+              placeholder="Digite o Número de Plantas por área"
             >
           </div>
         </div>
@@ -294,12 +366,12 @@
             <label
               class="tab-label"
               style="color: #007bff;"
-            >Precipitação por volta (mm/volta)</label>
+            >Precipitação por Volta (mm/volta)</label>
             <input
               v-model="validationPrecipitationAround"
-              type="text"
+              type="number"
               class="form-control"
-              @input="validateNumberInput($event, 'validationPrecipitationAround')"
+              placeholder="Digite a Precipitação por Volta"
             >
           </div>
         </div>
@@ -314,9 +386,9 @@
             >Comprimento dos Sulcos (m)</label>
             <input
               v-model="validationFurrowLength"
-              type="text"
+              type="number"
               class="form-control"
-              @input="validateNumberInput($event, 'validationFurrowLength')"
+              placeholder="Digite o Comprimento dos Sulcos"
             >
           </div>
           <div class="form-group mb-4">
@@ -326,9 +398,9 @@
             >Espaçamento entre os Sulcos (m)</label>
             <input
               v-model="validationGrooveSpacing"
-              type="text"
+              type="number"
               class="form-control"
-              @input="validateNumberInput($event, 'validationGrooveSpacing')"
+              placeholder="Digite o Espaçamento entre os Sulcos"
             >
           </div>
           <div class="form-group mb-4">
@@ -338,9 +410,9 @@
             >Vazão por Sulco (l/h)</label>
             <input
               v-model="validationFlowGrooves"
-              type="text"
+              type="number"
               class="form-control"
-              @input="validateNumberInput($event, 'validationFlowGrooves')"
+              placeholder="Digite a Vazão por Sulco"
             >
           </div>
         </div>
@@ -375,23 +447,22 @@ export default {
       selectedPluviometer: 'opcaoA',
       selectedCulture: 'opcaoX',
       selectedSystemIrrigation: 'opcao1',
-      validationPrecipitationSprinkler:'',
-      validationFlowSystem:'',
-      validationPlantedArea:'',
-      validationEffectiveArea:'',
-      validationNumberPlants:'',
-      validationPrecipitationAround:'',
-      validationFurrowLength:'',
-      validationGrooveSpacing:'',
-      validationFlowGrooves:'',
-      validationIrrigationEfficiency:'',
       showAdditionalFields: false,
-      useDefault: true
+      useDefault: true,
+      toggleSwitchStation: true,
+      toggleSwitchPluviometer: true,
+
     };
   },
   computed: {
     isFieldDisabled() {
       return this.useDefault;
+    },
+    isStationDisabled() {
+      return this.toggleSwitchStation;
+    },
+    isPluviometerDisabled() {
+      return this.toggleSwitchPluviometer;
     }
   },
   methods: {
@@ -410,15 +481,12 @@ export default {
     toggleAdditionalFields() {
       this.showAdditionalFields = ['Aspersão', 'MicroAspersão', 'Gotejamento', 'Pivô Central', 'Sulcos'].includes(this.selectedSystemIrrigation);
     },
-    validateNumberInput(event, fieldName) {
-      // Expressão regular para aceitar somente números e ponto
+    /*validateNumberInput(event, fieldName) {
       const regex = /^[0-9.]*$/;
-      // Verifica se o valor do campo corresponde à expressão regular
       if (!regex.test(event.target.value)) {
-        // Se não corresponder, remove o último caractere inserido
         this[fieldName] = event.target.value.slice(0, -1);
       }
-    },
+    },*/
   }
 };
 </script>
@@ -430,5 +498,9 @@ body {
 
 .btn-primary {
   margin-right: 10px;
+}
+
+.input-group-append{
+  margin-right: 0px;
 }
 </style>
