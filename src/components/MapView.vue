@@ -7,7 +7,7 @@
 
 <script>
 import L from 'leaflet';
-import { data as ceara_data } from '/Users/Naylton 3v3/Documents/seai-mapa-irrigante/src/cearaGeojson'
+import { data as ceara_data } from '/Users/Naylton Nobre/Documents/GitHub/seai-mapa-irrigante/src/cearaGeojson'
 
 export default {
   name: 'MapView',

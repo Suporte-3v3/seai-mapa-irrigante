@@ -42,7 +42,7 @@
   </div>
   <div class="container">
     <div class="row mt-3">
-      <div class="col-md-4">
+      <div class="col-md-12">
         <div class="form-group mb-4">
           <label
             for="option1"
@@ -84,7 +84,7 @@
           >
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-12">
         <div class="form-group mb-4">
           <label
             for="option2"
@@ -125,7 +125,7 @@
             placeholder="Digite o Valor da Precipitação"
           >
         </div>
-        <div class="col-md-4">
+        <div class="col-md-12">
           <div class="form-group mb-4">
             <label
               for="option3"
@@ -237,7 +237,7 @@
       >
         <div
           v-if="selectedSystemIrrigation === 'Aspersão'"
-          class="col-md-4"
+          class="col-md-12"
         >
           <div class="form-group mb-4">
             <label
@@ -254,7 +254,7 @@
         </div>
         <div
           v-if="selectedSystemIrrigation === 'MicroAspersão'"
-          class="col-md-4"
+          class="col-md-12"
         >
           <div class="form-group mb-4">
             <label
@@ -307,7 +307,7 @@
         </div>
         <div
           v-if="selectedSystemIrrigation === 'Gotejamento'"
-          class="col-md-4"
+          class="col-md-12"
         >
           <div class="form-group mb-4">
             <label
@@ -360,7 +360,7 @@
         </div>
         <div
           v-if="selectedSystemIrrigation === 'Pivô Central'"
-          class="col-md-4"
+          class="col-md-12"
         >
           <div class="form-group mb-4">
             <label
@@ -377,7 +377,7 @@
         </div>
         <div
           v-if="selectedSystemIrrigation === 'Sulcos'"
-          class="col-md-4"
+          class="col-md-12"
         >
           <div class="form-group mb-4">
             <label
