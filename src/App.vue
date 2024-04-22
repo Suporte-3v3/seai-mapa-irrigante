@@ -65,7 +65,7 @@ body {
   background-color: #bdc1c3 !important;
 }
 .navbar {
-  background-color: #007bff;
+  background-color: #1b3f82;
   border: none;
   border-radius: 0;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
@@ -101,7 +101,7 @@ body {
 
 .tab-button.active {
   background-color: #fff;
-  color: #007bff; /* Cor do texto dos tabs quando ativo */
+  color: #1b3f82; /* Cor do texto dos tabs quando ativo */
 }
 
 .recomendation-container {

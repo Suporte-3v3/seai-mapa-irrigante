@@ -55,14 +55,15 @@
               class="form-control"
               :disabled="!isStationDisabled"
             >
-              <option value="opcao1">
+              <option value="">
                 Selecione a Estação
               </option>
-              <option value="opcao2">
-                Maranguape (Funceme)
-              </option>
-              <option value="opcao3">
-                Maracanaú (Funceme)
+              <option
+                v-for="equipment in equipments" 
+                :key="equipment.Id"
+                :value="equipment.Id"
+              >
+                ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Et0: {{ equipment.Et0 }}]
               </option>
             </select>
           </div>
@@ -97,14 +98,15 @@
               class="form-control"
               :disabled="!isPluviometerDisabled"
             >
-              <option value="opcaoA">
+              <option value="">
                 Selecione o Pluviômetro
               </option>
-              <option value="opcaoB">
-                Maranguape (Funceme)
-              </option>
-              <option value="opcaoC">
-                Maracanaú (Funceme)
+              <option
+                v-for="equipment in pluviometers"
+                :key="equipment.Id"
+                :value="equipment.Id"
+              >
+                ({{ equipment.Organ.Name }} - {{ equipment.Name }} - [Precipitação: {{ equipment.Precipitation }} mm]
               </option>
             </select>
           </div>
@@ -439,11 +441,15 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'RecomendationComponent',
   data() {
     return {
-      selectedEstation: 'opcao1',
+      selectedEstation: '',
+      equipments: [],
+      pluviometers: [],
       selectedPluviometer: 'opcaoA',
       selectedCulture: 'opcaoX',
       selectedSystemIrrigation: 'opcao1',
@@ -463,6 +469,17 @@ export default {
     },
     isPluviometerDisabled() {
       return this.toggleSwitchPluviometer;
+    }
+  },
+  async created() {
+    try {
+      const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
+      this.equipments = responseStation.data.data;
+
+      const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');
+      this.pluviometers = responsePluviometer.data.data;
+    } catch (error) {
+      console.error(error);
     }
   },
   methods: {
@@ -496,11 +513,8 @@ body {
   background-color: #eff4f7; /* Cor de fundo desejada */
 }
 
-.btn-primary {
-  margin-right: 10px;
-}
-
 .input-group-append{
   margin-right: 0px;
 }
+
 </style>
