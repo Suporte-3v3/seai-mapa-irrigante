@@ -61,6 +61,8 @@ export default {
 </script>
 
 <style scoped>
+@import '@mdi/font/css/materialdesignicons.css';
+
 body {
   background-color: #bdc1c3 !important;
 }
@@ -75,13 +77,6 @@ body {
   align-items: center;
 }
 
-.navbar-brand {
-  font-family: Scorno Semi Bold, sans-serif;
-  font-size: 24px;
-  color: #fff;
-  font-weight: bold;
-}
-
 .tabs {
   display: flex;
 }
@@ -93,7 +88,7 @@ body {
   border: 0px solid #fff;
   border-radius: 10px;
   font-size: 18px;
-  font-family: "Scorno Semi Bold", sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: bold;
   color: #fff; /* Cor do texto dos tabs */
   text-align: center; /* Centraliza o texto horizontalmente */
@@ -108,11 +103,21 @@ body {
   padding: 20px;
 }
 
+.navbar-brand {
+    font-family: 'Montserrat', sans-serif; /* Usar a fonte Montserrat */
+    font-weight: bold;
+    font-size: 24px;
+    color: #fff;
+    letter-spacing: 2px /* Tornar o texto em negrito */
+  }
+
 @media (max-width: 700px) {
   .navbar-content {
     width: 100%;
     text-align: center;
+    
   }
+
   .tabs {
     width: 100%;
     justify-content: space-around;

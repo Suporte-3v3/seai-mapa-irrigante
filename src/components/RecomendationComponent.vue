@@ -59,7 +59,7 @@
                 Selecione a Estação
               </option>
               <option
-                v-for="equipment in equipments" 
+                v-for="equipment in stations" 
                 :key="equipment.Id"
                 :value="equipment.Id"
               >
@@ -75,7 +75,7 @@
           <label
             for="newForm"
             class="tab-label"
-            style="color: #007bff;"
+            style="color: #bb4430;"
           >ET0 Manual</label>
           <input
             id="newForm"
@@ -106,7 +106,7 @@
                 :key="equipment.Id"
                 :value="equipment.Id"
               >
-                ({{ equipment.Organ.Name }} - {{ equipment.Name }} - [Precipitação: {{ equipment.Precipitation }} mm]
+                ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Precipitação: {{ equipment.Precipitation }} mm]
               </option>
             </select>
           </div>
@@ -118,7 +118,7 @@
           <label
             for="newForm"
             class="tab-label"
-            style="color: #007bff;"
+            style="color: #bb4430;"
           >Precipitação Manual</label>
           <input
             id="newForm"
@@ -139,14 +139,15 @@
                 v-model="selectedCulture"
                 class="form-control"
               >
-                <option value="opcaoX">
+                <option value="">
                   Selecione a Cultura
                 </option>
-                <option value="opcaoY">
-                  Abacate
-                </option>
-                <option value="opcaoZ">
-                  Acerola
+                <option
+                  v-for="crop in crops"
+                  :key="crop.Id"
+                  :value="crop.Id"
+                >
+                  {{ crop.Name }}
                 </option>
               </select>
             </div>
@@ -225,6 +226,7 @@
                   <input
                     v-model="useDefault"
                     type="checkbox"
+                    class="mr-5"
                   > Usar padrão
                 </div>
               </div>
@@ -244,7 +246,7 @@
           <div class="form-group mb-4">
             <label
               class="tab-label"
-              style="color: #007bff;"
+              style="color: #bb4430;"
             >Precipitação por Aspersor (mm/h)</label>
             <input
               v-model="validationPrecipitationSprinkler"
@@ -261,7 +263,7 @@
           <div class="form-group mb-4">
             <label
               class="tab-label"
-              style="color: #007bff;"
+              style="color: #bb4430;"
             >Vazão do Sistema (l/h)</label>
             <input
               v-model="validationFlowSystem"
@@ -273,7 +275,7 @@
           <div class="form-group mb-4">
             <label
               class="tab-label"
-              style="color: #007bff;"
+              style="color: #bb4430;"
             >Área Plantada (m²)</label>
             <input
               v-model="validationPlantedArea"
@@ -285,7 +287,7 @@
           <div class="form-group mb-4">
             <label
               class="tab-label"
-              style="color: #007bff;"
+              style="color: #bb4430;"
             >Área efetiva de cada planta (m²/planta)</label>
             <input
               v-model="validationEffectiveArea"
@@ -297,7 +299,7 @@
           <div class="form-group mb-4">
             <label
               class="tab-label"
-              style="color: #007bff;"
+              style="color: #bb4430;"
             >Número de Plantas por área (plantas/m²)</label>
             <input
               v-model="validationNumberPlants"
@@ -314,7 +316,7 @@
           <div class="form-group mb-4">
             <label
               class="tab-label"
-              style="color: #007bff;"
+              style="color: #bb4430;"
             >Vazão do Sistema (l/h)</label>
             <input
               v-model="validationFlowSystem"
@@ -326,7 +328,7 @@
           <div class="form-group mb-4">
             <label
               class="tab-label"
-              style="color: #007bff;"
+              style="color: #bb4430;"
             >Área Plantada (m²)</label>
             <input
               v-model="validationPlantedArea"
@@ -338,7 +340,7 @@
           <div class="form-group mb-4">
             <label
               class="tab-label"
-              style="color: #007bff;"
+              style="color: #bb4430;"
             >Área efetiva de cada planta (m²/planta)</label>
             <input
               v-model="validationEffectiveArea"
@@ -350,7 +352,7 @@
           <div class="form-group mb-4">
             <label
               class="tab-label"
-              style="color: #007bff;"
+              style="color: #bb4430;"
             >Número de Plantas por área (plantas/m²)</label>
             <input
               v-model="validationNumberPlants"
@@ -367,7 +369,7 @@
           <div class="form-group mb-4">
             <label
               class="tab-label"
-              style="color: #007bff;"
+              style="color: #bb4430;"
             >Precipitação por Volta (mm/volta)</label>
             <input
               v-model="validationPrecipitationAround"
@@ -384,7 +386,7 @@
           <div class="form-group mb-4">
             <label
               class="tab-label"
-              style="color: #007bff;"
+              style="color: #bb4430;"
             >Comprimento dos Sulcos (m)</label>
             <input
               v-model="validationFurrowLength"
@@ -396,7 +398,7 @@
           <div class="form-group mb-4">
             <label
               class="tab-label"
-              style="color: #007bff;"
+              style="color: #bb4430;"
             >Espaçamento entre os Sulcos (m)</label>
             <input
               v-model="validationGrooveSpacing"
@@ -408,7 +410,7 @@
           <div class="form-group mb-4">
             <label
               class="tab-label"
-              style="color: #007bff;"
+              style="color: #bb4430;"
             >Vazão por Sulco (l/h)</label>
             <input
               v-model="validationFlowGrooves"
@@ -422,16 +424,18 @@
       <div class="row">
         <div class="col-md-12">
           <button
-            class="btn btn-primary"
+            class="btn"
+            style="background-color: #1b3f82; color: white; margin-right: 8px;"
             @click="CalculateRecomendation"
           >
             Simular Lâmina
           </button>
           <button
-            class="btn btn-danger mr-2"
+            class="btn"
+            style="background-color: #b1151f; color: white;"
             @click="ClearFields"
           >
-            Limpar
+            Limpar Campos
           </button>
         </div>
       </div>
@@ -450,8 +454,9 @@ export default {
       selectedEstation: '',
       equipments: [],
       pluviometers: [],
-      selectedPluviometer: 'opcaoA',
-      selectedCulture: 'opcaoX',
+      crops: [],
+      selectedPluviometer: '',
+      selectedCulture: '',
       selectedSystemIrrigation: 'opcao1',
       showAdditionalFields: false,
       useDefault: true,
@@ -474,14 +479,19 @@ export default {
   async created() {
     try {
       const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
-      this.equipments = responseStation.data.data;
+      this.stations = responseStation.data.data;
 
       const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');
       this.pluviometers = responsePluviometer.data.data;
+
+      const response = await axios.get('http://seai.3v3.farm/api/v2/management/crop');
+      this.crops = response.data.data;
+
     } catch (error) {
       console.error(error);
     }
   },
+
   methods: {
     CalculateRecomendation() {
       // Implementação do método de cálculo aqui
