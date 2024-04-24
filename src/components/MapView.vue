@@ -33,7 +33,14 @@ export default {
 
       // Adicionar o GeoJSON ao mapa
       const geojsonLayer = L.geoJSON(ceara_data, {
-        onEachFeature: this.onEachFeature
+        onEachFeature: this.onEachFeature,
+        style: function(feature) {
+        return {color: "#1b3f82", // cor do traçado
+            weight: 0.5, // largura do traçado
+            opacity: 1, // opacidade do traçado
+            fillOpacity: 0.2 // opacidade do preenchimento};
+    };
+  }
       }).addTo(this.map);
 
       // Ajustar o mapa para focar na área coberta pelo GeoJSON
@@ -81,6 +88,7 @@ export default {
       }
     }
   }
+  
 };
 </script>
 
