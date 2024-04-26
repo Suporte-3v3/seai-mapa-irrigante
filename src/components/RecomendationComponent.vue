@@ -478,7 +478,8 @@ export default {
   },
   async created() {
     try {
-      const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
+      const responseStation = await
+       axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
       this.stations = responseStation.data.data;
 
       const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');

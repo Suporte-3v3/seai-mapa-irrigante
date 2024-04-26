@@ -21,6 +21,7 @@
     export default {
       name: "FaqComponent"
     };
+    
     </script>
     
     <style scoped>
