@@ -184,9 +184,7 @@
                 class="form-control"
                 @change="toggleAdditionalFields"
               >
-                <option value="opcao1">
-                  Selecione o Sistema de Irrigação
-                </option>
+                <option value="OptionSystemIrrigation" />
                 <option value="Aspersão">
                   Aspersão
                 </option>
@@ -457,7 +455,7 @@ export default {
       crops: [],
       selectedPluviometer: '',
       selectedCulture: '',
-      selectedSystemIrrigation: 'opcao1',
+      selectedSystemIrrigation: 'OptionSystemIrrigation',
       showAdditionalFields: false,
       useDefault: true,
       toggleSwitchStation: true,
@@ -478,8 +476,7 @@ export default {
   },
   async created() {
     try {
-      const responseStation = await
-       axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
+      const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
       this.stations = responseStation.data.data;
 
       const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');
@@ -501,7 +498,7 @@ export default {
     this.selectedEstation = 'opcao1';
     this.selectedPluviometer = 'opcaoA';
     this.selectedCulture = 'opcaoX';
-    this.selectedSystemIrrigation = 'opcao1';
+    this.selectedSystemIrrigation = 'OptionSystemIrrigation';
     this.input1 = '';
     this.input2 = '';
     // Limpar outros campos adicionais, se houver
