@@ -435,10 +435,14 @@
           >
             Limpar Campos
           </button>
+          <hr class="line">
+          <div v-if="response">
+            <h2>Resposta:</h2>
+            <pre>{{ response }}</pre>
+          </div>
         </div>
       </div>
     </div>
-    <hr class="line">
   </div>
 </template>
 
@@ -453,6 +457,7 @@ export default {
       equipments: [],
       pluviometers: [],
       crops: [],
+      response: [],
       selectedPluviometer: '',
       selectedCulture: '',
       selectedSystemIrrigation: 'OptionSystemIrrigation',
@@ -474,6 +479,17 @@ export default {
       return this.toggleSwitchPluviometer;
     }
   },
+  async CalculateRecomendation() {
+      try {
+        const data = {
+          // seus dados aqui
+        };
+        const response = await axios.post('http://seai.3v3.farm/api/v2/management/blade_suggestion', data);
+        this.response = response.data.data; // Armazene a resposta em 'response'
+      } catch (error) {
+        console.error(error);
+      }
+    },
   async created() {
     try {
       const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
@@ -491,9 +507,6 @@ export default {
   },
 
   methods: {
-    CalculateRecomendation() {
-      // Implementação do método de cálculo aqui
-    },
     ClearFields() {
     this.selectedEstation = 'opcao1';
     this.selectedPluviometer = 'opcaoA';
@@ -501,6 +514,7 @@ export default {
     this.selectedSystemIrrigation = 'OptionSystemIrrigation';
     this.input1 = '';
     this.input2 = '';
+    this.response = '';
     // Limpar outros campos adicionais, se houver
   },
     toggleAdditionalFields() {
