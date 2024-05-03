@@ -437,7 +437,7 @@
           </button>
           <hr class="line">
           <div v-if="response">
-            <h2>Resposta:</h2>
+            <h2>Resultados:</h2>
             <pre>{{ response }}</pre>
           </div>
         </div>
