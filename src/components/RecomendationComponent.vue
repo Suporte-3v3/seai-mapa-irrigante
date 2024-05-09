@@ -184,7 +184,9 @@
                 class="form-control"
                 @change="toggleAdditionalFields"
               >
-                <option value="OptionSystemIrrigation" />
+              <option value="">
+                Selecione o Sistema de Irrigação
+              </option>
                 <option value="Aspersão">
                   Aspersão
                 </option>
@@ -224,7 +226,7 @@
                   <input
                     v-model="useDefault"
                     type="checkbox"
-                    class="mr-5"
+                    class="checkbox-margin"
                   > Usar padrão
                 </div>
               </div>
@@ -460,7 +462,7 @@ export default {
       response: [],
       selectedPluviometer: '',
       selectedCulture: '',
-      selectedSystemIrrigation: 'OptionSystemIrrigation',
+      selectedSystemIrrigation: '',
       showAdditionalFields: false,
       useDefault: true,
       toggleSwitchStation: true,
@@ -509,9 +511,9 @@ export default {
   methods: {
      // Método para limpar os campos.
     ClearFields() {
-    this.selectedEstation = 'opcao1';
-    this.selectedPluviometer = 'opcaoA';
-    this.selectedCulture = 'opcaoX';
+    this.selectedEstation = '';
+    this.selectedPluviometer = '';
+    this.selectedCulture = '';
     this.selectedSystemIrrigation = 'OptionSystemIrrigation';
     this.input1 = '';
     this.input2 = '';
@@ -551,4 +553,7 @@ body {
   margin-right: 0px;
 }
 
+.checkbox-margin {
+  margin-right: 8px; /* ou o valor que desejar */
+}
 </style>
