@@ -24,7 +24,9 @@ export default {
   methods: {
     setupMap() {
       // Criar o mapa
-      this.map = L.map(this.$refs.map); // Não defina uma visualização padrão aqui
+      this.map = L.map(this.$refs.map, {
+        scrollWheelZoom: false // Desabilita o zoom com a roda do mouse
+      });
 
       // Adicionar camada de tile do OpenStreetMap
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -35,12 +37,13 @@ export default {
       const geojsonLayer = L.geoJSON(ceara_data, {
         onEachFeature: this.onEachFeature,
         style: function(feature) {
-        return {color: "#1b3f82", // cor do traçado
+          return {
+            color: "#1b3f82", // cor do traçado
             weight: 0.5, // largura do traçado
             opacity: 1, // opacidade do traçado
-            fillOpacity: 0.2 // opacidade do preenchimento};
-    };
-  }
+            fillOpacity: 0.2 // opacidade do preenchimento
+          };
+        }
       }).addTo(this.map);
 
       // Ajustar o mapa para focar na área coberta pelo GeoJSON
@@ -64,11 +67,6 @@ export default {
     
           // Centralizar o mapa na localização do usuário
           this.map.setView([latitude, longitude], 7);
-    
-          // Adicionar marcador na localização do usuário
-         /* L.marker([latitude, longitude]).addTo(this.map)*/
-            /*.bindPopup('Você está aqui.')*/
-            /*.openPopup();*/
         }, error => {
           console.error('Erro ao obter a localização do usuário:', error);
         });
@@ -78,6 +76,16 @@ export default {
     
       // Ajustar o tamanho do mapa para a tela
       this.handleResize();
+
+      // Adiciona um evento de escuta para desabilitar o zoom quando o usuário toca no mapa
+      this.$refs.map.addEventListener('touchstart', () => {
+        this.map.scrollWheelZoom.disable(); // Desabilita o zoom com o toque
+      });
+
+      // Adiciona um evento de escuta para habilitar o zoom quando o usuário tira o dedo do mapa
+      this.$refs.map.addEventListener('touchend', () => {
+        this.map.scrollWheelZoom.enable(); // Habilita o zoom com o toque
+      });
     },
     handleResize() {
       this.map.invalidateSize(); // Reajusta o tamanho do mapa quando a janela é redimensionada
@@ -88,7 +96,6 @@ export default {
       }
     }
   }
-  
 };
 </script>
 

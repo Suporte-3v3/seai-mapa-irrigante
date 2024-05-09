@@ -507,6 +507,7 @@ export default {
   },
 
   methods: {
+     // Método para limpar os campos.
     ClearFields() {
     this.selectedEstation = 'opcao1';
     this.selectedPluviometer = 'opcaoA';
@@ -515,6 +516,17 @@ export default {
     this.input1 = '';
     this.input2 = '';
     this.response = '';
+    this.validationIrrigationEfficiency = '';
+    this.validationPrecipitationSprinkler = '';
+    this.validationFlowSystem = '';
+    this.validationPlantedArea = '';
+    this.validationEffectiveArea = '';
+    this.validationNumberPlants = '';
+    this.validationPrecipitationAround = '';
+    this.validationFurrowLength = '';
+    this.validationGrooveSpacing = '';
+    this.validationFlowGrooves = '';
+
     // Limpar outros campos adicionais, se houver
   },
     toggleAdditionalFields() {
