@@ -165,6 +165,7 @@
               <input
                 id="input1"
                 type="date"
+                v-model="dateplanting"
                 class="form-control"
                 placeholder="Digite a Data"
               >
