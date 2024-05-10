@@ -1,47 +1,130 @@
 <template>
   <div id="app">
-    <div class="map-container">
-      <!-- Componente do mapa -->
+    <nav class="navbar">
+      <div class="navbar-content">
+        <strong class="navbar-brand">SEAI IRRIGANTE</strong>
+      </div>
+      <div class="tabs">
+        <div
+          v-for="(tab, index) in tabs"
+          :key="index"
+          :class="{ 'tab-button': true, active: activeTab === index }"
+          @click="changeTab(index)"
+        >
+          {{ tab }}
+        </div>
+      </div>
+    </nav>
+    <div v-show="activeTab === 0">
       <MapView />
+      <div class="recomendation-container">
+        <RecomendationComponent />
+      </div>
     </div>
-    <div class="tab-container">
-      <!-- Componente de tab -->
-      <TabComponent />
+    <div v-show="activeTab === 1">
+      <NewsComponent />
+    </div>
+    <div v-show="activeTab === 2">
+      <FaqComponent />
     </div>
   </div>
 </template>
 
 <script>
-import MapView from './components/MapView.vue'; // Importe o componente do mapa
-import TabComponent from './components/TabComponent.vue'; // Importe o componente de tab
+import MapView from './components/MapView.vue';
+import RecomendationComponent from './components/RecomendationComponent.vue';
+import NewsComponent from './components/NewsComponent.vue';
+import FaqComponent from './components/FaqComponent.vue';
+
 
 export default {
   name: 'App',
   components: {
     MapView,
-    TabComponent
+    RecomendationComponent,
+    NewsComponent,
+    FaqComponent
+    // Adicione outros componentes aqui conforme necessário
+  },
+  data() {
+    return {
+      activeTab: 0,
+      tabs: ['💧 Lâmina', '📰 Notícias', '💬 FAQ', '👥 Login']
+    };
+  },
+  methods: {
+    changeTab(index) {
+      this.activeTab = index;
+    }
   }
 };
 </script>
 
-<style>
-/* Estilos para o contêiner do mapa */
-.map-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 60%; /* Largura do mapa */
+<style scoped>
+@import '@mdi/font/css/materialdesignicons.css';
+
+body {
+  background-color: #bdc1c3 !important;
+}
+.navbar {
+  background-color: #1b3f82;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Estilos para o contêiner da tab */
-.tab-container {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 60%; /* Largura da tab */
-  background-color: #f0f0f0; /* Cor de fundo opcional */
-  overflow-y: auto; /* Adicione rolagem vertical, se necessário */
+.tabs {
+  display: flex;
+}
+
+.tab-button {
+  cursor: pointer;
+  padding: 10px;
+  margin-left: 10px;
+  border: 0px solid #fff;
+  border-radius: 10px;
+  font-size: 18px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: bold;
+  color: #fff; /* Cor do texto dos tabs */
+  text-align: center; /* Centraliza o texto horizontalmente */
+}
+
+.tab-button.active {
+  background-color: #fff;
+  color: #1b3f82; /* Cor do texto dos tabs quando ativo */
+}
+
+.recomendation-container {
+  padding: 20px;
+}
+
+.navbar-brand {
+    font-family: 'Montserrat', sans-serif; /* Usar a fonte Montserrat */
+    font-weight: bold;
+    font-size: 24px;
+    color: #fff;
+    letter-spacing: 2px /* Tornar o texto em negrito */
+  }
+
+@media (max-width: 700px) {
+  .navbar-content {
+    width: 100%;
+    text-align: center;
+    
+  }
+
+  .tabs {
+    width: 100%;
+    justify-content: space-around;
+  }
+  .tab-button {
+    flex-grow: 1;
+    text-align: center;
+  }
 }
 </style>

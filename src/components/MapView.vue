@@ -1,91 +1,106 @@
 <template>
-    <div
-      ref="map"
-      class="map-container"
-    />
-  </template>
-    
-    <script>
-    import L from 'leaflet';
-    
-    export default {
-      name: 'MapView',
-      mounted() {
-        this.setupMap();
-        window.addEventListener('resize', this.handleResize);
-      },
-      unmounted() {
-        window.removeEventListener('resize', this.handleResize);
-        if (this.map) {
-          this.map.remove();
+  <div
+    ref="map"
+    class="map-container"
+  />
+</template>
+
+<script>
+import L from 'leaflet';
+import { data as ceara_data } from '/Users/Naylton Nobre/Documents/GitHub/seai-mapa-irrigante/src/cearaGeojson'
+
+export default {
+  name: 'MapView',
+  mounted() {
+    this.setupMap();
+    window.addEventListener('resize', this.handleResize);
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.handleResize);
+    if (this.map) {
+      this.map.remove();
+    }
+  },
+  methods: {
+    setupMap() {
+      // Criar o mapa
+      this.map = L.map(this.$refs.map, {
+        scrollWheelZoom: false // Desabilita o zoom com a roda do mouse
+      });
+
+      // Adicionar camada de tile do OpenStreetMap
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: 'SEAI - Irrigante'
+      }).addTo(this.map);
+
+      // Adicionar o GeoJSON ao mapa
+      const geojsonLayer = L.geoJSON(ceara_data, {
+        onEachFeature: this.onEachFeature,
+        style: function(feature) {
+          return {
+            color: "#1b3f82", // cor do traçado
+            weight: 0.5, // largura do traçado
+            opacity: 1, // opacidade do traçado
+            fillOpacity: 0.2 // opacidade do preenchimento
+          };
         }
-      },
-      methods: {
-        setupMap() {
-          // Criar o mapa
-          this.map = L.map(this.$refs.map).setView([0, 0], 2); // Defina uma visualização padrão
-    
-          // Adicionar camada de tile do OpenStreetMap
-          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: 'SEAI - Irrigante | &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(this.map);
-  
-          // Tentar obter a localização do usuário
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(position => {
-              const { latitude, longitude } = position.coords;
-    
-              // Centralizar o mapa na localização do usuário
-              this.map.setView([latitude, longitude], 13);
-    
-              // Adicionar marcador na localização do usuário
-              L.marker([latitude, longitude]).addTo(this.map)
-                .bindPopup('Você está aqui')
-                .openPopup();
-            }, error => {
-              console.error('Erro ao obter a localização do usuário:', error);
-            });
-          } else {
-            console.error('Geolocalização não é suportada neste navegador.');
+      }).addTo(this.map);
+
+      // Ajustar o mapa para focar na área coberta pelo GeoJSON
+      this.map.fitBounds(geojsonLayer.getBounds());
+
+      // Ocultar apenas a atribuição do Leaflet
+      const attributionControl = this.map.attributionControl;
+      if (attributionControl) {
+        const attributionElement = attributionControl.getContainer();
+        if (attributionElement) {
+          const leafletAttribution = attributionElement.querySelector('.leaflet-control-attribution.leaflet-control');
+          if (leafletAttribution) {
+            leafletAttribution.style.display = 'none';
           }
-    
-          // Ajustar o tamanho do mapa para a tela
-          this.handleResize();
-        },
-        handleResize() {
-          setTimeout(() => {
-            this.map.invalidateSize();
-          }, 100);
         }
       }
-    };
-    </script>
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          const { latitude, longitude } = position.coords;
     
-    <style scoped>
-    /* Estilos para o contêiner do mapa */
-    .map-container {
-      position: fixed; /* Define a posição fixa */
-      top: 0; /* Alinha o topo */
-      left: 0; /* Alinha a esquerda */
-      bottom: 0; /* Alinha a parte inferior */
-      width: 40%; /* Largura desejada */
+          // Centralizar o mapa na localização do usuário
+          this.map.setView([latitude, longitude], 7);
+        }, error => {
+          console.error('Erro ao obter a localização do usuário:', error);
+        });
+      } else {
+        console.error('Geolocalização não é suportada neste navegador.');
+      }
+    
+      // Ajustar o tamanho do mapa para a tela
+      this.handleResize();
+
+      // Adiciona um evento de escuta para desabilitar o zoom quando o usuário toca no mapa
+      this.$refs.map.addEventListener('touchstart', () => {
+        this.map.scrollWheelZoom.disable(); // Desabilita o zoom com o toque
+      });
+
+      // Adiciona um evento de escuta para habilitar o zoom quando o usuário tira o dedo do mapa
+      this.$refs.map.addEventListener('touchend', () => {
+        this.map.scrollWheelZoom.enable(); // Habilita o zoom com o toque
+      });
+    },
+    handleResize() {
+      this.map.invalidateSize(); // Reajusta o tamanho do mapa quando a janela é redimensionada
+    },
+    onEachFeature(feature, layer) {
+      if (feature.properties && feature.properties.name) {
+        layer.bindPopup(feature.properties.name);
+      }
     }
-    
-    /* Remover margens e preenchimentos do corpo da página e esconder a barra de rolagem */
-    body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-    
-    /* Estilos para o restante da página (lado direito) */
-    .page-content {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 40%; /* Largura do mapa */
-      overflow-y: auto; /* Adicione rolagem vertical apenas ao lado direito, se necessário */
-    }
-    </style>
-    
+  }
+};
+</script>
+
+<style scoped>
+.map-container {
+  height: 60vh; /* Define a altura do mapa para ocupar 70% da altura da tela */
+}
+</style>
