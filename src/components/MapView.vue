@@ -7,16 +7,53 @@
 
 <script>
 import L from 'leaflet';
-import { data as ceara_data } from '/Users/Naylton 3v3/Documents/seai-mapa-irrigante/src/cearaGeojson'
+import axios from 'axios';
+import { data as ceara_data } from '/Users/Naylton Nobre/Documents/GitHub/seai-mapa-irrigante/src/cearaGeojson'
 
 export default {
   name: 'MapView',
+  data() {
+    return {
+      stations: [],
+      pluviometers: [],
+      map: null,
+      stationIcon: L.marker({
+        iconUrl: '/user-icon.png', // caminho para o ícone na pasta public
+        iconSize: [100, 95], // tamanho do ícone
+      }),
+      pluviometerIcon: L.marker({
+        iconUrl: '/user-icon.png', // caminho para o ícone na pasta public
+        iconSize: [100, 95], // tamanho do ícone
+      }),
+    };
+  },
+  async created() {
+    try {
+      const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
+      this.stations = responseStation.data.data;
+
+      const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');
+      this.pluviometers = responsePluviometer.data.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
   mounted() {
     this.setupMap();
     window.addEventListener('resize', this.handleResize);
+
+    // Adicione os marcadores aqui, depois que o mapa foi criado
+    this.stations.forEach(station => {
+      L.marker(station.Location.Coordinates, { icon: this.stationIcon }).addTo(this.map);
+    });
+
+    this.pluviometers.forEach(pluviometer => {
+      L.marker(pluviometer.Location.Coordinates, { icon: this.pluviometerIcon }).addTo(this.map);
+    });
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
+
     if (this.map) {
       this.map.remove();
     }
