@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       activeTab: 0,
-      tabs: ['💧 Lâmina', '📰 Notícias', '💬 FAQ', '👥 Login']
+      tabs: ['Lâmina', 'Notícias', 'FAQ', 'Login']
     };
   },
   methods: {

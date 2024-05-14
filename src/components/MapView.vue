@@ -8,7 +8,7 @@
 <script>
 import L from 'leaflet';
 import axios from 'axios';
-import { data as ceara_data } from '/Users/Naylton Nobre/Documents/GitHub/seai-mapa-irrigante/src/cearaGeojson'
+import { data as ceara_data } from '/Users/Naylton 3v3/Documents/seai-mapa-irrigante/src/cearaGeojson'
 
 export default {
   name: 'MapView',
@@ -87,16 +87,6 @@ export default {
       this.map.fitBounds(geojsonLayer.getBounds());
 
       // Ocultar apenas a atribuição do Leaflet
-      const attributionControl = this.map.attributionControl;
-      if (attributionControl) {
-        const attributionElement = attributionControl.getContainer();
-        if (attributionElement) {
-          const leafletAttribution = attributionElement.querySelector('.leaflet-control-attribution.leaflet-control');
-          if (leafletAttribution) {
-            leafletAttribution.style.display = 'none';
-          }
-        }
-      }
 
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
@@ -139,5 +129,9 @@ export default {
 <style scoped>
 .map-container {
   height: 60vh; /* Define a altura do mapa para ocupar 70% da altura da tela */
+}
+
+.leaflet-control-attribution {
+  display: none;
 }
 </style>
