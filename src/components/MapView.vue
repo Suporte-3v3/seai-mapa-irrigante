@@ -25,7 +25,7 @@ export default {
     setupMap() {
       // Criar o mapa
       this.map = L.map(this.$refs.map, {
-        scrollWheelZoom: false // Desabilita o zoom com a roda do mouse
+        scrollWheelZoom: true // Desabilita o zoom com a roda do mouse
       });
 
       // Adicionar camada de tile do OpenStreetMap

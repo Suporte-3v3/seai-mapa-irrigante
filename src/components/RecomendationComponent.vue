@@ -164,8 +164,8 @@
             <div class="input-group">
               <input
                 id="input1"
-                type="date"
                 v-model="dateplanting"
+                type="date"
                 class="form-control"
                 placeholder="Digite a Data"
               >
@@ -185,9 +185,9 @@
                 class="form-control"
                 @change="toggleAdditionalFields"
               >
-              <option value="">
-                Selecione o Sistema de Irrigação
-              </option>
+                <option value="">
+                  Selecione o Sistema de Irrigação
+                </option>
                 <option value="Aspersão">
                   Aspersão
                 </option>
@@ -457,9 +457,9 @@ export default {
   data() {
     return {
       selectedEstation: '',
-      equipments: [],
-      pluviometers: [],
-      crops: [],
+      equipments: '',
+      pluviometers: '',
+      crops: '',
       response: [],
       selectedPluviometer: '',
       selectedCulture: '',
@@ -485,7 +485,22 @@ export default {
   async CalculateRecomendation() {
       try {
         const data = {
-          // seus dados aqui
+          Station: {
+            Id: parseInt(this.equipment.Id),
+            Et0: parseFloat(this.equipment.Et0)
+          },
+          CropId: parseInt(this.cropId),
+          Pluviometer: {
+            Precipitation: parseInt(this.equipment.Precipitation)
+          },
+          PlantingDate: this.dateplanting,
+          System: {
+            Type: this.selectedSystemIrrigation,
+            Measurements: {
+              Efficiency: parseInt(this.validationIrrigationEfficiency),
+              Precipitation: parseInt(this.validationPrecipitationSprinkler)
+            }
+          }
         };
         const response = await axios.post('http://seai.3v3.farm/api/v2/management/blade_suggestion', data);
         this.response = response.data.data; // Armazene a resposta em 'response'
