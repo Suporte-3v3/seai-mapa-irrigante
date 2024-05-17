@@ -18,11 +18,11 @@ export default {
       pluviometers: [],
       map: null,
       stationIcon: L.marker({
-        iconUrl: '/user-icon.png', // caminho para o ícone na pasta public
+        iconUrl: '/icone-pluviometer', // caminho para o ícone na pasta public
         iconSize: [100, 95], // tamanho do ícone
       }),
       pluviometerIcon: L.marker({
-        iconUrl: '/user-icon.png', // caminho para o ícone na pasta public
+        iconUrl: '/icon-station', // caminho para o ícone na pasta public
         iconSize: [100, 95], // tamanho do ícone
       }),
     };
