@@ -1,5 +1,8 @@
 <template>
-  <div ref="map" class="map-container"></div>
+  <div
+    ref="map"
+    class="map-container"
+  />
 </template>
 
 <script>
@@ -44,7 +47,7 @@ export default {
     this.setupMap();
     window.addEventListener('resize', this.handleResize);
   },
-  unmounted() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
 
     if (this.map) {
@@ -79,7 +82,9 @@ export default {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            this.map.setView([latitude, longitude], 7);
+            if (this.map) {
+              this.map.setView([latitude, longitude], 7);
+            }
           },
           (error) => {
             console.error('Erro ao obter a localização do usuário:', error);
@@ -92,18 +97,24 @@ export default {
       this.handleResize();
 
       this.$refs.map.addEventListener('touchstart', () => {
-        this.map.scrollWheelZoom.disable(); // Desabilita o zoom com o toque
+        if (this.map) {
+          this.map.scrollWheelZoom.disable(); // Desabilita o zoom com o toque
+        }
       });
 
       this.$refs.map.addEventListener('touchend', () => {
-        this.map.scrollWheelZoom.enable(); // Habilita o zoom com o toque
+        if (this.map) {
+          this.map.scrollWheelZoom.enable(); // Habilita o zoom com o toque
+        }
       });
 
       // Adicionar a legenda ao mapa
       this.addLegend();
     },
     handleResize() {
-      this.map.invalidateSize(); // Reajusta o tamanho do mapa quando a janela é redimensionada
+      if (this.map) {
+        this.map.invalidateSize(); // Reajusta o tamanho do mapa quando a janela é redimensionada
+      }
     },
     onEachFeature(feature, layer) {
       if (feature.properties && feature.properties.name) {
@@ -114,31 +125,31 @@ export default {
       if (this.stations && Array.isArray(this.stations)) {
         this.stations.forEach((station) => {
           const coordinates = station.Location.Coordinates;
-          console.log('Adding station marker at:', coordinates); // Log para verificar coordenadas das estações
+          console.log('Adicionando marcador de estação em:', coordinates); // Log para verificar coordenadas das estações
           if (coordinates && coordinates.length === 2) {
             const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.stationIcon }).addTo(this.map);
-            marker.bindPopup(`<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name}<br><b>Et0:</b> ${station.Et0}`);
+            marker.bindPopup(`<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} <a>[</a>${station.Code}<a>]</a><br><b>Et0:</b> ${station.Et0}`);
           } else {
-            console.error('Invalid station coordinates:', station);
+            console.error('Coordenadas de Estações inválidas:', station);
           }
         });
       } else {
-        console.error('Stations data is invalid or not an array');
+        console.error('Os dados das estações são inválidos');
       }
 
       if (this.pluviometers && Array.isArray(this.pluviometers)) {
         this.pluviometers.forEach((pluviometer) => {
           const coordinates = pluviometer.Location.Coordinates;
-          console.log('Adding pluviometer marker at:', coordinates); // Log para verificar coordenadas dos pluviômetros
+          console.log('Adicionando marcador de pluviômetro em:', coordinates); // Log para verificar coordenadas dos pluviômetros
           if (coordinates && coordinates.length === 2) {
             const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.pluviometerIcon }).addTo(this.map);
-            marker.bindPopup(`<b>Nome:</b> ${pluviometer.Name}<br><b>Orgão:</b> ${pluviometer.Organ.Name}`);
+            marker.bindPopup(`<b>Nome:</b> ${pluviometer.Name}<br><b>Orgão:</b> ${pluviometer.Organ.Name} <a>[</a>${pluviometer.Code}<a>]</a><br><b>Precipitação:</b> ${pluviometer.Precipitation}<a> mm</a>`);
           } else {
-            console.error('Invalid pluviometer coordinates:', pluviometer);
+            console.error('Coordenadas do pluviômetro inválidas', pluviometer);
           }
         });
       } else {
-        console.error('Pluviometers data is invalid or not an array');
+        console.error('Os dados dos pluviômetros são inválidos');
       }
     },
     addLegend() {
