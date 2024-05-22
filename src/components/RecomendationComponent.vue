@@ -51,7 +51,7 @@
           <div class="input-group">
             <select
               id="option1"
-              v-model="selectedEstation"
+              v-model="selectedStation"
               class="form-control"
               :disabled="!isStationDisabled"
             >
@@ -67,6 +67,7 @@
               </option>
             </select>
           </div>
+          <p v-if="showError" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
         </div>
         <div
           v-if="!isStationDisabled"
@@ -110,6 +111,7 @@
               </option>
             </select>
           </div>
+          <p v-if="showError" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
         </div>
         <div
           v-if="!isPluviometerDisabled"
@@ -126,6 +128,7 @@
             type="number"
             placeholder="Digite o Valor da Precipitação"
           >
+          
         </div>
         <div class="col-md-12">
           <div class="form-group mb-4">
@@ -151,6 +154,7 @@
                 </option>
               </select>
             </div>
+            <p v-if="showError" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
           </div>
         </div>
       </div>
@@ -170,6 +174,7 @@
                 placeholder="Digite a Data"
               >
             </div>
+            <p v-if="showError" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
           </div>
         </div>
         <div class="col-md-4">
@@ -205,6 +210,7 @@
                 </option>
               </select>
             </div>
+            <p v-if="showError" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
           </div>
         </div>
         <div class="col-md-4">
@@ -232,6 +238,7 @@
                 </div>
               </div>
             </div>
+            <p v-if="showError" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
           </div>
         </div>
       </div>
@@ -464,7 +471,14 @@ export default {
   name: 'RecomendationComponent',
   data() {
   return {
-    selectedEstation: '',
+    selectedStation: '',
+    showError: false,
+    showErrorpluviometer: false,
+    showErrorstation: false,
+    showErrorcrop: false,
+    showErrordateplanting: false,
+    showErrorsystemirrigation: false,
+    showErrorirrigationefficiency: false,
     stations: [],
     pluviometers: [],
     crops: [],
@@ -503,53 +517,6 @@ export default {
       return this.toggleSwitchPluviometer;
     }
   },
-  async calculateRecomendation() {
-    console.log("calculateRecomendation chamado"); // Log para verificaçã
-    try {
-      // Coletar dados do formulário
-      const data = {
-        Station: this.isStationDisabled ? {
-          Id: parseInt(this.selectedEstation),
-          Et0: parseFloat(this.stations.find(station => station.Id === this.selectedEstation).Et0)
-        } : {
-          Id: null,
-          Et0: parseFloat(this.manualEt0) // Supondo que você tenha um campo v-model="manualEt0" para ET0 manual
-        },
-        CropId: parseInt(this.selectedCulture),
-        Pluviometer: this.isPluviometerDisabled ? {
-          Id: parseInt(this.selectedPluviometer),
-          Precipitation: parseFloat(this.pluviometers.find(pluviometer => pluviometer.Id === this.selectedPluviometer).Precipitation)
-        } : {
-          Id: null,
-          Precipitation: parseFloat(this.manualPrecipitation) // Supondo que você tenha um campo v-model="manualPrecipitation" para precipitação manual
-        },
-        PlantingDate: this.dateplanting,
-        System: {
-          Type: this.selectedSystemIrrigation,
-          Measurements: {
-            Efficiency: parseFloat(this.validationIrrigationEfficiency),
-            Precipitation: this.selectedSystemIrrigation === 'Aspersão' ? parseFloat(this.validationPrecipitationSprinkler) : null,
-            Flow: this.selectedSystemIrrigation !== 'Aspersão' ? parseFloat(this.validationFlowSystem) : null,
-            PlantedArea: ['MicroAspersão', 'Gotejamento'].includes(this.selectedSystemIrrigation) ? parseFloat(this.validationPlantedArea) : null,
-            EffectiveArea: ['MicroAspersão', 'Gotejamento'].includes(this.selectedSystemIrrigation) ? parseFloat(this.validationEffectiveArea) : null,
-            NumberPlants: ['MicroAspersão', 'Gotejamento'].includes(this.selectedSystemIrrigation) ? parseFloat(this.validationNumberPlants) : null,
-            PrecipitationAround: this.selectedSystemIrrigation === 'Pivô Central' ? parseFloat(this.validationPrecipitationAround) : null,
-            FurrowLength: this.selectedSystemIrrigation === 'Sulcos' ? parseFloat(this.validationFurrowLength) : null,
-            GrooveSpacing: this.selectedSystemIrrigation === 'Sulcos' ? parseFloat(this.validationGrooveSpacing) : null,
-            FlowGrooves: this.selectedSystemIrrigation === 'Sulcos' ? parseFloat(this.validationFlowGrooves) : null
-          }
-        }
-      };
-      console.log("Dados do formulário:", data);
-
-      // Enviar a requisição para a API
-      const response = await axios.post('http://seai.3v3.farm/api/v2/management/blade_suggestion', data);
-      console.log("Resposta da API:", response);
-      this.response = response.data.data; // Armazene a resposta em 'response'
-    } catch (error) {
-      console.error("Erro ao chamar a API:", error);
-    }
-  },
   async created() {
     try {
       const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
@@ -569,12 +536,20 @@ export default {
   methods: {
      // Método para limpar os campos.
     ClearFields() {
-    this.selectedEstation = '';
+    this.selectedStation = '';
+    this.showError = false;
+    this.showErrorpluviometer = false;
+    this.showErrorstation = false;
+    this.showErrorcrop = false;
+    this.showErrordateplanting = false;
+    this.showErrorsystemirrigation = false;
+    this.showErrorirrigationefficiency = false;
     this.selectedPluviometer = '';
     this.selectedCulture = '';
     this.selectedSystemIrrigation = '';
     this.input1 = '';
     this.input2 = '';
+    this.dateplanting = '';
     this.response = '';
     this.validationIrrigationEfficiency = '';
     this.validationPrecipitationSprinkler = '';
@@ -589,16 +564,30 @@ export default {
 
     // Limpar outros campos adicionais, se houver
   },
+
+  validateFields(){
+    const fields = ['selectedStation', 'selectedPluviometer', 'selectedCulture',
+    'dateplanting', 'selectedSystemIrrigation', 'validationIrrigationEfficiency'];
+
+    for (let field of fields) {
+      if (!this[field]) {
+        this.showError = true;
+        return field; // Retorna o nome do campo inválido
+      }
+    }
+
+    // Se todos os campos forem válidos
+    this.showError = false;
+    return null;
+  },
   calculateRecomendation() {
         // Aqui você adicionaria sua lógica de cálculo
         console.log('Calculando recomendação...');
         // Exemplo de lógica de validação
-        if (!this.selectedCulture) {
-          this.errorMessage = 'Por favor, selecione uma cultura.';
-          return;
-        }
-        // Outras validações e cálculos
-        this.errorMessage = ''; // Limpa a mensagem de erro se todas as validações passarem
+        if (!this.validateFields()) {
+      return;
+    }
+
       },
     toggleAdditionalFields() {
       this.showAdditionalFields = ['Aspersão', 'MicroAspersão', 'Gotejamento', 'Pivô Central', 'Sulcos'].includes(this.selectedSystemIrrigation);
