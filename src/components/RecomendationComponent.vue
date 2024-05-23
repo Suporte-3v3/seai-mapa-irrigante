@@ -476,19 +476,37 @@
           >
             Limpar Campos
           </button>
-          <hr class="line">
-          <div v-if="results">
-            <h3>Resultados</h3>
-            <ul>
-              <li>Etc: {{ results.etc }}</li>
-              <li>Lâmina de Reposição: {{ results.laminaReposicao }}</li>
-              <li>Tempo de Irrigação: {{ results.tempoIrrigacao }}</li>
-              <li>Dias da Cultura: {{ results.diasCultura }}</li>
-              <li>ET0: {{ results.et0 }}</li>
-              <li>Precipitação: {{ results.precipitacao }}</li>
-              <li>Kc: {{ results.kc }}</li>
-            </ul>
-          </div>
+          <hr class="my-4">
+          <div v-if="resultsVisible && results" class="card mt-4 shadow">
+        <div class="card-header custom-header text-white">
+          <h3>Resultados</h3>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <strong>Etc:</strong> {{ results.etc }}
+            </li>
+            <li class="list-group-item">
+              <strong>Lâmina de Reposição:</strong> {{ results.laminaReposicao }}
+            </li>
+            <li class="list-group-item">
+              <strong>Tempo de Irrigação:</strong> {{ results.tempoIrrigacao }}
+            </li>
+            <li class="list-group-item">
+              <strong>Dias da Cultura:</strong> {{ results.diasCultura }}
+            </li>
+            <li class="list-group-item">
+              <strong>ET0:</strong> {{ results.et0 }}
+            </li>
+            <li class="list-group-item">
+              <strong>Precipitação:</strong> {{ results.precipitacao }}
+            </li>
+            <li class="list-group-item">
+              <strong>Kc:</strong> {{ results.kc }}
+            </li>
+          </ul>
+        </div>
+      </div>
         </div>
       </div>
     </div>
@@ -507,6 +525,8 @@ export default {
     stations: [],
     pluviometers: [],
     crops: [],
+    resultsVisible: false,
+    results: {},
     response: '',
     selectedPluviometer: '',
     selectedCulture: '',
@@ -586,6 +606,8 @@ export default {
     this.selectedET0Manual = '';
     this.toggleSwitchStation = true;
     this.toggleSwitchPluviometer = true;
+    this.results = {};
+    this.resultsVisible = false;
 
     // Limpar outros campos adicionais, se houver
   },
@@ -652,4 +674,28 @@ body {
 .checkbox-margin {
   margin-right: 8px; /* ou o valor que desejar */
 }
+
+.card {
+    border-radius: 10px;
+  }
+  .custom-header {
+    background-color: #1b3f82;
+    color: white; /* Assegura que o texto seja branco */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    font-size: 1.5em;
+  }
+  .list-group-item {
+    font-size: 1.1em;
+    background-color: #f8f9fa;
+  }
+  .list-group-item strong {
+    color: #1b3f82;
+  }
+  .btn {
+    font-size: 1.2em;
+  }
+  .shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
 </style>
