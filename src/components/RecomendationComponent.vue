@@ -67,7 +67,12 @@
               </option>
             </select>
           </div>
-          <p v-if="showError" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+          <p
+            v-if="showError"
+            style="color: red; font-size: 12px;"
+          >
+            * Campo Obrigatório
+          </p>
         </div>
         <div
           v-if="!isStationDisabled"
@@ -80,6 +85,7 @@
           >ET0 Manual</label>
           <input
             id="newForm"
+            v-model="selectedET0Manual"
             class="form-control"
             type="number"
             placeholder="Digite o Valor da ET0"
@@ -111,7 +117,12 @@
               </option>
             </select>
           </div>
-          <p v-if="showError" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+          <p
+            v-if="showError"
+            style="color: red; font-size: 12px;"
+          >
+            * Campo Obrigatório
+          </p>
         </div>
         <div
           v-if="!isPluviometerDisabled"
@@ -124,11 +135,11 @@
           >Precipitação Manual</label>
           <input
             id="newForm"
+            v-model="selectedPrecipitationManual"
             class="form-control"
             type="number"
             placeholder="Digite o Valor da Precipitação"
           >
-          
         </div>
         <div class="col-md-12">
           <div class="form-group mb-4">
@@ -154,7 +165,12 @@
                 </option>
               </select>
             </div>
-            <p v-if="showError" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+            <p
+              v-if="showError"
+              style="color: red; font-size: 12px;"
+            >
+              * Campo Obrigatório
+            </p>
           </div>
         </div>
       </div>
@@ -174,7 +190,12 @@
                 placeholder="Digite a Data"
               >
             </div>
-            <p v-if="showError" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+            <p
+              v-if="showError"
+              style="color: red; font-size: 12px;"
+            >
+              * Campo Obrigatório
+            </p>
           </div>
         </div>
         <div class="col-md-4">
@@ -210,7 +231,12 @@
                 </option>
               </select>
             </div>
-            <p v-if="showError" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+            <p
+              v-if="showError"
+              style="color: red; font-size: 12px;"
+            >
+              * Campo Obrigatório
+            </p>
           </div>
         </div>
         <div class="col-md-4">
@@ -238,7 +264,12 @@
                 </div>
               </div>
             </div>
-            <p v-if="showError" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+            <p
+              v-if="showError"
+              style="color: red; font-size: 12px;"
+            >
+              * Campo Obrigatório
+            </p>
           </div>
         </div>
       </div>
@@ -449,13 +480,13 @@
           <div v-if="results">
             <h3>Resultados</h3>
             <ul>
-              <li>Etc: {{ results.Etc }}</li>
-              <li>Lâmina de Reposição: {{ results.RepositionBlade }}</li>
-              <li>Tempo de Irrigação: {{ results.IrrigationTime }}</li>
-              <li>Dias da Cultura: {{ results.CropDays }}</li>
-              <li>ET0: {{ results.Et0 }}</li>
-              <li>Precipitação: {{ results.Precipitation }}</li>
-              <li>Kc: {{ results.Kc }}</li>
+              <li>Etc: {{ results.etc }}</li>
+              <li>Lâmina de Reposição: {{ results.laminaReposicao }}</li>
+              <li>Tempo de Irrigação: {{ results.tempoIrrigacao }}</li>
+              <li>Dias da Cultura: {{ results.diasCultura }}</li>
+              <li>ET0: {{ results.et0 }}</li>
+              <li>Precipitação: {{ results.precipitacao }}</li>
+              <li>Kc: {{ results.kc }}</li>
             </ul>
           </div>
         </div>
@@ -473,12 +504,6 @@ export default {
   return {
     selectedStation: '',
     showError: false,
-    showErrorpluviometer: false,
-    showErrorstation: false,
-    showErrorcrop: false,
-    showErrordateplanting: false,
-    showErrorsystemirrigation: false,
-    showErrorirrigationefficiency: false,
     stations: [],
     pluviometers: [],
     crops: [],
@@ -503,6 +528,8 @@ export default {
     useDefault: true,
     toggleSwitchStation: true,
     toggleSwitchPluviometer: true,
+    selectedET0Manual: '',
+    selectedPrecipitationManual: ''
   };
 },
 
@@ -538,12 +565,6 @@ export default {
     ClearFields() {
     this.selectedStation = '';
     this.showError = false;
-    this.showErrorpluviometer = false;
-    this.showErrorstation = false;
-    this.showErrorcrop = false;
-    this.showErrordateplanting = false;
-    this.showErrorsystemirrigation = false;
-    this.showErrorirrigationefficiency = false;
     this.selectedPluviometer = '';
     this.selectedCulture = '';
     this.selectedSystemIrrigation = '';
@@ -561,13 +582,20 @@ export default {
     this.validationFurrowLength = '';
     this.validationGrooveSpacing = '';
     this.validationFlowGrooves = '';
+    this.selectedPrecipitationManual = '';
+    this.selectedET0Manual = '';
+    this.toggleSwitchStation = true;
+    this.toggleSwitchPluviometer = true;
 
     // Limpar outros campos adicionais, se houver
   },
 
   validateFields(){
     const fields = ['selectedStation', 'selectedPluviometer', 'selectedCulture',
-    'dateplanting', 'selectedSystemIrrigation', 'validationIrrigationEfficiency'];
+    'dateplanting', 'selectedSystemIrrigation', /*'validationIrrigationEfficiency', 
+    'validationPrecipitationSprinkler', 'validationFlowSystem', 'validationPlantedArea',
+    'validationEffectiveArea', 'validationNumberPlants', 'validationPrecipitationAround',
+  'validationFurrowLength', 'validationGrooveSpacing', 'validationFlaqowGrooves'*/]; 
 
     for (let field of fields) {
       if (!this[field]) {
@@ -587,6 +615,16 @@ export default {
         if (!this.validateFields()) {
       return;
     }
+    this.results = {
+          etc: 5.2,
+          laminaReposicao: 12.4,
+          tempoIrrigacao: 3.5,
+          diasCultura: 90,
+          et0: 4.6,
+          precipitacao: 8.1,
+          kc: 0.7,
+        };
+        this.resultsVisible = true;
 
       },
     toggleAdditionalFields() {
