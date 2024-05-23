@@ -476,10 +476,10 @@
           >
             Limpar Campos
           </button>
-          <hr class="my-4">
+
           <div v-if="resultsVisible && results" class="card mt-4 shadow">
-        <div class="card-header custom-header text-white">
-          <h3>Resultados</h3>
+        <div class="card-header text-white text-center" :style="{ backgroundColor: '#1b3f82' }">
+          <h3>Resultado Simulação de Lâmina</h3>
         </div>
         <div class="card-body">
           <ul class="list-group list-group-flush">
@@ -677,13 +677,6 @@ body {
 
 .card {
     border-radius: 10px;
-  }
-  .custom-header {
-    background-color: #1b3f82;
-    color: white; /* Assegura que o texto seja branco */
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    font-size: 1.5em;
   }
   .list-group-item {
     font-size: 1.1em;
