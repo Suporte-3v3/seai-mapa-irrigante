@@ -644,13 +644,13 @@ export default {
       return;
     }
     this.results = {
-          etc: "equipment",
-          laminaReposicao: "equipment",
-          tempoIrrigacao: "equipment",
-          diasCultura: "equipment",
-          et0: "equipment",
-          precipitacao: "equipment",
-          kc: "equipment"
+          etc: "0.9",
+          laminaReposicao: "1.2",
+          tempoIrrigacao: "00 hrs 36 min",
+          diasCultura: "40",
+          et0: "4.1",
+          precipitacao: "0",
+          kc: "0.22"
         };
         this.resultsVisible = true;
 
