@@ -477,36 +477,42 @@
             Limpar Campos
           </button>
 
-          <div v-if="resultsVisible && results" class="card mt-4 shadow">
-        <div class="card-header text-white text-center" :style="{ backgroundColor: '#1b3f82' }">
-          <h3>Resultado Simulação de Lâmina</h3>
-        </div>
-        <div class="card-body">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <strong>Etc:</strong> {{ results.etc }}
-            </li>
-            <li class="list-group-item">
-              <strong>Lâmina de Reposição:</strong> {{ results.laminaReposicao }}
-            </li>
-            <li class="list-group-item">
-              <strong>Tempo de Irrigação:</strong> {{ results.tempoIrrigacao }}
-            </li>
-            <li class="list-group-item">
-              <strong>Dias da Cultura:</strong> {{ results.diasCultura }}
-            </li>
-            <li class="list-group-item">
-              <strong>ET0:</strong> {{ results.et0 }}
-            </li>
-            <li class="list-group-item">
-              <strong>Precipitação:</strong> {{ results.precipitacao }}
-            </li>
-            <li class="list-group-item">
-              <strong>Kc:</strong> {{ results.kc }}
-            </li>
-          </ul>
-        </div>
-      </div>
+          <div
+            v-if="resultsVisible && results"
+            class="card mt-4 shadow"
+          >
+            <div
+              class="card-header text-white text-center"
+              :style="{ backgroundColor: '#1b3f82' }"
+            >
+              <h3>Resultado Simulação de Lâmina</h3>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <strong>Etc:</strong> {{ results.etc }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Lâmina de Reposição:</strong> {{ results.laminaReposicao }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Tempo de Irrigação:</strong> {{ results.tempoIrrigacao }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Dias da Cultura:</strong> {{ results.diasCultura }}
+                </li>
+                <li class="list-group-item">
+                  <strong>ET0:</strong> {{ results.et0 }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Precipitação:</strong> {{ results.precipitacao }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Kc:</strong> {{ results.kc }}
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -638,13 +644,13 @@ export default {
       return;
     }
     this.results = {
-          etc: 5.2,
-          laminaReposicao: 12.4,
-          tempoIrrigacao: 3.5,
-          diasCultura: 90,
-          et0: 4.6,
-          precipitacao: 8.1,
-          kc: 0.7,
+          etc: 0.90,
+          laminaReposicao: 1.2,
+          tempoIrrigacao: "00hrs 36min",
+          diasCultura: 40,
+          et0: 4.1,
+          precipitacao: 0,
+          kc: 0.22,
         };
         this.resultsVisible = true;
 
