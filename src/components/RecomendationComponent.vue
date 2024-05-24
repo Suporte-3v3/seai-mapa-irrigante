@@ -51,7 +51,7 @@
           <div class="input-group">
             <select
               id="option1"
-              v-model="selectedEstation"
+              v-model="selectedStation"
               class="form-control"
               :disabled="!isStationDisabled"
             >
@@ -67,6 +67,12 @@
               </option>
             </select>
           </div>
+          <p
+            v-if="showError"
+            style="color: red; font-size: 12px;"
+          >
+            * Campo Obrigatório
+          </p>
         </div>
         <div
           v-if="!isStationDisabled"
@@ -79,6 +85,7 @@
           >ET0 Manual</label>
           <input
             id="newForm"
+            v-model="selectedET0Manual"
             class="form-control"
             type="number"
             placeholder="Digite o Valor da ET0"
@@ -110,6 +117,12 @@
               </option>
             </select>
           </div>
+          <p
+            v-if="showError"
+            style="color: red; font-size: 12px;"
+          >
+            * Campo Obrigatório
+          </p>
         </div>
         <div
           v-if="!isPluviometerDisabled"
@@ -122,6 +135,7 @@
           >Precipitação Manual</label>
           <input
             id="newForm"
+            v-model="selectedPrecipitationManual"
             class="form-control"
             type="number"
             placeholder="Digite o Valor da Precipitação"
@@ -151,6 +165,12 @@
                 </option>
               </select>
             </div>
+            <p
+              v-if="showError"
+              style="color: red; font-size: 12px;"
+            >
+              * Campo Obrigatório
+            </p>
           </div>
         </div>
       </div>
@@ -170,6 +190,12 @@
                 placeholder="Digite a Data"
               >
             </div>
+            <p
+              v-if="showError"
+              style="color: red; font-size: 12px;"
+            >
+              * Campo Obrigatório
+            </p>
           </div>
         </div>
         <div class="col-md-4">
@@ -205,6 +231,12 @@
                 </option>
               </select>
             </div>
+            <p
+              v-if="showError"
+              style="color: red; font-size: 12px;"
+            >
+              * Campo Obrigatório
+            </p>
           </div>
         </div>
         <div class="col-md-4">
@@ -232,6 +264,12 @@
                 </div>
               </div>
             </div>
+            <p
+              v-if="showError"
+              style="color: red; font-size: 12px;"
+            >
+              * Campo Obrigatório
+            </p>
           </div>
         </div>
       </div>
@@ -438,18 +476,42 @@
           >
             Limpar Campos
           </button>
-          <hr class="line">
-          <div v-if="results">
-            <h3>Resultados</h3>
-            <ul>
-              <li>Etc: {{ results.Etc }}</li>
-              <li>Lâmina de Reposição: {{ results.RepositionBlade }}</li>
-              <li>Tempo de Irrigação: {{ results.IrrigationTime }}</li>
-              <li>Dias da Cultura: {{ results.CropDays }}</li>
-              <li>ET0: {{ results.Et0 }}</li>
-              <li>Precipitação: {{ results.Precipitation }}</li>
-              <li>Kc: {{ results.Kc }}</li>
-            </ul>
+
+          <div
+            v-if="resultsVisible && results"
+            class="card mt-4 shadow"
+          >
+            <div
+              class="card-header text-white text-center"
+              :style="{ backgroundColor: '#1b3f82' }"
+            >
+              <h3>Resultado Simulação de Lâmina</h3>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <strong>Etc:</strong> {{ results.etc }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Lâmina de Reposição:</strong> {{ results.laminaReposicao }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Tempo de Irrigação:</strong> {{ results.tempoIrrigacao }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Dias da Cultura:</strong> {{ results.diasCultura }}
+                </li>
+                <li class="list-group-item">
+                  <strong>ET0:</strong> {{ results.et0 }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Precipitação:</strong> {{ results.precipitacao }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Kc:</strong> {{ results.kc }}
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -464,10 +526,13 @@ export default {
   name: 'RecomendationComponent',
   data() {
   return {
-    selectedEstation: '',
+    selectedStation: '',
+    showError: false,
     stations: [],
     pluviometers: [],
     crops: [],
+    resultsVisible: false,
+    results: {},
     response: '',
     selectedPluviometer: '',
     selectedCulture: '',
@@ -489,6 +554,8 @@ export default {
     useDefault: true,
     toggleSwitchStation: true,
     toggleSwitchPluviometer: true,
+    selectedET0Manual: '',
+    selectedPrecipitationManual: ''
   };
 },
 
@@ -501,53 +568,6 @@ export default {
     },
     isPluviometerDisabled() {
       return this.toggleSwitchPluviometer;
-    }
-  },
-  async calculateRecomendation() {
-    console.log("calculateRecomendation chamado"); // Log para verificaçã
-    try {
-      // Coletar dados do formulário
-      const data = {
-        Station: this.isStationDisabled ? {
-          Id: parseInt(this.selectedEstation),
-          Et0: parseFloat(this.stations.find(station => station.Id === this.selectedEstation).Et0)
-        } : {
-          Id: null,
-          Et0: parseFloat(this.manualEt0) // Supondo que você tenha um campo v-model="manualEt0" para ET0 manual
-        },
-        CropId: parseInt(this.selectedCulture),
-        Pluviometer: this.isPluviometerDisabled ? {
-          Id: parseInt(this.selectedPluviometer),
-          Precipitation: parseFloat(this.pluviometers.find(pluviometer => pluviometer.Id === this.selectedPluviometer).Precipitation)
-        } : {
-          Id: null,
-          Precipitation: parseFloat(this.manualPrecipitation) // Supondo que você tenha um campo v-model="manualPrecipitation" para precipitação manual
-        },
-        PlantingDate: this.dateplanting,
-        System: {
-          Type: this.selectedSystemIrrigation,
-          Measurements: {
-            Efficiency: parseFloat(this.validationIrrigationEfficiency),
-            Precipitation: this.selectedSystemIrrigation === 'Aspersão' ? parseFloat(this.validationPrecipitationSprinkler) : null,
-            Flow: this.selectedSystemIrrigation !== 'Aspersão' ? parseFloat(this.validationFlowSystem) : null,
-            PlantedArea: ['MicroAspersão', 'Gotejamento'].includes(this.selectedSystemIrrigation) ? parseFloat(this.validationPlantedArea) : null,
-            EffectiveArea: ['MicroAspersão', 'Gotejamento'].includes(this.selectedSystemIrrigation) ? parseFloat(this.validationEffectiveArea) : null,
-            NumberPlants: ['MicroAspersão', 'Gotejamento'].includes(this.selectedSystemIrrigation) ? parseFloat(this.validationNumberPlants) : null,
-            PrecipitationAround: this.selectedSystemIrrigation === 'Pivô Central' ? parseFloat(this.validationPrecipitationAround) : null,
-            FurrowLength: this.selectedSystemIrrigation === 'Sulcos' ? parseFloat(this.validationFurrowLength) : null,
-            GrooveSpacing: this.selectedSystemIrrigation === 'Sulcos' ? parseFloat(this.validationGrooveSpacing) : null,
-            FlowGrooves: this.selectedSystemIrrigation === 'Sulcos' ? parseFloat(this.validationFlowGrooves) : null
-          }
-        }
-      };
-      console.log("Dados do formulário:", data);
-
-      // Enviar a requisição para a API
-      const response = await axios.post('http://seai.3v3.farm/api/v2/management/blade_suggestion', data);
-      console.log("Resposta da API:", response);
-      this.response = response.data.data; // Armazene a resposta em 'response'
-    } catch (error) {
-      console.error("Erro ao chamar a API:", error);
     }
   },
   async created() {
@@ -569,12 +589,14 @@ export default {
   methods: {
      // Método para limpar os campos.
     ClearFields() {
-    this.selectedEstation = '';
+    this.selectedStation = '';
+    this.showError = false;
     this.selectedPluviometer = '';
     this.selectedCulture = '';
     this.selectedSystemIrrigation = '';
     this.input1 = '';
     this.input2 = '';
+    this.dateplanting = '';
     this.response = '';
     this.validationIrrigationEfficiency = '';
     this.validationPrecipitationSprinkler = '';
@@ -586,19 +608,52 @@ export default {
     this.validationFurrowLength = '';
     this.validationGrooveSpacing = '';
     this.validationFlowGrooves = '';
+    this.selectedPrecipitationManual = '';
+    this.selectedET0Manual = '';
+    this.toggleSwitchStation = true;
+    this.toggleSwitchPluviometer = true;
+    this.results = {};
+    this.resultsVisible = false;
 
     // Limpar outros campos adicionais, se houver
+  },
+
+  validateFields(){
+    const fields = ['selectedStation', 'selectedPluviometer', 'selectedCulture',
+    'dateplanting', 'selectedSystemIrrigation', /*'validationIrrigationEfficiency', 
+    'validationPrecipitationSprinkler', 'validationFlowSystem', 'validationPlantedArea',
+    'validationEffectiveArea', 'validationNumberPlants', 'validationPrecipitationAround',
+  'validationFurrowLength', 'validationGrooveSpacing', 'validationFlaqowGrooves'*/]; 
+
+    for (let field of fields) {
+      if (!this[field]) {
+        this.showError = true;
+        return field; // Retorna o nome do campo inválido
+      }
+    }
+
+    // Se todos os campos forem válidos
+    this.showError = false;
+    return null;
   },
   calculateRecomendation() {
         // Aqui você adicionaria sua lógica de cálculo
         console.log('Calculando recomendação...');
         // Exemplo de lógica de validação
-        if (!this.selectedCulture) {
-          this.errorMessage = 'Por favor, selecione uma cultura.';
-          return;
-        }
-        // Outras validações e cálculos
-        this.errorMessage = ''; // Limpa a mensagem de erro se todas as validações passarem
+        if (!this.validateFields()) {
+      return;
+    }
+    this.results = {
+          etc: "equipment",
+          laminaReposicao: "equipment",
+          tempoIrrigacao: "equipment",
+          diasCultura: "equipment",
+          et0: "equipment",
+          precipitacao: "equipment",
+          kc: "equipment"
+        };
+        this.resultsVisible = true;
+
       },
     toggleAdditionalFields() {
       this.showAdditionalFields = ['Aspersão', 'MicroAspersão', 'Gotejamento', 'Pivô Central', 'Sulcos'].includes(this.selectedSystemIrrigation);
@@ -625,4 +680,21 @@ body {
 .checkbox-margin {
   margin-right: 8px; /* ou o valor que desejar */
 }
+
+.card {
+    border-radius: 10px;
+  }
+  .list-group-item {
+    font-size: 1.1em;
+    background-color: #f8f9fa;
+  }
+  .list-group-item strong {
+    color: #1b3f82;
+  }
+  .btn {
+    font-size: 1.2em;
+  }
+  .shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
 </style>
