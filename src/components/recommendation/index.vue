@@ -46,7 +46,7 @@
           <div class="input-group">
             <select
               id="option1"
-              v-model="selectedEstation"
+              v-model="selectedStation"
               class="form-control"
               :disabled="!isStationDisabled"
             >
@@ -61,6 +61,12 @@
               </option>
             </select>
           </div>
+          <p
+            v-if="showError"
+            style="color: red; font-size: 12px;"
+          >
+            * Campo Obrigatório
+          </p>
         </div>
         <div v-if="!isStationDisabled" class="form-group mb-4">
           <label for="newForm" class="tab-label" style="color: #bb4430"
@@ -68,6 +74,7 @@
           >
           <input
             id="newForm"
+            v-model="selectedET0Manual"
             class="form-control"
             type="number"
             placeholder="Digite o Valor da ET0"
@@ -95,6 +102,12 @@
               </option>
             </select>
           </div>
+          <p
+            v-if="showError"
+            style="color: red; font-size: 12px;"
+          >
+            * Campo Obrigatório
+          </p>
         </div>
         <div v-if="!isPluviometerDisabled" class="form-group mb-4">
           <label for="newForm" class="tab-label" style="color: #bb4430"
@@ -102,6 +115,7 @@
           >
           <input
             id="newForm"
+            v-model="selectedPrecipitationManual"
             class="form-control"
             type="number"
             placeholder="Digite o Valor da Precipitação"
@@ -122,6 +136,12 @@
                 </option>
               </select>
             </div>
+            <p
+              v-if="showError"
+              style="color: red; font-size: 12px;"
+            >
+              * Campo Obrigatório
+            </p>
           </div>
         </div>
       </div>
@@ -138,6 +158,12 @@
                 placeholder="Digite a Data"
               />
             </div>
+            <p
+              v-if="showError"
+              style="color: red; font-size: 12px;"
+            >
+              * Campo Obrigatório
+            </p>
           </div>
         </div>
         <div class="col-md-4">
@@ -158,6 +184,12 @@
                 <option value="Sulcos">Sulcos</option>
               </select>
             </div>
+            <p
+              v-if="showError"
+              style="color: red; font-size: 12px;"
+            >
+              * Campo Obrigatório
+            </p>
           </div>
         </div>
         <div class="col-md-4">
@@ -185,6 +217,12 @@
                 </div>
               </div>
             </div>
+            <p
+              v-if="showError"
+              style="color: red; font-size: 12px;"
+            >
+              * Campo Obrigatório
+            </p>
           </div>
         </div>
       </div>
@@ -384,34 +422,39 @@ import Result from "./result.vue"
 export default {
   name: "RecomendationComponent",
   data() {
-    return {
-      selectedEstation: "",
-      stations: [],
-      pluviometers: [],
-      crops: [],
-      response: "",
-      selectedPluviometer: "",
-      selectedCulture: "",
-      selectedSystemIrrigation: "",
-      dateplanting: "",
-      validationIrrigationEfficiency: "",
-      validationPrecipitationSprinkler: "",
-      validationFlowSystem: "",
-      validationPlantedArea: "",
-      validationEffectiveArea: "",
-      validationNumberPlants: "",
-      validationPrecipitationAround: "",
-      validationFurrowLength: "",
-      validationGrooveSpacing: "",
-      validationFlowGrooves: "",
-      manualEt0: "", // Novo campo para ET0 manual
-      manualPrecipitation: "", // Novo campo para precipitação manual
-      showAdditionalFields: false,
-      useDefault: true,
-      toggleSwitchStation: true,
-      toggleSwitchPluviometer: true,
-    };
-  },
+  return {
+    selectedStation: '',
+    showError: false,
+    stations: [],
+    pluviometers: [],
+    crops: [],
+    resultsVisible: false,
+    results: {},
+    response: '',
+    selectedPluviometer: '',
+    selectedCulture: '',
+    selectedSystemIrrigation: '',
+    dateplanting: '',
+    validationIrrigationEfficiency: '',
+    validationPrecipitationSprinkler: '',
+    validationFlowSystem: '',
+    validationPlantedArea: '',
+    validationEffectiveArea: '',
+    validationNumberPlants: '',
+    validationPrecipitationAround: '',
+    validationFurrowLength: '',
+    validationGrooveSpacing: '',
+    validationFlowGrooves: '',
+    manualEt0: '', // Novo campo para ET0 manual
+    manualPrecipitation: '', // Novo campo para precipitação manual
+    showAdditionalFields: false,
+    useDefault: true,
+    toggleSwitchStation: true,
+    toggleSwitchPluviometer: true,
+    selectedET0Manual: '',
+    selectedPrecipitationManual: ''
+  };
+},
 
   computed: {
     isFieldDisabled() {
@@ -602,4 +645,21 @@ body {
 .checkbox-margin {
   margin-right: 8px; /* ou o valor que desejar */
 }
+
+.card {
+    border-radius: 10px;
+  }
+  .list-group-item {
+    font-size: 1.1em;
+    background-color: #f8f9fa;
+  }
+  .list-group-item strong {
+    color: #1b3f82;
+  }
+  .btn {
+    font-size: 1.2em;
+  }
+  .shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
 </style>

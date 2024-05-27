@@ -14,29 +14,30 @@ export default {
       stations: [],
       pluviometers: [],
       map: null,
-      stationIcon: L.marker({
-        iconUrl: "/icone-pluviometer", // caminho para o ícone na pasta public
-        iconSize: [100, 95], // tamanho do ícone
+      stationIcon: L.icon({
+        iconUrl: '/icon-station.png', // caminho para o ícone na pasta public
+        iconSize: [15, 15], // tamanho do ícone
       }),
-      pluviometerIcon: L.marker({
-        iconUrl: "/icon-station", // caminho para o ícone na pasta public
-        iconSize: [100, 95], // tamanho do ícone
+      pluviometerIcon: L.icon({
+        iconUrl: '/icon-pluviometer.png', // caminho para o ícone na pasta public
+        iconSize: [15, 15], // tamanho do ícone
       }),
     };
   },
   async created() {
     try {
-      const responseStation = await axios.get(
-        "http://seai.3v3.farm/api/v1/equipments/activated?type=station"
-      );
-      this.stations = responseStation.data.data;
+      const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
+      this.stations = responseStation.data.data || [];
+      console.log('Stations data:', this.stations); // Log para verificar dados das estações
 
-      const responsePluviometer = await axios.get(
-        "http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer"
-      );
-      this.pluviometers = responsePluviometer.data.data;
+      const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');
+      this.pluviometers = responsePluviometer.data ? responsePluviometer.data.data : [];
+      console.log('Pluviometers data:', this.pluviometers); // Log para verificar dados dos pluviômetros
+
+      // Adicionar marcadores após os dados serem carregados e validados
+      this.addMarkers();
     } catch (error) {
-      console.error(error);
+      console.error('Error fetching data from API:', error);
     }
   },
   mounted() {
@@ -58,6 +59,9 @@ export default {
   },
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.handleResize);
 
     if (this.map) {
       this.map.remove();
@@ -65,7 +69,6 @@ export default {
   },
   methods: {
     setupMap() {
-      // Criar o mapa
       this.map = L.map(this.$refs.map, {
         scrollWheelZoom: true, // Desabilita o zoom com a roda do mouse
       });
@@ -78,12 +81,11 @@ export default {
         }
       ).addTo(this.map);
 
-      // Adicionar o GeoJSON ao mapa
       const geojsonLayer = L.geoJSON(ceara_data, {
         onEachFeature: this.onEachFeature,
         style: function (feature) {
           return {
-            color: "#1b3f82", // cor do traçado
+            color: '#1b3f82', // cor do traçado
             weight: 0.5, // largura do traçado
             opacity: 1, // opacidade do traçado
             fillOpacity: 0.2, // opacidade do preenchimento
@@ -91,58 +93,118 @@ export default {
         },
       }).addTo(this.map);
 
-      // Ajustar o mapa para focar na área coberta pelo GeoJSON
       this.map.fitBounds(geojsonLayer.getBounds());
-
-      // Ocultar apenas a atribuição do Leaflet
 
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-
-            // Centralizar o mapa na localização do usuário
-            this.map.setView([latitude, longitude], 7);
+            if (this.map) {
+              this.map.setView([latitude, longitude], 7);
+            }
           },
           (error) => {
-            console.error("Erro ao obter a localização do usuário:", error);
+            console.error('Erro ao obter a localização do usuário:', error);
           }
         );
       } else {
         console.error("Geolocalização não é suportada neste navegador.");
       }
 
-      // Ajustar o tamanho do mapa para a tela
       this.handleResize();
 
-      // Adiciona um evento de escuta para desabilitar o zoom quando o usuário toca no mapa
-      this.$refs.map.addEventListener("touchstart", () => {
-        this.map.scrollWheelZoom.disable(); // Desabilita o zoom com o toque
+      this.$refs.map.addEventListener('touchstart', () => {
+        if (this.map) {
+          this.map.scrollWheelZoom.disable(); // Desabilita o zoom com o toque
+        }
       });
 
-      // Adiciona um evento de escuta para habilitar o zoom quando o usuário tira o dedo do mapa
-      this.$refs.map.addEventListener("touchend", () => {
-        this.map.scrollWheelZoom.enable(); // Habilita o zoom com o toque
+      this.$refs.map.addEventListener('touchend', () => {
+        if (this.map) {
+          this.map.scrollWheelZoom.enable(); // Habilita o zoom com o toque
+        }
       });
+
+      // Adicionar a legenda ao mapa
+      this.addLegend();
     },
     handleResize() {
-      this.map.invalidateSize(); // Reajusta o tamanho do mapa quando a janela é redimensionada
+      if (this.map) {
+        this.map.invalidateSize(); // Reajusta o tamanho do mapa quando a janela é redimensionada
+      }
     },
     onEachFeature(feature, layer) {
       if (feature.properties && feature.properties.name) {
         layer.bindPopup(feature.properties.name);
       }
     },
+    addMarkers() {
+      if (this.stations && Array.isArray(this.stations)) {
+        this.stations.forEach((station) => {
+          const coordinates = station.Location.Coordinates;
+          console.log('Adicionando marcador de estação em:', coordinates); // Log para verificar coordenadas das estações
+          if (coordinates && coordinates.length === 2) {
+            const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.stationIcon }).addTo(this.map);
+            marker.bindPopup(`<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} <a>[</a>${station.Code}<a>]</a><br><b>Et0:</b> ${station.Et0}`);
+          } else {
+            console.error('Coordenadas de Estações inválidas:', station);
+          }
+        });
+      } else {
+        console.error('Os dados das estações são inválidos');
+      }
+
+      if (this.pluviometers && Array.isArray(this.pluviometers)) {
+        this.pluviometers.forEach((pluviometer) => {
+          const coordinates = pluviometer.Location.Coordinates;
+          console.log('Adicionando marcador de pluviômetro em:', coordinates); // Log para verificar coordenadas dos pluviômetros
+          if (coordinates && coordinates.length === 2) {
+            const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.pluviometerIcon }).addTo(this.map);
+            marker.bindPopup(`<b>Nome:</b> ${pluviometer.Name}<br><b>Orgão:</b> ${pluviometer.Organ.Name} <a>[</a>${pluviometer.Code}<a>]</a><br><b>Precipitação:</b> ${pluviometer.Precipitation}<a> mm</a>`);
+          } else {
+            console.error('Coordenadas do pluviômetro inválidas', pluviometer);
+          }
+        });
+      } else {
+        console.error('Os dados dos pluviômetros são inválidos');
+      }
+    },
+    addLegend() {
+      const legend = L.control({ position: 'topright' });
+
+      legend.onAdd = () => {
+        const div = L.DomUtil.create('div', 'info legend');
+        div.innerHTML += '<i style="background: #1b3f82; width: 15px; height: 15px; display: inline-block;"></i> Estação<br>';
+        div.innerHTML += '<i style="background: #b1151f; width: 15px; height: 15px; display: inline-block;"></i> Pluviômetro<br>';
+        return div;
+      };
+
+      legend.addTo(this.map);
+    }
   },
 };
 </script>
 
 <style scoped>
 .map-container {
-  height: 60vh; /* Define a altura do mapa para ocupar 70% da altura da tela */
+  height: 60vh; /* Define a altura do mapa para ocupar 60% da altura da tela */
 }
 
 .leaflet-control-attribution {
   display: none;
+}
+
+.info.legend {
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.info.legend i {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
 }
 </style>
