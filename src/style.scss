@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+.accordion-custom {
+  
+  .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link {
+    background-color: #a1b5d8 !important;
+    box-shadow: none !important;
+    border: 1px solid #2c5ebb;
+  }
+  .p-accordion-header .p-accordion-header-link {
+    background-color: #f8f9fd !important;
+    box-shadow: none;
+    border: 1px solid #2c5ebb;
+    border-radius: 0%;
+    color: #212529 !important;
+    text-decoration: none !important;
+  }
+  .p-accordion-content {
+    padding-top: 20px;
+    background-color: #f8f9fd !important;
+  }
+}
+.p-tabview-nav {
+  background-color: #0478fd00 !important;
+  border-color: #1b3f82;
+
+  a {
+    background-color: #0478fd00 !important;
+    text-decoration: none;
+    color: #1b3f82;
+    font-family: "Montserrat", sans-serif !important;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+}
+.p-tabview .p-tabview-nav li .p-tabview-nav-link {
+  background: #ffffff;
+  border-color: #1b3f82;
+}
+.p-tabview .p-tabview-nav .p-highlight .p-tabview-nav-link {
+  border-color: #99bdff;
+  font-weight: 600;
+}
+.p-tabview-panels {
+  background-color: #1b3f8200;
+}
+
+.btn-simple {
+  background-color: rgba(0, 0, 0, 0);
+  color: white;
+  border: 1px solid #0478fd00;
+  border-radius: 5px;
+  padding: 10px;
+  transition: 0.5s;
+  &:hover {
+    color: rgb(212, 212, 212);
+  }
+  p {
+    margin-bottom: 0px;
+    font-weight: bold;
+  }
+}
+
+.btn-white {
+  background-color: rgb(255, 255, 255);
+  color: #1b3f82;
+  border: 1px solid #0478fd00;
+  border-radius: 5px;
+  padding: 10px;
+  transition: 0.5s;
+  p {
+    margin-bottom: 0px;
+    font-weight: bold;
+  }
+}
