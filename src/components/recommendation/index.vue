@@ -408,7 +408,7 @@
             Limpar Campos
           </button>
           <hr class="line" />
-          <Result v-if="results" :results="results" />
+          <Resultados v-if="results" :results="response" />
         </div>
       </div>
     </div>
@@ -474,10 +474,10 @@ export default {
       const data = {
         Station: this.isStationDisabled
           ? {
-              Id: parseInt(this.selectedEstation),
+              Id: parseInt(this.selectedStation),
               Et0: parseFloat(
                 this.stations.find(
-                  (station) => station.Id === this.selectedEstation
+                  (station) => station.Id === this.selectedStation
                 ).Et0
               ),
             }
@@ -583,7 +583,7 @@ export default {
   methods: {
     // Método para limpar os campos.
     ClearFields() {
-      this.selectedEstation = "";
+      this.selectedStation = "";
       this.selectedPluviometer = "";
       this.selectedCulture = "";
       this.selectedSystemIrrigation = "";
@@ -600,19 +600,9 @@ export default {
       this.validationFurrowLength = "";
       this.validationGrooveSpacing = "";
       this.validationFlowGrooves = "";
+      this.dateplanting = "";
 
       // Limpar outros campos adicionais, se houver
-    },
-    calculateRecomendation() {
-      // Aqui você adicionaria sua lógica de cálculo
-      console.log("Calculando recomendação...");
-      // Exemplo de lógica de validação
-      if (!this.selectedCulture) {
-        this.errorMessage = "Por favor, selecione uma cultura.";
-        return;
-      }
-      // Outras validações e cálculos
-      this.errorMessage = ""; // Limpa a mensagem de erro se todas as validações passarem
     },
     toggleAdditionalFields() {
       this.showAdditionalFields = [
