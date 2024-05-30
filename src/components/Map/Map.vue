@@ -15,12 +15,12 @@ export default {
       pluviometers: [],
       map: null,
       stationIcon: L.icon({
-        iconUrl: '/icon-station.png', // caminho para o ícone na pasta public
-        iconSize: [15, 15], // tamanho do ícone
+        iconUrl: '/icon-station.png',
+        iconSize: [15, 15],
       }),
       pluviometerIcon: L.icon({
-        iconUrl: '/icon-pluviometer.png', // caminho para o ícone na pasta public
-        iconSize: [15, 15], // tamanho do ícone
+        iconUrl: '/icon-pluviometer.png',
+        iconSize: [15, 15],
       }),
     };
   },
@@ -28,13 +28,12 @@ export default {
     try {
       const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
       this.stations = responseStation.data.data || [];
-      console.log('Stations data:', this.stations); // Log para verificar dados das estações
+      console.log('Stations data:', this.stations);
 
       const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');
       this.pluviometers = responsePluviometer.data ? responsePluviometer.data.data : [];
-      console.log('Pluviometers data:', this.pluviometers); // Log para verificar dados dos pluviômetros
+      console.log('Pluviometers data:', this.pluviometers);
 
-      // Adicionar marcadores após os dados serem carregados e validados
       this.addMarkers();
     } catch (error) {
       console.error('Error fetching data from API:', error);
@@ -44,7 +43,6 @@ export default {
     this.setupMap();
     window.addEventListener("resize", this.handleResize);
 
-    // Adicione os marcadores aqui, depois que o mapa foi criado
     this.stations.forEach((station) => {
       L.marker(station.Location.Coordinates, { icon: this.stationIcon }).addTo(
         this.map
@@ -70,14 +68,15 @@ export default {
   methods: {
     setupMap() {
       this.map = L.map(this.$refs.map, {
-        scrollWheelZoom: true, // Desabilita o zoom com a roda do mouse
+        scrollWheelZoom: true,
+        attributionControl: false, // Remove attribution control
+        zoomControl: false, // Remove default zoom controls
       });
 
-      // Adicionar camada de tile do OpenStreetMap
       L.tileLayer(
         "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
         {
-          attribution: "SEAI - Irrigante",
+          attribution: "", // Ensure no attribution is added
         }
       ).addTo(this.map);
 
@@ -85,10 +84,10 @@ export default {
         onEachFeature: this.onEachFeature,
         style: function (feature) {
           return {
-            color: '#1b3f82', // cor do traçado
-            weight: 0.5, // largura do traçado
-            opacity: 1, // opacidade do traçado
-            fillOpacity: 0.2, // opacidade do preenchimento
+            color: '#1b3f82',
+            weight: 0.5,
+            opacity: 1,
+            fillOpacity: 0.2,
           };
         },
       }).addTo(this.map);
@@ -115,22 +114,26 @@ export default {
 
       this.$refs.map.addEventListener('touchstart', () => {
         if (this.map) {
-          this.map.scrollWheelZoom.disable(); // Desabilita o zoom com o toque
+          this.map.scrollWheelZoom.disable();
         }
       });
 
       this.$refs.map.addEventListener('touchend', () => {
         if (this.map) {
-          this.map.scrollWheelZoom.enable(); // Habilita o zoom com o toque
+          this.map.scrollWheelZoom.enable();
         }
       });
 
-      // Adicionar a legenda ao mapa
       this.addLegend();
+
+      // Add custom zoom controls
+      L.control.zoom({
+        position: 'bottomleft', // Position zoom controls to bottom left
+      }).addTo(this.map);
     },
     handleResize() {
       if (this.map) {
-        this.map.invalidateSize(); // Reajusta o tamanho do mapa quando a janela é redimensionada
+        this.map.invalidateSize();
       }
     },
     onEachFeature(feature, layer) {
@@ -142,7 +145,7 @@ export default {
       if (this.stations && Array.isArray(this.stations)) {
         this.stations.forEach((station) => {
           const coordinates = station.Location.Coordinates;
-          console.log('Adicionando marcador de estação em:', coordinates); // Log para verificar coordenadas das estações
+          console.log('Adicionando marcador de estação em:', coordinates);
           if (coordinates && coordinates.length === 2) {
             const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.stationIcon }).addTo(this.map);
             marker.bindPopup(`<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} <a>[</a>${station.Code}<a>]</a><br><b>Et0:</b> ${station.Et0}`);
@@ -157,7 +160,7 @@ export default {
       if (this.pluviometers && Array.isArray(this.pluviometers)) {
         this.pluviometers.forEach((pluviometer) => {
           const coordinates = pluviometer.Location.Coordinates;
-          console.log('Adicionando marcador de pluviômetro em:', coordinates); // Log para verificar coordenadas dos pluviômetros
+          console.log('Adicionando marcador de pluviômetro em:', coordinates);
           if (coordinates && coordinates.length === 2) {
             const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.pluviometerIcon }).addTo(this.map);
             marker.bindPopup(`<b>Nome:</b> ${pluviometer.Name}<br><b>Orgão:</b> ${pluviometer.Organ.Name} <a>[</a>${pluviometer.Code}<a>]</a><br><b>Precipitação:</b> ${pluviometer.Precipitation}<a> mm</a>`);
@@ -170,12 +173,13 @@ export default {
       }
     },
     addLegend() {
-      const legend = L.control({ position: 'topright' });
+      const legend = L.control({ position: 'bottomright' });
 
       legend.onAdd = () => {
         const div = L.DomUtil.create('div', 'info legend');
-        div.innerHTML += '<i style="background: #1b3f82; width: 15px; height: 15px; display: inline-block;"></i> Estação<br>';
-        div.innerHTML += '<i style="background: #b1151f; width: 15px; height: 15px; display: inline-block;"></i> Pluviômetro<br>';
+        console.log('Legenda adicionada com classes:', div.className); // Adicione este log
+        div.innerHTML += '<i style="background: #26c28d; width: 15px; height: 15px; display: inline-block;"></i> <b>Estação</b><br>';
+        div.innerHTML += '<i style="background: #e30224; width: 15px; height: 15px; display: inline-block;"></i> <b>Pluviômetro</b><br>';
         return div;
       };
 
@@ -185,20 +189,31 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .map-container {
-  height: 60vh; /* Define a altura do mapa para ocupar 60% da altura da tela */
+  height: 60vh;
 }
 
 .leaflet-control-attribution {
   display: none;
 }
 
+.leaflet-bottom {
+  bottom: 320px !important; /* Ajusta a distância da parte inferior */
+}
+
+.leaflet-control-zoom {
+  bottom: 20px !important; /* Ajusta a distância do controle de zoom */
+}
+
 .info.legend {
-  background-color: white;
+  background-color: #1b3f82; /* Cor de fundo da legenda */
+  color: white; /* Cor do texto da legenda */
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  bottom: 20px; /* Ajusta a distância da parte inferior */
+  z-index: 9999; /* Garante que a legenda esteja sempre no topo */
 }
 
 .info.legend i {
