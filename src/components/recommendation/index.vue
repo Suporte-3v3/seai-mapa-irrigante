@@ -458,6 +458,7 @@ export default {
       selectedPrecipitationManual: ''
     };
   },
+ 
   computed: {
     isFieldDisabled() {
       return this.useDefault;
@@ -467,7 +468,22 @@ export default {
     },
     isPluviometerDisabled() {
       return this.toggleSwitchPluviometer;
-    },
+    }
+  },
+      async created() {
+    try {
+      const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
+      this.stations = responseStation.data.data;
+
+      const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');
+      this.pluviometers = responsePluviometer.data.data;
+
+      const response = await axios.get('http://seai.3v3.farm/api/v2/management/crop');
+      this.crops = response.data.data;
+
+    } catch (error) {
+      console.error(error);
+    }
   },
   methods: {
     async calculateRecomendation() {
@@ -479,8 +495,8 @@ export default {
                 Id: parseInt(this.selectedStation),
                 Et0: parseFloat(
                   this.stations.find(
-                    (station) => station.Id === this.selectedStation
-                  ).Et0
+                    (station) => station.Et0 === this.selectedStation
+                  )
                 ),
               }
             : {
@@ -493,8 +509,8 @@ export default {
                 Id: parseInt(this.selectedPluviometer),
                 Precipitation: parseFloat(
                   this.pluviometers.find(
-                    (pluviometer) => pluviometer.Id === this.selectedPluviometer
-                  ).Precipitation
+                    (pluviometer) => pluviometer.Precipitation === this.selectedPluviometer
+                  )
                 ),
               }
             : {
@@ -561,26 +577,6 @@ export default {
         console.log("Results visible:", this.resultsVisible);
       } catch (error) {
         console.error("Erro ao chamar a API:", error);
-      }
-    },
-    async created() {
-      try {
-        const responseStation = await axios.get(
-          "http://seai.3v3.farm/api/v1/equipments/activated?type=station"
-        );
-        this.stations = responseStation.data.data;
-
-        const responsePluviometer = await axios.get(
-          "http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer"
-        );
-        this.pluviometers = responsePluviometer.data.data;
-
-        const response = await axios.get(
-          "http://seai.3v3.farm/api/v2/management/crop"
-        );
-        this.crops = response.data.data;
-      } catch (error) {
-        console.error(error);
       }
     },
     ClearFields() {

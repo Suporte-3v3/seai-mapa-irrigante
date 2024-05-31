@@ -178,8 +178,8 @@ export default {
       legend.onAdd = () => {
         const div = L.DomUtil.create('div', 'info legend');
         console.log('Legenda adicionada com classes:', div.className); // Adicione este log
-        div.innerHTML += '<i style="background: #26c28d; width: 15px; height: 15px; display: inline-block;"></i> <b>Estação</b><br>';
-        div.innerHTML += '<i style="background: #e30224; width: 15px; height: 15px; display: inline-block;"></i> <b>Pluviômetro</b><br>';
+        div.innerHTML += '<i style="background: #02fa07; width: 15px; height: 15px; display: inline-block;"></i> <b>Estação</b><br>';
+        div.innerHTML += '<i style="background: #d234eb; width: 15px; height: 15px; display: inline-block;"></i> <b>Pluviômetro</b><br>';
         return div;
       };
 
@@ -199,7 +199,7 @@ export default {
 }
 
 .leaflet-bottom {
-  bottom: 320px !important; /* Ajusta a distância da parte inferior */
+  bottom: 500px !important; /* Ajusta a distância da parte inferior */
 }
 
 .leaflet-control-zoom {
