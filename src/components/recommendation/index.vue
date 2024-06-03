@@ -478,8 +478,8 @@ export default {
       const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');
       this.pluviometers = responsePluviometer.data.data;
 
-      const response = await axios.get('http://seai.3v3.farm/api/v2/management/crop');
-      this.crops = response.data.data;
+      const responseCrop = await axios.get('http://seai.3v3.farm/api/v2/management/crop');
+      this.crops = responseCrop.data.data;
 
     } catch (error) {
       console.error(error);
@@ -566,12 +566,12 @@ export default {
         };
         console.log("Dados do formulário:", data);
 
-        const response = await axios.post(
+        const responseBladeSuggestion = await axios.post(
           "http://seai.3v3.farm/api/v2/management/blade_suggestion",
           data
         );
         console.log("Resposta da API:", response);
-        this.results = response.data.data;
+        this.results = responseBladeSuggestion.data;
         this.resultsVisible = true;
         console.log("Results atualizados:", this.results);
         console.log("Results visible:", this.resultsVisible);

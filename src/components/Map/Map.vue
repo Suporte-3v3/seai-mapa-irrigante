@@ -16,11 +16,15 @@ export default {
       map: null,
       stationIcon: L.icon({
         iconUrl: '/icon-station.png',
-        iconSize: [15, 15],
+        iconSize: [25, 25],
       }),
       pluviometerIcon: L.icon({
         iconUrl: '/icon-pluviometer.png',
-        iconSize: [15, 15],
+        iconSize: [25, 25],
+      }),
+      userIcon: L.icon({
+        iconUrl: '/icon-user.png',
+        iconSize: [25, 25],
       }),
     };
   },
@@ -99,7 +103,10 @@ export default {
           (position) => {
             const { latitude, longitude } = position.coords;
             if (this.map) {
-              this.map.setView([latitude, longitude], 7);
+              this.map.setView([latitude, longitude], 12);
+              L.marker([latitude, longitude], { icon: this.userIcon }).addTo(this.map)
+              .bindPopup("<b>Usuário</b><br>Localização Aproximada")
+              .openPopup();
             }
           },
           (error) => {
@@ -178,8 +185,8 @@ export default {
       legend.onAdd = () => {
         const div = L.DomUtil.create('div', 'info legend');
         console.log('Legenda adicionada com classes:', div.className); // Adicione este log
-        div.innerHTML += '<i style="background: #02fa07; width: 15px; height: 15px; display: inline-block;"></i> <b>Estação</b><br>';
-        div.innerHTML += '<i style="background: #d234eb; width: 15px; height: 15px; display: inline-block;"></i> <b>Pluviômetro</b><br>';
+        div.innerHTML += '<i style="background: #02fa07; width: 18px; height: 18px; display: inline-block;"></i> <b>Estação</b><br>';
+        div.innerHTML += '<i style="background: #d234eb; width: 18px; height: 18px; display: inline-block;"></i> <b>Pluviômetro</b><br>';
         return div;
       };
 

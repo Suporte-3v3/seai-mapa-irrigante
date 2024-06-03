@@ -24,3 +24,34 @@ export default {
   },
 };
 </script>
+
+<style>
+body {
+  background-color: #eff4f7; /* Cor de fundo desejada */
+}
+
+.input-group-append {
+  margin-right: 0px;
+}
+
+.checkbox-margin {
+  margin-right: 8px; /* ou o valor que desejar */
+}
+
+.card {
+    border-radius: 10px;
+  }
+  .list-group-item {
+    font-size: 1.1em;
+    background-color: #f8f9fa;
+  }
+  .list-group-item strong {
+    color: #1b3f82;
+  }
+  .btn {
+    font-size: 1.2em;
+  }
+  .shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+</style>
