@@ -156,6 +156,7 @@
                 type="date"
                 class="form-control"
                 placeholder="Digite a Data"
+                :max="maxDate"
               />
             </div>
             <p
@@ -178,7 +179,7 @@
               >
                 <option value="">Selecione o Sistema de Irrigação</option>
                 <option value="Aspersão">Aspersão</option>
-                <option value="MicroAspersão">Microaspersão</option>
+                <option value="Microaspersão">Microaspersão</option>
                 <option value="Gotejamento">Gotejamento</option>
                 <option value="Pivô Central">Pivô Central</option>
                 <option value="Sulcos">Sulcos</option>
@@ -242,7 +243,7 @@
           </div>
         </div>
         <div
-          v-if="selectedSystemIrrigation === 'MicroAspersão'"
+          v-if="selectedSystemIrrigation === 'Microaspersão'"
           class="col-md-12"
         >
           <div class="form-group mb-4">
@@ -417,6 +418,7 @@
             >
               <h3>Resultado Simulação de Lâmina</h3>
             </div>
+            <div v-if="isLoading" class="loading">Carregando...</div>
             <div class="card-body">
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
@@ -443,6 +445,7 @@
               </ul>
             </div>
           </div>
+          <br> <br/>
         </div>
       </div>
     </div>
@@ -462,6 +465,7 @@ export default {
   data() {
     return {
       selectedStation: '',
+      isLoading: false,
       showError: false,
       stations: [],
       pluviometers: [],
@@ -473,6 +477,7 @@ export default {
       selectedCulture: '',
       selectedSystemIrrigation: '',
       dateplanting: '',
+      maxDate: '',
       validationIrrigationEfficiency: '',
       validationPrecipitationSprinkler: '',
       validationFlowSystem: '',
@@ -518,12 +523,14 @@ export default {
       console.error(error);
     }
   },
+  mounted() {
+      this.setMaxDate();
+    },
   methods: {
     async calculateRecomendation() {
   try {
     // Ajustar o formato da data para DD/MM/YYYY
     const formattedDate = this.dateplanting ? this.formatDate(this.dateplanting) : '';
-
     const data = {
       Station: this.isStationDisabled
         ? {
@@ -536,7 +543,7 @@ export default {
           }
         : {
             Id: null,
-            Et0: parseFloat(this.manualEt0),
+            Et0: parseFloat(this.selectedET0Manual),
           },
       CropId: parseInt(this.selectedCulture),
       Pluviometer: this.isPluviometerDisabled
@@ -551,7 +558,7 @@ export default {
           }
         : {
             Id: null,
-            Precipitation: parseFloat(this.manualPrecipitation),
+            Precipitation: parseFloat(this.selectedPrecipitationManual),
           },
       PlantingDate: formattedDate, // Utiliza a data formatada
       System: {
@@ -559,43 +566,38 @@ export default {
         Measurements: {
           Efficiency: parseFloat(this.validationIrrigationEfficiency),
           Precipitation:
-            this.selectedSystemIrrigation === "Aspersão"
-              ? parseFloat(this.validationPrecipitationSprinkler)
-              : null,
-          Flow:
-            this.selectedSystemIrrigation !== "Aspersão"
-              ? parseFloat(this.validationFlowSystem)
-              : null,
-          PlantedArea: ["MicroAspersão", "Gotejamento"].includes(
+        this.selectedSystemIrrigation === "Aspersão"
+          ? parseFloat(this.validationPrecipitationSprinkler)
+          : this.selectedSystemIrrigation === "Pivô Central"
+          ? parseFloat(this.validationPrecipitationAround)
+          : null,
+          Flow: ["Microaspersão", "Gotejamento"].includes(this.selectedSystemIrrigation)
+          ? parseFloat(this.validationFlowSystem)
+          : this.selectedSystemIrrigation === "Sulcos"
+          ? parseFloat(this.validationFlowGrooves)
+          : null,
+          Area: ["Microaspersão", "Gotejamento"].includes(
             this.selectedSystemIrrigation
           )
             ? parseFloat(this.validationPlantedArea)
             : null,
-          EffectiveArea: ["MicroAspersão", "Gotejamento"].includes(
+          EfectiveArea: ["Microaspersão", "Gotejamento"].includes(
             this.selectedSystemIrrigation
           )
             ? parseFloat(this.validationEffectiveArea)
             : null,
-          NumberPlants: ["MicroAspersão", "Gotejamento"].includes(
+          PlantsQtd: ["Microaspersão", "Gotejamento"].includes(
             this.selectedSystemIrrigation
           )
             ? parseFloat(this.validationNumberPlants)
             : null,
-          PrecipitationAround:
-            this.selectedSystemIrrigation === "Pivô Central"
-              ? parseFloat(this.validationPrecipitationAround)
-              : null,
-          FurrowLength:
+          Length:
             this.selectedSystemIrrigation === "Sulcos"
               ? parseFloat(this.validationFurrowLength)
               : null,
-          GrooveSpacing:
+          Spacing:
             this.selectedSystemIrrigation === "Sulcos"
               ? parseFloat(this.validationGrooveSpacing)
-              : null,
-          FlowGrooves:
-            this.selectedSystemIrrigation === "Sulcos"
-              ? parseFloat(this.validationFlowGrooves)
               : null,
         },
       },
@@ -619,12 +621,23 @@ export default {
   }
 },
 
+appendPercentage(event) {
+    let value = event.target.value;
+    if (value > 0 && value <= 100) {
+      this.validationIrrigationEfficiency = value + '%';
+    }
+  },
 // Função para formatar a data para DD/MM/YYYY
 formatDate(date) {
   if (!date) return '';
   const [year, month, day] = date.split('-');
   return `${day}/${month}/${year}`;
 },
+
+setMaxDate() {
+        const today = new Date().toISOString().split('T')[0];
+        this.maxDate = today;
+      },
     ClearFields() {
       this.selectedStation = "";
       this.selectedPluviometer = "";
@@ -650,7 +663,7 @@ formatDate(date) {
     toggleAdditionalFields() {
       this.showAdditionalFields = [
         "Aspersão",
-        "MicroAspersão",
+        "Microaspersão",
         "Gotejamento",
         "Pivô Central",
         "Sulcos",

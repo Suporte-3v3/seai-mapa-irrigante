@@ -105,8 +105,7 @@ export default {
             if (this.map) {
               this.map.setView([latitude, longitude], 12);
               L.marker([latitude, longitude], { icon: this.userIcon }).addTo(this.map)
-              .bindPopup("<b>Usuário</b><br>Localização Aproximada")
-              .openPopup();
+              .bindPopup("<b>Usuário</b><br>Localização Aproximada");
             }
           },
           (error) => {
@@ -185,8 +184,8 @@ export default {
       legend.onAdd = () => {
         const div = L.DomUtil.create('div', 'info legend');
         console.log('Legenda adicionada com classes:', div.className); // Adicione este log
-        div.innerHTML += '<i style="background: #02fa07; width: 18px; height: 18px; display: inline-block;"></i> <b>Estação</b><br>';
-        div.innerHTML += '<i style="background: #d234eb; width: 18px; height: 18px; display: inline-block;"></i> <b>Pluviômetro</b><br>';
+        div.innerHTML += '<i style="background: #02fa07; width: 20px; height: 18px; display: inline-block;"></i> <b>Estação</b><br>';
+        div.innerHTML += '<i style="background: #d234eb; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetro</b><br>';
         return div;
       };
 
@@ -216,7 +215,7 @@ export default {
 .info.legend {
   background-color: #1b3f82; /* Cor de fundo da legenda */
   color: white; /* Cor do texto da legenda */
-  padding: 10px;
+  padding: 12px;
   border-radius: 5px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   bottom: 20px; /* Ajusta a distância da parte inferior */
