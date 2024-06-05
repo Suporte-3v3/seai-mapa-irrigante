@@ -156,6 +156,8 @@
                 type="date"
                 class="form-control"
                 placeholder="Digite a Data"
+                :max="maxDate"
+                @keydown="preventTyping"
               />
             </div>
             <p
@@ -178,7 +180,7 @@
               >
                 <option value="">Selecione o Sistema de Irrigação</option>
                 <option value="Aspersão">Aspersão</option>
-                <option value="MicroAspersão">Microaspersão</option>
+                <option value="Microaspersão">Microaspersão</option>
                 <option value="Gotejamento">Gotejamento</option>
                 <option value="Pivô Central">Pivô Central</option>
                 <option value="Sulcos">Sulcos</option>
@@ -199,12 +201,15 @@
             >
             <div class="input-group">
               <input
-                id="input2"
-                v-model="validationIrrigationEfficiency"
-                type="number"
-                class="form-control"
-                placeholder="Digite a Eficiência"
-                :disabled="isFieldDisabled"
+              id="input2"
+        v-model.number="validationIrrigationEfficiency"
+        type="number"
+        class="form-control"
+        placeholder="Digite a Eficiência"
+        :disabled="isFieldDisabled"
+        min="0"
+        max="100"
+        @input="validateEfficiency"
               />
               <div class="input-group-append">
                 <div class="input-group-text">
@@ -213,7 +218,7 @@
                     type="checkbox"
                     class="checkbox-margin"
                   />
-                  Usar padrão
+                  (%) Usar padrão
                 </div>
               </div>
             </div>
@@ -242,7 +247,7 @@
           </div>
         </div>
         <div
-          v-if="selectedSystemIrrigation === 'MicroAspersão'"
+          v-if="selectedSystemIrrigation === 'Microaspersão'"
           class="col-md-12"
         >
           <div class="form-group mb-4">
@@ -407,55 +412,95 @@
           >
             Limpar Campos
           </button>
-          <hr class="line" />
-          <Result v-if="results" :results="results" />
+          <div
+            v-if="resultsVisible && results"
+            class="card mt-4 shadow"
+          >
+            <div
+              class="card-header text-white text-center"
+              :style="{ backgroundColor: '#1b3f82' }"
+            >
+              <h3>Resultado Simulação de Lâmina</h3>
+            </div>
+            <div v-if="isLoading" class="loading">Carregando...</div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <strong>Etc:</strong> {{ results.data.Etc }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Lâmina de Reposição:</strong> {{ results.data.RepositionBlade }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Tempo de Irrigação:</strong> {{ results.data.IrrigationTime }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Dias da Cultura:</strong> {{ results.data.CropDays }}
+                </li>
+                <li class="list-group-item">
+                  <strong>ET0:</strong> {{ results.data.Et0 }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Precipitação:</strong> {{ results.data.Precipitation }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Kc:</strong> {{ results.data.Kc }}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <br> <br/>
         </div>
       </div>
     </div>
   </div>
 </template>
 
+
 <script>
 import axios from "axios";
-import Result from "./result.vue"
+import Resultados from "./result.vue";
 
 export default {
   name: "RecomendationComponent",
+  components: {
+    Resultados
+  },
   data() {
-  return {
-    selectedStation: '',
-    showError: false,
-    stations: [],
-    pluviometers: [],
-    crops: [],
-    resultsVisible: false,
-    results: {},
-    response: '',
-    selectedPluviometer: '',
-    selectedCulture: '',
-    selectedSystemIrrigation: '',
-    dateplanting: '',
-    validationIrrigationEfficiency: '',
-    validationPrecipitationSprinkler: '',
-    validationFlowSystem: '',
-    validationPlantedArea: '',
-    validationEffectiveArea: '',
-    validationNumberPlants: '',
-    validationPrecipitationAround: '',
-    validationFurrowLength: '',
-    validationGrooveSpacing: '',
-    validationFlowGrooves: '',
-    manualEt0: '', // Novo campo para ET0 manual
-    manualPrecipitation: '', // Novo campo para precipitação manual
-    showAdditionalFields: false,
-    useDefault: true,
-    toggleSwitchStation: true,
-    toggleSwitchPluviometer: true,
-    selectedET0Manual: '',
-    selectedPrecipitationManual: ''
-  };
-},
-
+    return {
+      selectedStation: '',
+      isLoading: false,
+      showError: false,
+      stations: [],
+      pluviometers: [],
+      crops: [],
+      resultsVisible: false,
+      results: null,
+      response: '',
+      selectedPluviometer: '',
+      selectedCulture: '',
+      selectedSystemIrrigation: '',
+      dateplanting: '',
+      maxDate: '',
+      validationIrrigationEfficiency: '',
+      validationPrecipitationSprinkler: '',
+      validationFlowSystem: '',
+      validationPlantedArea: '',
+      validationEffectiveArea: '',
+      validationNumberPlants: '',
+      validationPrecipitationAround: '',
+      validationFurrowLength: '',
+      validationGrooveSpacing: '',
+      validationFlowGrooves: '',
+      selectedET0Manual: '', 
+      selectedPrecipitationManual: '', 
+      showAdditionalFields: false,
+      useDefault: true,
+      toggleSwitchStation: true,
+      toggleSwitchPluviometer: true,
+    };
+  },
+ 
   computed: {
     isFieldDisabled() {
       return this.useDefault;
@@ -465,131 +510,149 @@ export default {
     },
     isPluviometerDisabled() {
       return this.toggleSwitchPluviometer;
-    },
-  },
-  async calculateRecomendation() {
-    console.log("calculateRecomendation chamado"); // Log para verificaçã
-    try {
-      // Coletar dados do formulário
-      const data = {
-        Station: this.isStationDisabled
-          ? {
-              Id: parseInt(this.selectedEstation),
-              Et0: parseFloat(
-                this.stations.find(
-                  (station) => station.Id === this.selectedEstation
-                ).Et0
-              ),
-            }
-          : {
-              Id: null,
-              Et0: parseFloat(this.manualEt0), // Supondo que você tenha um campo v-model="manualEt0" para ET0 manual
-            },
-        CropId: parseInt(this.selectedCulture),
-        Pluviometer: this.isPluviometerDisabled
-          ? {
-              Id: parseInt(this.selectedPluviometer),
-              Precipitation: parseFloat(
-                this.pluviometers.find(
-                  (pluviometer) => pluviometer.Id === this.selectedPluviometer
-                ).Precipitation
-              ),
-            }
-          : {
-              Id: null,
-              Precipitation: parseFloat(this.manualPrecipitation), // Supondo que você tenha um campo v-model="manualPrecipitation" para precipitação manual
-            },
-        PlantingDate: this.dateplanting,
-        System: {
-          Type: this.selectedSystemIrrigation,
-          Measurements: {
-            Efficiency: parseFloat(this.validationIrrigationEfficiency),
-            Precipitation:
-              this.selectedSystemIrrigation === "Aspersão"
-                ? parseFloat(this.validationPrecipitationSprinkler)
-                : null,
-            Flow:
-              this.selectedSystemIrrigation !== "Aspersão"
-                ? parseFloat(this.validationFlowSystem)
-                : null,
-            PlantedArea: ["MicroAspersão", "Gotejamento"].includes(
-              this.selectedSystemIrrigation
-            )
-              ? parseFloat(this.validationPlantedArea)
-              : null,
-            EffectiveArea: ["MicroAspersão", "Gotejamento"].includes(
-              this.selectedSystemIrrigation
-            )
-              ? parseFloat(this.validationEffectiveArea)
-              : null,
-            NumberPlants: ["MicroAspersão", "Gotejamento"].includes(
-              this.selectedSystemIrrigation
-            )
-              ? parseFloat(this.validationNumberPlants)
-              : null,
-            PrecipitationAround:
-              this.selectedSystemIrrigation === "Pivô Central"
-                ? parseFloat(this.validationPrecipitationAround)
-                : null,
-            FurrowLength:
-              this.selectedSystemIrrigation === "Sulcos"
-                ? parseFloat(this.validationFurrowLength)
-                : null,
-            GrooveSpacing:
-              this.selectedSystemIrrigation === "Sulcos"
-                ? parseFloat(this.validationGrooveSpacing)
-                : null,
-            FlowGrooves:
-              this.selectedSystemIrrigation === "Sulcos"
-                ? parseFloat(this.validationFlowGrooves)
-                : null,
-          },
-        },
-      };
-      console.log("Dados do formulário:", data);
-
-      // Enviar a requisição para a API
-      const response = await axios.post(
-        "http://seai.3v3.farm/api/v2/management/blade_suggestion",
-        data
-      );
-      console.log("Resposta da API:", response);
-      this.response = response.data.data; // Armazene a resposta em 'response'
-    } catch (error) {
-      console.error("Erro ao chamar a API:", error);
     }
   },
   async created() {
     try {
-      const responseStation = await axios.get(
-        "http://seai.3v3.farm/api/v1/equipments/activated?type=station"
-      );
+      const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
       this.stations = responseStation.data.data;
 
-      const responsePluviometer = await axios.get(
-        "http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer"
-      );
+      const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');
       this.pluviometers = responsePluviometer.data.data;
 
-      const response = await axios.get(
-        "http://seai.3v3.farm/api/v2/management/crop"
-      );
-      this.crops = response.data.data;
+      const responseCrop = await axios.get('http://seai.3v3.farm/api/v2/management/crop');
+      this.crops = responseCrop.data.data;
+
     } catch (error) {
       console.error(error);
     }
   },
-
+  mounted() {
+      this.setMaxDate();
+    },
   methods: {
-    // Método para limpar os campos.
+    async calculateRecomendation() {
+  try {
+    // Ajustar o formato da data para DD/MM/YYYY
+    const formattedDate = this.dateplanting ? this.formatDate(this.dateplanting) : '';
+    const data = {
+      Station: this.isStationDisabled
+        ? {
+            Id: parseInt(this.selectedStation),
+            Et0: parseFloat(
+              this.stations.find(
+                (station) => station.Id === parseInt(this.selectedStation)
+              ).Et0
+            ),
+          }
+        : {
+            Id: null,
+            Et0: parseFloat(this.selectedET0Manual),
+          },
+      CropId: parseInt(this.selectedCulture),
+      Pluviometer: this.isPluviometerDisabled
+        ? {
+            Id: parseInt(this.selectedPluviometer),
+            Precipitation: parseFloat(
+              this.pluviometers.find(
+                (pluviometer) =>
+                  pluviometer.Id === parseInt(this.selectedPluviometer)
+              ).Precipitation
+            ),
+          }
+        : {
+            Id: null,
+            Precipitation: parseFloat(this.selectedPrecipitationManual),
+          },
+      PlantingDate: formattedDate, // Utiliza a data formatada
+      System: {
+        Type: this.selectedSystemIrrigation,
+        Measurements: {
+          Efficiency: parseFloat(this.validationIrrigationEfficiency),
+          Precipitation:
+        this.selectedSystemIrrigation === "Aspersão"
+          ? parseFloat(this.validationPrecipitationSprinkler)
+          : this.selectedSystemIrrigation === "Pivô Central"
+          ? parseFloat(this.validationPrecipitationAround)
+          : null,
+          Flow: ["Microaspersão", "Gotejamento"].includes(this.selectedSystemIrrigation)
+          ? parseFloat(this.validationFlowSystem)
+          : this.selectedSystemIrrigation === "Sulcos"
+          ? parseFloat(this.validationFlowGrooves)
+          : null,
+          Area: ["Microaspersão", "Gotejamento"].includes(
+            this.selectedSystemIrrigation
+          )
+            ? parseFloat(this.validationPlantedArea)
+            : null,
+          EfectiveArea: ["Microaspersão", "Gotejamento"].includes(
+            this.selectedSystemIrrigation
+          )
+            ? parseFloat(this.validationEffectiveArea)
+            : null,
+          PlantsQtd: ["Microaspersão", "Gotejamento"].includes(
+            this.selectedSystemIrrigation
+          )
+            ? parseFloat(this.validationNumberPlants)
+            : null,
+          Length:
+            this.selectedSystemIrrigation === "Sulcos"
+              ? parseFloat(this.validationFurrowLength)
+              : null,
+          Spacing:
+            this.selectedSystemIrrigation === "Sulcos"
+              ? parseFloat(this.validationGrooveSpacing)
+              : null,
+        },
+      },
+    };
+
+    console.log("Dados do formulário:", data);
+
+    const responseBladeSuggestion = await axios.post(
+      "http://seai.3v3.farm/api/v2/management/blade_suggestion",
+      data
+    );
+
+    console.log("Resposta da API:", responseBladeSuggestion);
+    this.results = responseBladeSuggestion.data;
+    this.resultsVisible = true;
+    console.log("Results atualizados:", this.results);
+    console.log("Results visible:", this.resultsVisible);
+  } catch (error) {
+    console.error("Erro ao chamar a API:", error);
+    console.log("Dados enviados:", data); // Certifique-se de que 'data' esteja definido aqui
+  }
+},
+
+validateEfficiency() {
+      if (this.validationIrrigationEfficiency < 0) {
+        this.validationIrrigationEfficiency = 0;
+      } else if (this.validationIrrigationEfficiency > 100) {
+        this.validationIrrigationEfficiency = 100;
+      }
+    },
+// Função para formatar a data para DD/MM/YYYY
+formatDate(date) {
+  if (!date) return '';
+  const [year, month, day] = date.split('-');
+  return `${day}/${month}/${year}`;
+},
+
+preventTyping(event) {
+      event.preventDefault(); // Previne a digitação no campo de data
+    },
+
+setMaxDate() {
+        const today = new Date().toISOString().split('T')[0];
+        this.maxDate = today;
+      },
     ClearFields() {
-      this.selectedEstation = "";
+      this.selectedStation = "";
       this.selectedPluviometer = "";
       this.selectedCulture = "";
       this.selectedSystemIrrigation = "";
-      this.input1 = "";
-      this.input2 = "";
-      this.response = "";
+      this.dateplanting = "";
       this.validationIrrigationEfficiency = "";
       this.validationPrecipitationSprinkler = "";
       this.validationFlowSystem = "";
@@ -600,35 +663,21 @@ export default {
       this.validationFurrowLength = "";
       this.validationGrooveSpacing = "";
       this.validationFlowGrooves = "";
-
-      // Limpar outros campos adicionais, se houver
-    },
-    calculateRecomendation() {
-      // Aqui você adicionaria sua lógica de cálculo
-      console.log("Calculando recomendação...");
-      // Exemplo de lógica de validação
-      if (!this.selectedCulture) {
-        this.errorMessage = "Por favor, selecione uma cultura.";
-        return;
-      }
-      // Outras validações e cálculos
-      this.errorMessage = ""; // Limpa a mensagem de erro se todas as validações passarem
+      this.selectedET0Manual = "";
+      this.selectedPrecipitationManual = "";
+      this.results = null;
+      this.resultsVisible = false;
+      this.showError = false;
     },
     toggleAdditionalFields() {
       this.showAdditionalFields = [
         "Aspersão",
-        "MicroAspersão",
+        "Microaspersão",
         "Gotejamento",
         "Pivô Central",
         "Sulcos",
       ].includes(this.selectedSystemIrrigation);
     },
-    /*validateNumberInput(event, fieldName) {
-        const regex = /^[0-9.]*$/;
-        if (!regex.test(event.target.value)) {
-          this[fieldName] = event.target.value.slice(0, -1);
-        }
-      },*/
   },
 };
 </script>
