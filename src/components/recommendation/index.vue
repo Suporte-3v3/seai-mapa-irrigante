@@ -157,6 +157,7 @@
                 class="form-control"
                 placeholder="Digite a Data"
                 :max="maxDate"
+                @keydown="preventTyping"
               />
             </div>
             <p
@@ -200,12 +201,15 @@
             >
             <div class="input-group">
               <input
-                id="input2"
-                v-model="validationIrrigationEfficiency"
-                type="number"
-                class="form-control"
-                placeholder="Digite a Eficiência"
-                :disabled="isFieldDisabled"
+              id="input2"
+        v-model.number="validationIrrigationEfficiency"
+        type="number"
+        class="form-control"
+        placeholder="Digite a Eficiência"
+        :disabled="isFieldDisabled"
+        min="0"
+        max="100"
+        @input="validateEfficiency"
               />
               <div class="input-group-append">
                 <div class="input-group-text">
@@ -214,7 +218,7 @@
                     type="checkbox"
                     class="checkbox-margin"
                   />
-                  Usar padrão
+                  (%) Usar padrão
                 </div>
               </div>
             </div>
@@ -621,18 +625,23 @@ export default {
   }
 },
 
-appendPercentage(event) {
-    let value = event.target.value;
-    if (value > 0 && value <= 100) {
-      this.validationIrrigationEfficiency = value + '%';
-    }
-  },
+validateEfficiency() {
+      if (this.validationIrrigationEfficiency < 0) {
+        this.validationIrrigationEfficiency = 0;
+      } else if (this.validationIrrigationEfficiency > 100) {
+        this.validationIrrigationEfficiency = 100;
+      }
+    },
 // Função para formatar a data para DD/MM/YYYY
 formatDate(date) {
   if (!date) return '';
   const [year, month, day] = date.split('-');
   return `${day}/${month}/${year}`;
 },
+
+preventTyping(event) {
+      event.preventDefault(); // Previne a digitação no campo de data
+    },
 
 setMaxDate() {
         const today = new Date().toISOString().split('T')[0];
