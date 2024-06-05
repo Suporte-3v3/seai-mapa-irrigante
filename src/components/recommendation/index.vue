@@ -197,7 +197,7 @@
         <div class="col-md-4">
           <div class="form-group mb-4">
             <label for="input2" class="tab-label"
-              >Eficiência de Irrigação</label
+              >Eficiência de Irrigação (%)</label
             >
             <div class="input-group">
               <input
@@ -218,7 +218,7 @@
                     type="checkbox"
                     class="checkbox-margin"
                   />
-                  (%) Usar padrão
+                  Usar padrão
                 </div>
               </div>
             </div>
