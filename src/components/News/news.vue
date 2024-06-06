@@ -22,7 +22,7 @@
     </div>
     <h4 class="mt-4" v-if="!loading">Todas as notícias</h4>
 
-    <div class="d-flex w-100 flex-column content-cards" v-if="!loading">
+    <div class="d-flex w-100 flex-column content-cards scroll-style" v-if="!loading">
       <ProgressSpinner v-if="loadingNews" />
       <div
         class="card"
@@ -133,7 +133,9 @@ export default {
   min-height: 100px;
   border-radius: 5px;
   margin-top: 15px;
+ 
   padding: 20px;
+  padding-bottom: 100px;
   transition: 0.5s;
   &:hover {
     background-color: rgb(241, 241, 241);
@@ -154,7 +156,9 @@ export default {
   }
 }
 .content-cards {
-  height: 65vh;
+  height: 68vh;
   max-height: 1000px;
+  overflow: auto;
+  padding-right: 20px;
 }
 </style>

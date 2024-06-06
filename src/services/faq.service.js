@@ -2,7 +2,7 @@ import http from "./config.js";
 
 export class FAQRest {
   async getAll(params) {
-    const result = await http.get(`v1/faq/`, { params });
+    const result = await http.get(`v1/faq`, { params });
     return result.data;
   }
   async getById(id) {
