@@ -73,14 +73,14 @@ export default {
     setupMap() {
       this.map = L.map(this.$refs.map, {
         scrollWheelZoom: true,
-        attributionControl: false, // Remove attribution control
-        zoomControl: false, // Remove default zoom controls
+        attributionControl: false, 
+        zoomControl: false, 
       });
 
       L.tileLayer(
         "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
         {
-          attribution: "", // Ensure no attribution is added
+          attribution: "", 
         }
       ).addTo(this.map);
 
@@ -132,9 +132,8 @@ export default {
 
       this.addLegend();
 
-      // Add custom zoom controls
       L.control.zoom({
-        position: 'bottomleft', // Position zoom controls to bottom left
+        position: 'bottomleft', 
       }).addTo(this.map);
     },
     handleResize() {
@@ -179,18 +178,18 @@ export default {
       }
     },
     addLegend() {
-      const legend = L.control({ position: 'bottomright' });
+  const legend = L.control({ position: 'topright' });
 
-      legend.onAdd = () => {
-        const div = L.DomUtil.create('div', 'info legend');
-        console.log('Legenda adicionada com classes:', div.className); // Adicione este log
-        div.innerHTML += '<i style="background: #02fa07; width: 20px; height: 18px; display: inline-block;"></i> <b>Estação</b><br>';
-        div.innerHTML += '<i style="background: #d234eb; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetro</b><br>';
-        return div;
-      };
+  legend.onAdd = () => {
+    const div = L.DomUtil.create('div', 'info legend');
+    console.log('Legenda adicionada com classes:', div.className);
+    div.innerHTML += '<i style="background: #EF760F; width: 20px; height: 18px; display: inline-block;"></i> <b>Estação</b><br>';
+    div.innerHTML += '<i style="background: #9023A1; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetro</b><br>';
+    return div;
+  };
 
-      legend.addTo(this.map);
-    }
+  legend.addTo(this.map);
+}
   },
 };
 </script>
@@ -205,27 +204,59 @@ export default {
 }
 
 .leaflet-bottom {
-  bottom: 500px !important; /* Ajusta a distância da parte inferior */
+  bottom: 500px !important; 
 }
 
 .leaflet-control-zoom {
-  bottom: 20px !important; /* Ajusta a distância do controle de zoom */
+  bottom: 20px !important; 
+}
+
+.leaflet-top.leaflet-right {
+  top: 20px;
 }
 
 .info.legend {
-  background-color: #1b3f82; /* Cor de fundo da legenda */
-  color: white; /* Cor do texto da legenda */
+  background-color: #1b3f82;
+  color: white;
   padding: 12px;
   border-radius: 5px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  bottom: 20px; /* Ajusta a distância da parte inferior */
-  z-index: 9999; /* Garante que a legenda esteja sempre no topo */
+  z-index: 9999;
 }
 
 .info.legend i {
   display: inline-block;
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 18px;
   margin-right: 5px;
+}
+
+.leaflet-bottom.leaflet-left {
+  bottom: 70px; 
+}
+
+.leaflet-control-zoom {
+  margin-bottom: 20px;
+}
+
+
+@media (max-width: 768px) {
+  .leaflet-bottom.leaflet-left {
+    bottom: 60px; 
+  }
+  
+  .leaflet-top.leaflet-right {
+    top: 50px; 
+  }
+
+  .info.legend {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .info.legend i {
+    width: 15px;
+    height: 15px;
+  }
 }
 </style>
