@@ -2,8 +2,7 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 
 const extractBaseUrl = () => {
-  // const urlObj = new URL(window.location.href);
-  const urlObj = new URL("http://seai.3v3.farm");
+  const urlObj = new URL(window.location.href);
 
   return [
     urlObj.protocol,
@@ -15,8 +14,7 @@ const extractBaseUrl = () => {
 const urlBase = extractBaseUrl();
 const serverUrlBase = urlBase[2];
 
-const serverPort = 80;
-const baseURL = `${serverUrlBase}:${serverPort}/api/`;
+const baseURL = `/api/`;
 
 const httpClient = axios.create({
   baseURL,
@@ -28,7 +26,6 @@ const httpClient = axios.create({
 
 httpClient.interceptors.response.use(
   function (response) {
-    // Optional: Do something with response data
     return response;
   },
   function (error) {

@@ -19,6 +19,7 @@
           },
         }),
       }"
+      v-if="categories.length > 0"
     >
       <TabPanel
         v-for="(category, i) in categories"
@@ -50,6 +51,7 @@
         </Accordion>
       </TabPanel>
     </TabView>
+    <div v-else>Nada encontrado</div>
   </div>
 </template>
 
@@ -84,6 +86,10 @@ export default {
           this.categories = res.data;
           this.getFaqById(this.categories[0].id);
         })
+        .catch(() => {
+          this.loadingFaq = false;
+          this.loading = false;
+        });
     },
     onTabChange(event) {
       const selectedIndex = event.index;

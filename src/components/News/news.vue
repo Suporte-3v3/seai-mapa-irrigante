@@ -14,7 +14,7 @@
             v-model="searchTerm"
             placeholder="Pesquisar por título"
             class="w-100"
-            @input="onSearchItem"
+            @input="searchItems"
           />
           <InputIcon class="pi pi-search"> </InputIcon>
         </IconField>
@@ -75,12 +75,11 @@ export default {
     this.getNews();
   },
   methods: {
-    searchItems(searchTerm) {
-      if (searchTerm.length >= 3 || searchTerm.length === 0) {
-        this.params.title = searchTerm.length >= 3 ? searchTerm : null;
-        this.params.limit = limit.value;
+    searchItems() {
+      if (this.searchTerm.length >= 3 || this.searchItems.length === 0) {
+        this.params.title = this.searchTerm.length >= 3 ? this.searchTerm : null;
         this.params.pageNumber = 0;
-        getNews();
+        this.getNews();
       }
     },
     getNews() {
@@ -130,7 +129,7 @@ export default {
   background-color: white;
   width: 100%;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  min-height: 100px;
+  height: 100px;
   border-radius: 5px;
   margin-top: 15px;
  

@@ -1,9 +1,12 @@
 <template>
   <div class="topbar">
     <div class="container topbar-items">
-      <div>
-        <strong class="navbar-brand">SEAI IRRIGANTE</strong>
-      </div>
+      <router-link to="/">
+        <div>
+          <strong class="navbar-brand">SEAI</strong>
+        </div>
+      </router-link>
+
       <div class="nav-buttons">
         <router-link
           :to="navLink.link"
@@ -101,6 +104,9 @@ export default {
     .nav-buttons {
       display: flex;
       gap: 5px;
+    }
+    a {
+      text-decoration: none;
     }
   }
   .navbar-brand {
