@@ -397,34 +397,46 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-12">
-          <button
-            class="btn"
-            style="background-color: #1b3f82; color: white; margin-right: 8px"
-            @click="calculateRecomendation"
-          >
-            Simular Lâmina
-          </button>
-          <button
-            class="btn"
-            style="background-color: #b1151f; color: white"
-            @click="ClearFields"
-          >
-            Limpar Campos
-          </button>
-          <div
-            v-if="resultsVisible && results"
-            class="card mt-4 shadow"
-          >
-            <div
-              class="card-header text-white text-center"
-              :style="{ backgroundColor: '#1b3f82' }"
-            >
+  <div class="col-md-12">
+    <button
+      class="btn"
+      style="background-color: #1b3f82; color: white; margin-right: 8px"
+      @click="calculateRecomendation"
+    >
+      Simular Lâmina
+    </button>
+    <button
+      class="btn"
+      style="background-color: #b1151f; color: white"
+      @click="ClearFields"
+    >
+      Limpar Campos
+    </button>
+    <!-- Spinner de carregamento -->
+  <div v-if="isLoading" class="loader"></div>
+  <div v-if="resultsVisible && results" class="card mt-4 shadow">
+    <div
+      class="card-header text-white text-center"
+      :style="{ backgroundColor: '#1b3f82' }"
+    >
+
               <h3>Resultado Simulação de Lâmina</h3>
             </div>
             <div v-if="isLoading" class="loading">Carregando...</div>
             <div class="card-body">
               <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <strong>ET0:</strong> {{ results.data.Et0 }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Precipitação:</strong> {{ results.data.Precipitation }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Dias da Cultura:</strong> {{ results.data.CropDays }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Kc:</strong> {{ results.data.Kc }}
+                </li>
                 <li class="list-group-item">
                   <strong>Etc:</strong> {{ results.data.Etc }}
                 </li>
@@ -433,18 +445,6 @@
                 </li>
                 <li class="list-group-item">
                   <strong>Tempo de Irrigação:</strong> {{ results.data.IrrigationTime }}
-                </li>
-                <li class="list-group-item">
-                  <strong>Dias da Cultura:</strong> {{ results.data.CropDays }}
-                </li>
-                <li class="list-group-item">
-                  <strong>ET0:</strong> {{ results.data.Et0 }}
-                </li>
-                <li class="list-group-item">
-                  <strong>Precipitação:</strong> {{ results.data.Precipitation }}
-                </li>
-                <li class="list-group-item">
-                  <strong>Kc:</strong> {{ results.data.Kc }}
                 </li>
               </ul>
             </div>
@@ -532,6 +532,7 @@ export default {
     },
     methods: {
       async calculateRecomendation() {
+        this.isLoading = true;
     try {
         const formattedDate = this.dateplanting ? this.formatDate(this.dateplanting) : '';
 
@@ -611,6 +612,9 @@ export default {
     console.error("Erro ao chamar a API:", error);
     console.log("Dados enviados:", data);
   }
+  finally {
+      this.isLoading = false; // Esconde o spinner
+    }
 },
 
 validateEfficiency() {
@@ -694,9 +698,48 @@ body {
     color: #1b3f82;
   }
   .btn {
-    font-size: 1.2em;
+    font-size: 1.0em;
   }
   .shadow {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
+
+  .loader {
+  width: 48px;
+  height: 48px;
+  border: 10px solid #FFF;
+  border-radius: 50%;
+  position: relative;
+  transform: rotate(45deg);
+  box-sizing: border-box;
+}
+
+.loader::before {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  inset: -10px;
+  border-radius: 50%;
+  border: 10px solid #1b3f82;
+  animation: prixClipFix 2s infinite linear;
+}
+
+@keyframes prixClipFix {
+  0% {
+    clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
+  }
+  25% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+  }
+  50% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+  }
+  75% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+  }
+}
+
 </style>

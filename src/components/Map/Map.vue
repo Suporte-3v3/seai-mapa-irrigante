@@ -114,7 +114,7 @@ export default {
       if (this.stations && Array.isArray(this.stations)) {
         this.stations.forEach((station) => {
           const coordinates = station.Location.Coordinates;
-          console.log('Adicionando marcador de estação em:', coordinates);
+          /*console.log('Adicionando marcador de estação em:', coordinates); */
           if (coordinates && coordinates.length === 2) {
             const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.stationIcon }).addTo(this.map);
             marker.bindPopup(`<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} [${station.Code}]<br><b>Et0:</b> ${station.Et0}`);
@@ -129,7 +129,7 @@ export default {
       if (this.pluviometers && Array.isArray(this.pluviometers)) {
         this.pluviometers.forEach((pluviometer) => {
           const coordinates = pluviometer.Location.Coordinates;
-          console.log('Adicionando marcador de pluviômetro em:', coordinates);
+          /*console.log('Adicionando marcador de pluviômetro em:', coordinates);*/
           if (coordinates && coordinates.length === 2) {
             const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.pluviometerIcon }).addTo(this.map);
             marker.bindPopup(`<b>Nome:</b> ${pluviometer.Name}<br><b>Orgão:</b> ${pluviometer.Organ.Name} [${pluviometer.Code}]<br><b>Precipitação:</b> ${pluviometer.Precipitation} mm`);
@@ -146,7 +146,7 @@ export default {
 
       legend.onAdd = () => {
         const div = L.DomUtil.create('div', 'info legend');
-        console.log('Legenda adicionada com classes:', div.className);
+        console.log('Legenda adicionada:', div.className);
         div.innerHTML += '<i style="background: #EF760F; width: 20px; height: 18px; display: inline-block;"></i> <b>Estação</b><br>';
         div.innerHTML += '<i style="background: #9023A1; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetro</b><br>';
         return div;
@@ -166,7 +166,7 @@ export default {
               const userMarker = L.marker(this.userLocation, { icon: this.userIcon }).addTo(this.map)
                 .bindPopup("<b>Usuário</b><br>Localização Aproximada");
 
-              // Adiciona um atraso de 1 segundo antes de desenhar as polylines
+
               setTimeout(() => {
                 this.addPolylines();
               }, 3000);
@@ -192,7 +192,7 @@ export default {
         const stationCoords = station.Location.Coordinates;
         if (stationCoords && stationCoords.length === 2) {
           const distance = L.latLng(this.userLocation[0], this.userLocation[1]).distanceTo(L.latLng(stationCoords[0], stationCoords[1]));
-          console.log(`Distância para estação ${station.Name}:`, distance);
+         /* console.log(`Distância para estação ${station.Name}:`, distance);*/
           if (distance < minStationDistance) {
             minStationDistance = distance;
             closestStation = stationCoords;
@@ -208,7 +208,7 @@ export default {
         const pluviometerCoords = pluviometer.Location.Coordinates;
         if (pluviometerCoords && pluviometerCoords.length === 2) {
           const distance = L.latLng(this.userLocation[0], this.userLocation[1]).distanceTo(L.latLng(pluviometerCoords[0], pluviometerCoords[1]));
-          console.log(`Distância para pluviômetro ${pluviometer.Name}:`, distance);
+          /* console.log(`Distância para pluviômetro ${pluviometer.Name}:`, distance); */
           if (distance < minPluviometerDistance) {
             minPluviometerDistance = distance;
             closestPluviometer = pluviometerCoords;
