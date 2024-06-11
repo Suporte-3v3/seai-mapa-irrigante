@@ -14,6 +14,7 @@ export default {
       stations: [],
       pluviometers: [],
       map: null,
+      userLocation: null,
       stationIcon: L.icon({
         iconUrl: '/icon-station.png',
         iconSize: [25, 25],
@@ -32,39 +33,24 @@ export default {
     try {
       const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
       this.stations = responseStation.data.data || [];
-      console.log('Stations data:', this.stations);
+      console.log('Dados das Estações:', this.stations);
 
       const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');
       this.pluviometers = responsePluviometer.data ? responsePluviometer.data.data : [];
-      console.log('Pluviometers data:', this.pluviometers);
+      console.log('Dados dos Pluviômetros:', this.pluviometers);
 
       this.addMarkers();
     } catch (error) {
-      console.error('Error fetching data from API:', error);
+      console.error('Erro ao buscar dados da API:', error);
     }
   },
   mounted() {
     this.setupMap();
     window.addEventListener("resize", this.handleResize);
-
-    this.stations.forEach((station) => {
-      L.marker(station.Location.Coordinates, { icon: this.stationIcon }).addTo(
-        this.map
-      );
-    });
-
-    this.pluviometers.forEach((pluviometer) => {
-      L.marker(pluviometer.Location.Coordinates, {
-        icon: this.pluviometerIcon,
-      }).addTo(this.map);
-    });
-  },
-  unmounted() {
-    window.removeEventListener("resize", this.handleResize);
+    this.getUserLocation();
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.handleResize);
-
+    window.removeEventListener("resize", this.handleResize);
     if (this.map) {
       this.map.remove();
     }
@@ -73,14 +59,14 @@ export default {
     setupMap() {
       this.map = L.map(this.$refs.map, {
         scrollWheelZoom: true,
-        attributionControl: false, 
-        zoomControl: false, 
+        attributionControl: false,
+        zoomControl: false,
       });
 
       L.tileLayer(
         "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
         {
-          attribution: "", 
+          attribution: "",
         }
       ).addTo(this.map);
 
@@ -97,25 +83,6 @@ export default {
       }).addTo(this.map);
 
       this.map.fitBounds(geojsonLayer.getBounds());
-
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            if (this.map) {
-              this.map.setView([latitude, longitude], 12);
-              L.marker([latitude, longitude], { icon: this.userIcon }).addTo(this.map)
-              .bindPopup("<b>Usuário</b><br>Localização Aproximada");
-            }
-          },
-          (error) => {
-            console.error('Erro ao obter a localização do usuário:', error);
-          }
-        );
-      } else {
-        console.error("Geolocalização não é suportada neste navegador.");
-      }
-
       this.handleResize();
 
       this.$refs.map.addEventListener('touchstart', () => {
@@ -131,10 +98,7 @@ export default {
       });
 
       this.addLegend();
-
-      L.control.zoom({
-        position: 'bottomleft', 
-      }).addTo(this.map);
+      L.control.zoom({ position: 'topleft' }).addTo(this.map);
     },
     handleResize() {
       if (this.map) {
@@ -153,13 +117,13 @@ export default {
           console.log('Adicionando marcador de estação em:', coordinates);
           if (coordinates && coordinates.length === 2) {
             const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.stationIcon }).addTo(this.map);
-            marker.bindPopup(`<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} <a>[</a>${station.Code}<a>]</a><br><b>Et0:</b> ${station.Et0}`);
+            marker.bindPopup(`<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} [${station.Code}]<br><b>Et0:</b> ${station.Et0}`);
           } else {
-            console.error('Coordenadas de Estações inválidas:', station);
+            console.error('Coordenadas de Estação inválidas:', station);
           }
         });
       } else {
-        console.error('Os dados das estações são inválidos');
+        console.error('Dados das estações são inválidos');
       }
 
       if (this.pluviometers && Array.isArray(this.pluviometers)) {
@@ -168,31 +132,121 @@ export default {
           console.log('Adicionando marcador de pluviômetro em:', coordinates);
           if (coordinates && coordinates.length === 2) {
             const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.pluviometerIcon }).addTo(this.map);
-            marker.bindPopup(`<b>Nome:</b> ${pluviometer.Name}<br><b>Orgão:</b> ${pluviometer.Organ.Name} <a>[</a>${pluviometer.Code}<a>]</a><br><b>Precipitação:</b> ${pluviometer.Precipitation}<a> mm</a>`);
+            marker.bindPopup(`<b>Nome:</b> ${pluviometer.Name}<br><b>Orgão:</b> ${pluviometer.Organ.Name} [${pluviometer.Code}]<br><b>Precipitação:</b> ${pluviometer.Precipitation} mm`);
           } else {
-            console.error('Coordenadas do pluviômetro inválidas', pluviometer);
+            console.error('Coordenadas do Pluviômetro inválidas', pluviometer);
           }
         });
       } else {
-        console.error('Os dados dos pluviômetros são inválidos');
+        console.error('Dados dos pluviômetros são inválidos');
       }
     },
     addLegend() {
-  const legend = L.control({ position: 'topright' });
+      const legend = L.control({ position: 'topright' });
 
-  legend.onAdd = () => {
-    const div = L.DomUtil.create('div', 'info legend');
-    console.log('Legenda adicionada com classes:', div.className);
-    div.innerHTML += '<i style="background: #EF760F; width: 20px; height: 18px; display: inline-block;"></i> <b>Estação</b><br>';
-    div.innerHTML += '<i style="background: #9023A1; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetro</b><br>';
-    return div;
-  };
+      legend.onAdd = () => {
+        const div = L.DomUtil.create('div', 'info legend');
+        console.log('Legenda adicionada com classes:', div.className);
+        div.innerHTML += '<i style="background: #EF760F; width: 20px; height: 18px; display: inline-block;"></i> <b>Estação</b><br>';
+        div.innerHTML += '<i style="background: #9023A1; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetro</b><br>';
+        return div;
+      };
 
-  legend.addTo(this.map);
-}
-  },
+      legend.addTo(this.map);
+    },
+    getUserLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            this.userLocation = [latitude, longitude];
+            console.log('Localização do usuário:', this.userLocation);
+            if (this.map) {
+              this.map.setView(this.userLocation, 12);
+              const userMarker = L.marker(this.userLocation, { icon: this.userIcon }).addTo(this.map)
+                .bindPopup("<b>Usuário</b><br>Localização Aproximada");
+
+              // Adiciona um atraso de 1 segundo antes de desenhar as polylines
+              setTimeout(() => {
+                this.addPolylines();
+              }, 3000);
+            }
+          },
+          (error) => {
+            console.error('Erro ao obter a localização do usuário:', error);
+          }
+        );
+      } else {
+        console.error("Geolocalização não é suportada por este navegador.");
+      }
+    },
+    addPolylines() {
+      if (!this.userLocation) {
+        console.error('Localização do usuário não definida');
+        return;
+      }
+
+      let closestStation = null;
+      let minStationDistance = Number.MAX_SAFE_INTEGER;
+      this.stations.forEach((station) => {
+        const stationCoords = station.Location.Coordinates;
+        if (stationCoords && stationCoords.length === 2) {
+          const distance = L.latLng(this.userLocation[0], this.userLocation[1]).distanceTo(L.latLng(stationCoords[0], stationCoords[1]));
+          console.log(`Distância para estação ${station.Name}:`, distance);
+          if (distance < minStationDistance) {
+            minStationDistance = distance;
+            closestStation = stationCoords;
+          }
+        } else {
+          console.error('Coordenadas de estação inválidas para:', station);
+        }
+      });
+
+      let closestPluviometer = null;
+      let minPluviometerDistance = Number.MAX_SAFE_INTEGER;
+      this.pluviometers.forEach((pluviometer) => {
+        const pluviometerCoords = pluviometer.Location.Coordinates;
+        if (pluviometerCoords && pluviometerCoords.length === 2) {
+          const distance = L.latLng(this.userLocation[0], this.userLocation[1]).distanceTo(L.latLng(pluviometerCoords[0], pluviometerCoords[1]));
+          console.log(`Distância para pluviômetro ${pluviometer.Name}:`, distance);
+          if (distance < minPluviometerDistance) {
+            minPluviometerDistance = distance;
+            closestPluviometer = pluviometerCoords;
+          }
+        } else {
+          console.error('Coordenadas do pluviômetro inválidas para:', pluviometer);
+        }
+      });
+
+      if (closestStation) {
+        const stationPolyline = L.polyline([this.userLocation, closestStation], {
+          color: '#EF760F',
+          weight: 1,
+          dashArray: '4,4',
+        }).addTo(this.map);
+        console.log('Polyline traçada para a estação mais próxima:', closestStation);
+      } else {
+        console.log('Nenhuma estação próxima encontrada');
+      }
+
+      // Adiciona um pequeno atraso para garantir que ambos os polylines sejam desenhados
+      setTimeout(() => {
+        if (closestPluviometer) {
+          const pluviometerPolyline = L.polyline([this.userLocation, closestPluviometer], {
+            color: '#9023A1',
+            weight: 1,
+            dashArray: '4,4',
+          }).addTo(this.map);
+          console.log('Polyline traçada para o pluviômetro mais próximo:', closestPluviometer);
+        } else {
+          console.log('Nenhum pluviômetro próximo encontrado');
+        }
+      }, 500); // atraso de 0.5 segundos
+    }
+  }
 };
 </script>
+
 
 <style>
 .map-container {
@@ -203,16 +257,13 @@ export default {
   display: none;
 }
 
-.leaflet-bottom {
-  bottom: 500px !important; 
+.leaflet-top.leaflet-left {
+  top: 20px;
+  left: 2px;
 }
 
 .leaflet-control-zoom {
-  bottom: 20px !important; 
-}
-
-.leaflet-top.leaflet-right {
-  top: 20px;
+  margin-top: 10px;
 }
 
 .info.legend {
@@ -222,6 +273,8 @@ export default {
   border-radius: 5px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   z-index: 9999;
+  top: 20px;
+  right: 2px;
 }
 
 .info.legend i {
@@ -231,27 +284,17 @@ export default {
   margin-right: 5px;
 }
 
-.leaflet-bottom.leaflet-left {
-  bottom: 70px; 
-}
-
-.leaflet-control-zoom {
-  margin-bottom: 20px;
-}
-
-
 @media (max-width: 768px) {
-  .leaflet-bottom.leaflet-left {
-    bottom: 60px; 
-  }
-  
-  .leaflet-top.leaflet-right {
-    top: 50px; 
+  .leaflet-top.leaflet-left {
+    top: 60px;
+    left: 2px;
   }
 
   .info.legend {
     padding: 8px;
     font-size: 14px;
+    top: 60px;
+    right: 2px;
   }
 
   .info.legend i {
