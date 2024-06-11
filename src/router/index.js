@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import FAQ from "../views/FAQ.vue";
 import Home from "../views/Home.vue";
+import News from "../views/News.vue";
+import NewsById from "../views/NewsById.vue";
 
 const routes = [
   {
@@ -14,10 +16,15 @@ const routes = [
     component: FAQ,
   },
   {
-    path: '/news',
-    name: 'News',
-    component: FAQ
-  }
+    path: "/noticias",
+    name: "News",
+    component: News,
+  },
+  {
+    path: "/noticias/:id/:name?",
+    name: "NewsById",
+    component: NewsById,
+  },
 ];
 
 const router = createRouter({
