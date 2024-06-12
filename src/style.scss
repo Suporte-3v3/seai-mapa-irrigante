@@ -4,48 +4,88 @@ body {
   font-family: "Montserrat", sans-serif;
 }
 
-.accordion-custom {
-  .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link {
-    background-color: #a1b5d8 !important;
-    box-shadow: none !important;
-    border: 1px solid #2c5ebb;
+.faq {
+  .accordion-custom {
+    .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link {
+      background-color: #a1b5d8 !important;
+      box-shadow: none !important;
+      border: 1px solid #2c5ebb;
+    }
+    .p-accordion-header .p-accordion-header-link {
+      background-color: #f8f9fd !important;
+      box-shadow: none;
+      border: 1px solid #2c5ebb;
+      border-radius: 0%;
+      color: #212529 !important;
+      text-decoration: none !important;
+    }
+    .p-accordion-content {
+      padding-top: 20px;
+      background-color: #f8f9fd !important;
+    }
   }
-  .p-accordion-header .p-accordion-header-link {
-    background-color: #f8f9fd !important;
-    box-shadow: none;
-    border: 1px solid #2c5ebb;
-    border-radius: 0%;
-    color: #212529 !important;
-    text-decoration: none !important;
-  }
-  .p-accordion-content {
-    padding-top: 20px;
-    background-color: #f8f9fd !important;
-  }
-}
-.p-tabview-nav {
-  background-color: #0478fd00 !important;
-  border-color: #1b3f82;
-
-  a {
+  .p-tabview-nav {
     background-color: #0478fd00 !important;
-    text-decoration: none;
-    color: #1b3f82;
-    font-family: "Montserrat", sans-serif !important;
-    text-transform: uppercase;
-    font-weight: 400;
+    border-color: #1b3f82;
+
+    a {
+      background-color: #0478fd00 !important;
+      text-decoration: none;
+      color: #1b3f82;
+      font-family: "Montserrat", sans-serif !important;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+  }
+  .p-tabview .p-tabview-nav li .p-tabview-nav-link {
+    background: #ffffff;
+    border-color: #1b3f82;
+  }
+  .p-tabview .p-tabview-nav .p-highlight .p-tabview-nav-link {
+    border-color: #99bdff;
+    font-weight: 600;
+  }
+  .p-tabview-panels {
+    background-color: #1b3f8200;
   }
 }
-.p-tabview .p-tabview-nav li .p-tabview-nav-link {
-  background: #ffffff;
-  border-color: #1b3f82;
-}
-.p-tabview .p-tabview-nav .p-highlight .p-tabview-nav-link {
-  border-color: #99bdff;
-  font-weight: 600;
-}
-.p-tabview-panels {
-  background-color: #1b3f8200;
+
+.login {
+  .p-tabview-nav {
+    background-color: #ffffff !important;
+    border: 0px;
+    display: flex;
+    padding: 0;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    .p-tabview-header{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    a {
+      background-color: #0478fd00 !important;
+      text-decoration: none;
+      color: #1b3f82;
+      font-family: "Montserrat", sans-serif !important;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+  }
+  .p-tabview .p-tabview-nav li .p-tabview-nav-link {
+    background: #ffffff;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
+  }
+  .p-tabview .p-tabview-nav .p-highlight .p-tabview-nav-link {
+    border-color: #1b3f82;
+    font-weight: 600;
+  }
+  .p-tabview-panels {
+    background-color: #1b3f8200;
+  }
+
 }
 
 .btn-simple {

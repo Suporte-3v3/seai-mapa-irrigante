@@ -3,6 +3,7 @@ import FAQ from "../views/FAQ.vue";
 import Home from "../views/Home.vue";
 import News from "../views/News.vue";
 import NewsById from "../views/NewsById.vue";
+import Login from "../views/User/User.vue";
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: "/noticias/:id/:name?",
     name: "NewsById",
     component: NewsById,
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: Login,
   },
 ];
 
