@@ -8,7 +8,7 @@
   >
     <ProgressSpinner />
   </div>
-  <div class="container mt-4" v-if="!loading">
+  <div class="container mt-4 faq" v-if="!loading">
     <TabView
       @tab-change="onTabChange"
       :pt="{
@@ -112,7 +112,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .spinner {
   margin-top: 100px;
 }
@@ -120,4 +120,5 @@ export default {
   margin-top: 100px;
   color: #1b3f82;
 }
+
 </style>

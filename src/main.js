@@ -9,7 +9,9 @@ import InputText from "primevue/inputtext";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
 import Paginator from "primevue/paginator";
+import Button from "primevue/button";
 import ProgressSpinner from "primevue/progressspinner";
+import Password from "primevue/password";
 import "leaflet/dist/leaflet.css";
 import "primeicons/primeicons.css";
 import "primevue/resources/themes/lara-light-indigo/theme.css";
@@ -30,4 +32,6 @@ createApp(App)
   .component("IconField", IconField)
   .component("InputIcon", InputIcon)
   .component("Paginator", Paginator)
+  .component("Button", Button)
+  .component("Password", Password)
   .mount("#app");
