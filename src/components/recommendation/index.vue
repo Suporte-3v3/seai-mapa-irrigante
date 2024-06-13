@@ -161,10 +161,10 @@
               />
             </div>
             <p
-              v-if="showError"
+              v-if="showErrordp"
               style="color: red; font-size: 12px;"
             >
-              * Campo Obrigatório
+              * Forneça uma Data Válida.
             </p>
           </div>
         </div>
@@ -532,10 +532,10 @@ export default {
     methods: {
       validateDateplanting() {
             if (this.dateplanting > this.maxDate) {
-                this.showError = true;
+                this.showErrordp = true;
                 this.dateplanting = '';  // Limpa o campo se a data for inválida
             } else {
-                this.showError = false;
+                this.showErrordp = false;
             }
         },
       async calculateRecomendation() {
@@ -666,7 +666,7 @@ setMaxDate() {
       this.selectedPrecipitationManual = "";
       this.results = null;
       this.resultsVisible = false;
-      this.showError = false;
+      this.showErrordp = false;
     },
     toggleAdditionalFields() {
       this.showAdditionalFields = [
