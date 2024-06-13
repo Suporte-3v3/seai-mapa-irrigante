@@ -287,14 +287,14 @@ export default {
 
 @media (max-width: 768px) {
   .leaflet-top.leaflet-left {
-    top: 60px;
+    top: 10px;
     left: 2px;
   }
 
   .info.legend {
     padding: 8px;
     font-size: 14px;
-    top: 60px;
+    top: 10px;
     right: 2px;
   }
 

@@ -70,7 +70,7 @@
         </div>
         <div v-if="!isStationDisabled" class="form-group mb-4">
           <label for="newForm" class="tab-label" style="color: #bb4430"
-            >ET0 Manual</label
+            >ET0 Manual (mm)</label
           >
           <input
             id="newForm"
@@ -111,7 +111,7 @@
         </div>
         <div v-if="!isPluviometerDisabled" class="form-group mb-4">
           <label for="newForm" class="tab-label" style="color: #bb4430"
-            >Precipitação Manual</label
+            >Precipitação Manual (mm)</label
           >
           <input
             id="newForm"
@@ -151,13 +151,13 @@
             <label for="input1" class="tab-label">Data de Plantio</label>
             <div class="input-group">
               <input
-                id="input1"
-                v-model="dateplanting"
-                type="date"
-                class="form-control"
-                placeholder="Digite a Data"
-                :max="maxDate"
-                @keydown="preventTyping"
+              id="input1"
+              v-model="dateplanting"
+              type="date"
+              class="form-control"
+              placeholder="Digite a Data"
+              :max="maxDate"
+              @blur="validateDateplanting"
               />
             </div>
             <p
@@ -426,10 +426,10 @@
             <div class="card-body">
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                  <strong>ET0:</strong> {{ results.data.Et0 }}
+                  <strong>ET0:</strong> {{ results.data.Et0 }} {{ "mm" }}
                 </li>
                 <li class="list-group-item">
-                  <strong>Precipitação:</strong> {{ results.data.Precipitation }}
+                  <strong>Precipitação:</strong> {{ results.data.Precipitation }} {{ "mm" }}
                 </li>
                 <li class="list-group-item">
                   <strong>Dias da Cultura:</strong> {{ results.data.CropDays }}
@@ -438,7 +438,7 @@
                   <strong>Kc:</strong> {{ results.data.Kc }}
                 </li>
                 <li class="list-group-item">
-                  <strong>Etc:</strong> {{ results.data.Etc }}
+                  <strong>Etc:</strong> {{ results.data.Etc }} {{ "mm" }}
                 </li>
                 <li class="list-group-item">
                   <strong>Lâmina de Reposição:</strong> {{ results.data.RepositionBlade }}
@@ -455,7 +455,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import axios from "axios";
@@ -481,7 +480,7 @@ export default {
       selectedCulture: '',
       selectedSystemIrrigation: '',
       dateplanting: '',
-      maxDate: '',
+      maxDate: new Date().toISOString().split('T')[0],
       validationIrrigationEfficiency: '',
       validationPrecipitationSprinkler: '',
       validationFlowSystem: '',
@@ -498,9 +497,9 @@ export default {
       useDefault: true,
       toggleSwitchStation: true,
       toggleSwitchPluviometer: true,
+      anotherField: null,
     };
   },
- 
   computed: {
     isFieldDisabled() {
       return this.useDefault;
@@ -531,6 +530,14 @@ export default {
       this.setMaxDate();
     },
     methods: {
+      validateDateplanting() {
+            if (this.dateplanting > this.maxDate) {
+                this.showError = true;
+                this.dateplanting = '';  // Limpa o campo se a data for inválida
+            } else {
+                this.showError = false;
+            }
+        },
       async calculateRecomendation() {
         this.isLoading = true;
     try {
