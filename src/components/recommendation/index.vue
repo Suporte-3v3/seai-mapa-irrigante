@@ -207,7 +207,7 @@
         class="form-control"
         placeholder="Digite a Eficiência"
         :disabled="isFieldDisabled"
-        min="0"
+        min="1"
         max="100"
         @input="validateEfficiency"
               />
@@ -432,6 +432,9 @@
                   <strong>Precipitação:</strong> {{ results.data.Precipitation }} {{ "mm" }}
                 </li>
                 <li class="list-group-item">
+                  <strong>Eficiência de Irrigação:</strong> {{ results.data.IrrigationEfficiency *100 }} {{ "%" }}
+                </li>
+                <li class="list-group-item">
                   <strong>Dias da Cultura:</strong> {{ results.data.CropDays }}
                 </li>
                 <li class="list-group-item">
@@ -625,8 +628,8 @@ export default {
 },
 
 validateEfficiency() {
-      if (this.validationIrrigationEfficiency < 0) {
-        this.validationIrrigationEfficiency = 0;
+      if (this.validationIrrigationEfficiency < 1) {
+        this.validationIrrigationEfficiency = 1;
       } else if (this.validationIrrigationEfficiency > 100) {
         this.validationIrrigationEfficiency = 100;
       }
