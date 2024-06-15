@@ -231,6 +231,9 @@
           </div>
         </div>
       </div>
+      <div v-if="showAdditionalFields" ref="additionalFields">
+      <div ref="scrollTarget"></div>
+    </div>
       <!-- Campos adicionais -->
       <div v-if="showAdditionalFields" class="row">
         <div v-if="selectedSystemIrrigation === 'Aspersão'" class="col-md-12">
@@ -241,7 +244,7 @@
             <input v-model.number="validationPrecipitationSprinkler"
            type="number"
            class="form-control"
-           placeholder="Digite o valor"
+           placeholder="Digite o valor da Precipitação por Aspersor"
            @input="validateMinimum(validationPrecipitationSprinkler, 'validationPrecipitationSprinkler')">
           </div>
         </div>
@@ -256,7 +259,7 @@
             <input v-model.number="validationFlowSystem"
            type="number"
            class="form-control"
-           placeholder="Digite o valor"
+           placeholder="Digite o valor da Vazão do Sistema"
            @input="validateMinimum(validationFlowSystem, 'validationFlowSystem')">
           </div>
           <div class="form-group mb-4">
@@ -266,7 +269,7 @@
             <input v-model.number="validationPlantedArea"
            type="number"
            class="form-control"
-           placeholder="Digite o valor"
+           placeholder="Digite o valor da Área Plantada"
            @input="validateMinimum(validationPlantedArea, 'validationPlantedArea')">
           </div>
           <div class="form-group mb-4">
@@ -276,17 +279,17 @@
             <input v-model.number="validationEffectiveArea"
            type="number"
            class="form-control"
-           placeholder="Digite o valor"
+           placeholder="Digite o valor da Área efetiva de cada planta"
            @input="validateMinimum(validationEffectiveArea, 'validationEffectiveArea')">
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
-              >Número de Plantas por área (plantas/m²)</label
+              >Número de Plantas por Área (plantas/m²)</label
             >
             <input v-model.number="validationNumberPlants"
            type="number"
            class="form-control"
-           placeholder="Digite o valor"
+           placeholder="Digite o valor de Número de Plantas por Área"
            @input="validateMinimum(validationNumberPlants, 'validationNumberPlants')">
           </div>
         </div>
@@ -301,7 +304,7 @@
             <input v-model.number="validationFlowSystem"
            type="number"
            class="form-control"
-           placeholder="Digite o valor"
+           placeholder="Digite o valor da Vazão do Sistema"
            @input="validateMinimum(validationFlowSystem, 'validationFlowSystem')">
           </div>
           <div class="form-group mb-4">
@@ -311,7 +314,7 @@
             <input v-model.number="validationPlantedArea"
            type="number"
            class="form-control"
-           placeholder="Digite o valor"
+           placeholder="Digite o valor da Área Plantada"
            @input="validateMinimum(validationPlantedArea, 'validationPlantedArea')">
           </div>
           <div class="form-group mb-4">
@@ -321,17 +324,17 @@
             <input v-model.number="validationEffectiveArea"
            type="number"
            class="form-control"
-           placeholder="Digite o valor"
+           placeholder="Digite o valor da Área efetiva de cada planta"
            @input="validateMinimum(validationEffectiveArea, 'validationEffectiveArea')">
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
-              >Número de Plantas por área (plantas/m²)</label
+              >Número de Plantas por Área (plantas/m²)</label
             >
             <input v-model.number="validationNumberPlants"
            type="number"
            class="form-control"
-           placeholder="Digite o valor"
+           placeholder="Digite o valor do Número de Plantas por Área"
            @input="validateMinimum(validationNumberPlants, 'validationNumberPlants')">
           </div>
         </div>
@@ -346,7 +349,7 @@
             <input v-model.number="validationPrecipitationAround"
            type="number"
            class="form-control"
-           placeholder="Digite o valor"
+           placeholder="Digite o valor da Precipitação por Volta"
            @input="validateMinimum(validationPrecipitationAround, 'validationPrecipitationAround')">
           </div>
         </div>
@@ -358,7 +361,7 @@
             <input v-model.number="validationFurrowLength"
            type="number"
            class="form-control"
-           placeholder="Digite o valor"
+           placeholder="Digite o valor do Comprimento por Sulcos"
            @input="validateMinimum(validationFurrowLength, 'validationFurrowLength')">
           </div>
           <div class="form-group mb-4">
@@ -368,7 +371,7 @@
             <input v-model.number="validationGrooveSpacing"
            type="number"
            class="form-control"
-           placeholder="Digite o valor"
+           placeholder="Digite o valor do Espaçamento entre os Sulcos"
            @input="validateMinimum(validationGrooveSpacing, 'validationGrooveSpacing')">
           </div>
           <div class="form-group mb-4">
@@ -378,7 +381,7 @@
             <input v-model.number="validationFlowGrooves"
            type="number"
            class="form-control"
-           placeholder="Digite o valor"
+           placeholder="Digite o valor da Vazão por Sulco"
            @input="validateMinimum(validationFlowGrooves, 'validationFlowGrooves')">
           </div>
         </div>
@@ -664,15 +667,26 @@ setMaxDate() {
       this.showErrordp = false;
     },
     toggleAdditionalFields() {
-      this.showAdditionalFields = [
+      const validSelections = [
         "Aspersão",
         "Microaspersão",
         "Gotejamento",
         "Pivô Central",
-        "Sulcos",
-      ].includes(this.selectedSystemIrrigation);
-    },
-  },
+        "Sulcos"
+      ];
+      
+      this.showAdditionalFields = validSelections.includes(this.selectedSystemIrrigation);
+      
+      this.$nextTick(() => {
+        if (this.showAdditionalFields && this.$refs.additionalFields) {
+          // Adiciona um pequeno atraso para garantir que a renderização esteja completa
+          setTimeout(() => {
+            this.$refs.additionalFields.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        }
+      });
+    }
+  }
 };
 </script>
 
