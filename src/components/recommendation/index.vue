@@ -238,12 +238,11 @@
             <label class="tab-label" style="color: #bb4430"
               >Precipitação por Aspersor (mm/h)</label
             >
-            <input
-              v-model="validationPrecipitationSprinkler"
-              type="number"
-              class="form-control"
-              placeholder="Digite a Precipitação por Aspersor"
-            />
+            <input v-model.number="validationPrecipitationSprinkler"
+           type="number"
+           class="form-control"
+           placeholder="Digite o valor"
+           @input="validateMinimum(validationPrecipitationSprinkler, 'validationPrecipitationSprinkler')">
           </div>
         </div>
         <div
@@ -254,45 +253,41 @@
             <label class="tab-label" style="color: #bb4430"
               >Vazão do Sistema (l/h)</label
             >
-            <input
-              v-model="validationFlowSystem"
-              type="number"
-              class="form-control"
-              placeholder="Digite a Vazão do Sistema"
-            />
+            <input v-model.number="validationFlowSystem"
+           type="number"
+           class="form-control"
+           placeholder="Digite o valor"
+           @input="validateMinimum(validationFlowSystem, 'validationFlowSystem')">
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Área Plantada (m²)</label
             >
-            <input
-              v-model="validationPlantedArea"
-              type="number"
-              class="form-control"
-              placeholder="Digite a Área Plantada"
-            />
+            <input v-model.number="validationPlantedArea"
+           type="number"
+           class="form-control"
+           placeholder="Digite o valor"
+           @input="validateMinimum(validationPlantedArea, 'validationPlantedArea')">
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Área efetiva de cada planta (m²/planta)</label
             >
-            <input
-              v-model="validationEffectiveArea"
-              type="number"
-              class="form-control"
-              placeholder="Digite a Área efetiva de cada planta"
-            />
+            <input v-model.number="validationEffectiveArea"
+           type="number"
+           class="form-control"
+           placeholder="Digite o valor"
+           @input="validateMinimum(validationEffectiveArea, 'validationEffectiveArea')">
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Número de Plantas por área (plantas/m²)</label
             >
-            <input
-              v-model="validationNumberPlants"
-              type="number"
-              class="form-control"
-              placeholder="Digite o Número de Plantas por área"
-            />
+            <input v-model.number="validationNumberPlants"
+           type="number"
+           class="form-control"
+           placeholder="Digite o valor"
+           @input="validateMinimum(validationNumberPlants, 'validationNumberPlants')">
           </div>
         </div>
         <div
@@ -303,45 +298,41 @@
             <label class="tab-label" style="color: #bb4430"
               >Vazão do Sistema (l/h)</label
             >
-            <input
-              v-model="validationFlowSystem"
-              type="number"
-              class="form-control"
-              placeholder="Digite a Vazão do Sistema"
-            />
+            <input v-model.number="validationFlowSystem"
+           type="number"
+           class="form-control"
+           placeholder="Digite o valor"
+           @input="validateMinimum(validationFlowSystem, 'validationFlowSystem')">
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Área Plantada (m²)</label
             >
-            <input
-              v-model="validationPlantedArea"
-              type="number"
-              class="form-control"
-              placeholder="Digite a Área Plantada"
-            />
+            <input v-model.number="validationPlantedArea"
+           type="number"
+           class="form-control"
+           placeholder="Digite o valor"
+           @input="validateMinimum(validationPlantedArea, 'validationPlantedArea')">
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Área efetiva de cada planta (m²/planta)</label
             >
-            <input
-              v-model="validationEffectiveArea"
-              type="number"
-              class="form-control"
-              placeholder="Digite a Área efetiva de cada planta"
-            />
+            <input v-model.number="validationEffectiveArea"
+           type="number"
+           class="form-control"
+           placeholder="Digite o valor"
+           @input="validateMinimum(validationEffectiveArea, 'validationEffectiveArea')">
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Número de Plantas por área (plantas/m²)</label
             >
-            <input
-              v-model="validationNumberPlants"
-              type="number"
-              class="form-control"
-              placeholder="Digite o Número de Plantas por área"
-            />
+            <input v-model.number="validationNumberPlants"
+           type="number"
+           class="form-control"
+           placeholder="Digite o valor"
+           @input="validateMinimum(validationNumberPlants, 'validationNumberPlants')">
           </div>
         </div>
         <div
@@ -352,12 +343,11 @@
             <label class="tab-label" style="color: #bb4430"
               >Precipitação por Volta (mm/volta)</label
             >
-            <input
-              v-model="validationPrecipitationAround"
-              type="number"
-              class="form-control"
-              placeholder="Digite a Precipitação por Volta"
-            />
+            <input v-model.number="validationPrecipitationAround"
+           type="number"
+           class="form-control"
+           placeholder="Digite o valor"
+           @input="validateMinimum(validationPrecipitationAround, 'validationPrecipitationAround')">
           </div>
         </div>
         <div v-if="selectedSystemIrrigation === 'Sulcos'" class="col-md-12">
@@ -365,34 +355,31 @@
             <label class="tab-label" style="color: #bb4430"
               >Comprimento dos Sulcos (m)</label
             >
-            <input
-              v-model="validationFurrowLength"
-              type="number"
-              class="form-control"
-              placeholder="Digite o Comprimento dos Sulcos"
-            />
+            <input v-model.number="validationFurrowLength"
+           type="number"
+           class="form-control"
+           placeholder="Digite o valor"
+           @input="validateMinimum(validationFurrowLength, 'validationFurrowLength')">
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Espaçamento entre os Sulcos (m)</label
             >
-            <input
-              v-model="validationGrooveSpacing"
-              type="number"
-              class="form-control"
-              placeholder="Digite o Espaçamento entre os Sulcos"
-            />
+            <input v-model.number="validationGrooveSpacing"
+           type="number"
+           class="form-control"
+           placeholder="Digite o valor"
+           @input="validateMinimum(validationGrooveSpacing, 'validationGrooveSpacing')">
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Vazão por Sulco (l/h)</label
             >
-            <input
-              v-model="validationFlowGrooves"
-              type="number"
-              class="form-control"
-              placeholder="Digite a Vazão por Sulco"
-            />
+            <input v-model.number="validationFlowGrooves"
+           type="number"
+           class="form-control"
+           placeholder="Digite o valor"
+           @input="validateMinimum(validationFlowGrooves, 'validationFlowGrooves')">
           </div>
         </div>
       </div>
@@ -536,7 +523,7 @@ export default {
       validateDateplanting() {
             if (this.dateplanting > this.maxDate) {
                 this.showErrordp = true;
-                this.dateplanting = '';  // Limpa o campo se a data for inválida
+                this.dateplanting = ''; 
             } else {
                 this.showErrordp = false;
             }
@@ -548,7 +535,6 @@ export default {
 
         let measurements = {};
 
-        // Verifica se o campo de eficiência está preenchido e adiciona ao objeto measurements se estiver
         if (this.isEfficiencyCheckboxChecked && this.validationIrrigationEfficiencyFromAPI) {
             measurements.Efficiency = parseFloat(this.validationIrrigationEfficiencyFromAPI);
         } else if (this.validationIrrigationEfficiency) {
@@ -632,6 +618,12 @@ validateEfficiency() {
         this.validationIrrigationEfficiency = 1;
       } else if (this.validationIrrigationEfficiency > 100) {
         this.validationIrrigationEfficiency = 100;
+      }
+    },
+
+validateMinimum(value, field) {
+      if (value < 1) {
+        this[field] = 1;
       }
     },
 // Função para formatar a data para DD/MM/YYYY
