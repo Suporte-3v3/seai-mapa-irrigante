@@ -49,6 +49,8 @@
 
 <script>
 import { UserRest } from "@/services/user.service";
+import { useRouter } from "vue-router";
+
 export default {
   name: "Login",
 
@@ -61,6 +63,7 @@ export default {
       requiredField: "Campo obrigatório",
       submitted: false,
       service: new UserRest(),
+      router: useRouter(),
     };
   },
   methods: {
@@ -68,7 +71,8 @@ export default {
       this.submitted = true;
       if (this.isValid()) {
         this.service.login(this.profile).then((res) => {
-          localStorage.setItem("tkn", String(res.data.accessToken))
+          localStorage.setItem("tkn", String(res.data.accessToken));
+          this.router.push("/")
         });
       }
     },
