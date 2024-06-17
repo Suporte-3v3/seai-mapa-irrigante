@@ -78,6 +78,7 @@
             class="form-control"
             type="number"
             placeholder="Digite o Valor da ET0"
+            @input="validateMinimum(selectedET0Manual, 'selectedET0Manual')"
           />
         </div>
       </div>
@@ -725,8 +726,10 @@ body {
   height: 48px;
   border: 10px solid #FFF;
   border-radius: 50%;
-  position: relative;
-  transform: rotate(45deg);
+  position: fixed; /* Use fixed to position the spinner relative to the viewport */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%) rotate(45deg); /* Adjust position back by 50% of its size and apply rotation */
   box-sizing: border-box;
 }
 
