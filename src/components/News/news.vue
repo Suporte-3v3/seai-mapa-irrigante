@@ -37,7 +37,7 @@
         >
           <h6 :title="item.Title">{{ item.Title }}</h6>
           <p :title="item.Description">{{ item.Description }}</p>
-          <small>{{ generics.convertDate(item.CreatedAt) }}</small>
+          <small>{{ generics.convertDate(item.SendDate) }}</small>
         </div>
       </div>
       <Pagination
