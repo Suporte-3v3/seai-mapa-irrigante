@@ -638,7 +638,7 @@ formatDate(date) {
 },
 
 preventTyping(event) {
-      event.preventDefault(); // Previne a digitação no campo de data
+      event.preventDefault();
     },
 
 setMaxDate() {
@@ -726,10 +726,8 @@ body {
   height: 48px;
   border: 10px solid #FFF;
   border-radius: 50%;
-  position: fixed; /* Use fixed to position the spinner relative to the viewport */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%) rotate(45deg); /* Adjust position back by 50% of its size and apply rotation */
+  position: relative;
+  transform: rotate(45deg);
   box-sizing: border-box;
 }
 
