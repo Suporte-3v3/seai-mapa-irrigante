@@ -210,7 +210,7 @@
            class="form-control"
            placeholder="Digite o valor da Precipitação por Aspersor"
            @input="validateMinimum(PrecipitationSprinkler, 'PrecipitationSprinkler')">
-           <p v-if="errors.PrecipitationSprinkler" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+           <p v-if="errors.PrecipitationSprinkler" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
           </div>
         </div>
         <div
@@ -226,7 +226,7 @@
            class="form-control"
            placeholder="Digite o valor da Vazão do Sistema"
            @input="validateMinimum(FlowSystem, 'FlowSystem')">
-           <p v-if="errors.FlowSystem" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+           <p v-if="errors.FlowSystem" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
@@ -237,7 +237,7 @@
            class="form-control"
            placeholder="Digite o valor da Área Plantada"
            @input="validateMinimum(PlantedArea, 'PlantedArea')">
-           <p v-if="errors.PlantedArea" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+           <p v-if="errors.PlantedArea" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
@@ -248,7 +248,7 @@
            class="form-control"
            placeholder="Digite o valor da Área efetiva de cada planta"
            @input="validateMinimum(EffectiveArea, 'EffectiveArea')">
-           <p v-if="errors.EffectiveArea" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+           <p v-if="errors.EffectiveArea" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
@@ -259,7 +259,7 @@
            class="form-control"
            placeholder="Digite o valor de Número de Plantas por Área"
            @input="validateMinimum(NumberPlants, 'NumberPlants')">
-           <p v-if="errors.NumberPlants" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+           <p v-if="errors.NumberPlants" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
           </div>
         </div>
         <div
@@ -275,7 +275,7 @@
            class="form-control"
            placeholder="Digite o valor da Vazão do Sistema"
            @input="validateMinimum(FlowSystem, 'FlowSystem')">
-           <p v-if="errors.FlowSystem" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+           <p v-if="errors.FlowSystem" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
@@ -286,7 +286,7 @@
            class="form-control"
            placeholder="Digite o valor da Área Plantada"
            @input="validateMinimum(PlantedArea, 'PlantedArea')">
-           <p v-if="errors.PlantedArea" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+           <p v-if="errors.PlantedArea" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
@@ -297,7 +297,7 @@
            class="form-control"
            placeholder="Digite o valor da Área efetiva de cada planta"
            @input="validateMinimum(EffectiveArea, 'EffectiveArea')">
-           <p v-if="errors.EffectiveArea" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+           <p v-if="errors.EffectiveArea" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
@@ -308,7 +308,7 @@
            class="form-control"
            placeholder="Digite o valor do Número de Plantas por Área"
            @input="validateMinimum(NumberPlants, 'NumberPlants')">
-           <p v-if="errors.NumberPlants" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+           <p v-if="errors.NumberPlants" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
           </div>
         </div>
         <div
@@ -324,7 +324,7 @@
            class="form-control"
            placeholder="Digite o valor da Precipitação por Volta"
            @input="validateMinimum(PrecipitationAround, 'PrecipitationAround')">
-           <p v-if="errors.PrecipitationAround" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+           <p v-if="errors.PrecipitationAround" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
           </div>
         </div>
         <div v-if="selectedSystemIrrigation === 'Sulcos'" class="col-md-12">
@@ -337,7 +337,7 @@
            class="form-control"
            placeholder="Digite o valor do Comprimento por Sulcos"
            @input="validateMinimum(FurrowLength, 'FurrowLength')">
-           <p v-if="errors.FurrowLength" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+           <p v-if="errors.FurrowLength" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
@@ -348,7 +348,7 @@
            class="form-control"
            placeholder="Digite o valor do Espaçamento entre os Sulcos"
            @input="validateMinimum(GrooveSpacing, 'GrooveSpacing')">
-           <p v-if="errors.GrooveSpacing" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+           <p v-if="errors.GrooveSpacing" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
@@ -359,7 +359,7 @@
            class="form-control"
            placeholder="Digite o valor da Vazão por Sulco"
            @input="validateMinimum(FlowGrooves, 'FlowGrooves')">
-           <p v-if="errors.FlowGrooves" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+           <p v-if="errors.FlowGrooves" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
           </div>
         </div>
       </div>
@@ -525,7 +525,7 @@ export default {
             }
         },*/
 
-  validateAndCalculate() {
+        validateAndCalculate() {
   console.log("Validando os dados...");
   this.errors.selectedStation = !this.selectedStation;
   this.errors.selectedPluviometer = !this.selectedPluviometer;
@@ -535,22 +535,22 @@ export default {
 
   switch (this.selectedSystemIrrigation) {
     case "Aspersão":
-      this.errors.PrecipitationSprinkler = !this.PrecipitationSprinkler;
+      this.errors.PrecipitationSprinkler = !this.PrecipitationSprinkler || this.PrecipitationSprinkler === 0;
       break;
     case "Pivô Central":
-      this.errors.PrecipitationAround = !this.PrecipitationAround;
+      this.errors.PrecipitationAround = !this.PrecipitationAround || this.PrecipitationAround === 0;
       break;
     case "Sulcos":
-      this.errors.FurrowLength = !this.FurrowLength;
-      this.errors.GrooveSpacing = !this.GrooveSpacing;
-      this.errors.FlowGrooves = !this.FlowGrooves;
+      this.errors.FurrowLength = !this.FurrowLength || this.FurrowLength === 0;
+      this.errors.GrooveSpacing = !this.GrooveSpacing || this.GrooveSpacing === 0;
+      this.errors.FlowGrooves = !this.FlowGrooves || this.FlowGrooves === 0;
       break;
     case "Gotejamento":
     case "Microaspersão":
-      this.errors.FlowSystem = !this.FlowSystem;
-      this.errors.PlantedArea = !this.PlantedArea;
-      this.errors.EffectiveArea = !this.EffectiveArea;
-      this.errors.NumberPlants = !this.NumberPlants;
+      this.errors.FlowSystem = !this.FlowSystem || this.FlowSystem === 0;
+      this.errors.PlantedArea = !this.PlantedArea || this.PlantedArea === 0;
+      this.errors.EffectiveArea = !this.EffectiveArea || this.EffectiveArea === 0;
+      this.errors.NumberPlants = !this.NumberPlants || this.NumberPlants === 0;
       break;
     default:
       console.log("Sistema de irrigação desconhecido.");
