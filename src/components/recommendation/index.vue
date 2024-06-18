@@ -761,7 +761,7 @@ body {
 }
 
 .card {
-    border-radius: 10px;
+    border-radius: 20px;
   }
   .list-group-item {
     font-size: 1.1em;
