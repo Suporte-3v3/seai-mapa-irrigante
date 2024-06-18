@@ -17,7 +17,7 @@
         <h4>{{ news.Title }}</h4>
         <hr />
       </div>
-      <small>{{ generics.convertDate(news.CreatedAt) }}</small>
+      <small>{{ generics.convertDate(news.SendDate) }}</small>
       <h6 class="mt-4">{{ news.Description }}</h6>
 
       <p class="mt-4" v-html="news.Data"></p>
