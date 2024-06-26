@@ -1,7 +1,6 @@
 <template>
-    <div
-      class="container-fluid mt-5 login d-flex h-100"
-    >
+  <div class="background">
+    <div class="container-fluid login d-flex h-100">
       <div class="login-content">
         <TabView
           :pt="{
@@ -14,21 +13,22 @@
           }"
         >
           <TabPanel header="Entrar">
-              <Login></Login>
+            <Login></Login>
           </TabPanel>
-          <TabPanel header="Cadastrar"> 
+          <TabPanel header="Cadastrar">
             <Register></Register>
           </TabPanel>
         </TabView>
       </div>
     </div>
-  </template>
+  </div>
+</template>
 <script>
-import Login from "../../components/Login/Login.vue"
-import Register from "../../components/Register/Register.vue"
+import Login from "../../components/Login/Login.vue";
+import Register from "../../components/Register/Register.vue";
 export default {
   name: "User",
-  components: { Login, Register},
+  components: { Login, Register },
   data() {
     return {
       titles: ["Entrar", "Cadastrar"],
@@ -37,20 +37,20 @@ export default {
 };
 </script>
 
-
 <style lang="scss">
-.login {
-  height: 94.7vh !important;
+.background {
+  height: 100vh;
   background: linear-gradient(180deg, #1b3f82 0%, #112549 100%);
+}
+.login {
   justify-content: center;
   align-items: center;
-
 }
 .login-content {
-    background-color: white;
-    width: 30vw;
-    max-width: 728px;
-    min-height: 500px;
-    min-width: 360px;
+  background-color: white;
+  width: 30vw;
+  max-width: 728px;
+  min-height: 500px;
+  min-width: 360px;
 }
 </style>

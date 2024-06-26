@@ -23,9 +23,9 @@
       <div
         class="form-group form-group-text text-left p-float-label mt-2 w-full"
       >
-        <InputText id="user" v-model="profile.user" class="w-full" required />
+        <InputText id="user" v-model="profile.login" class="w-full" required />
         <label for="cpf" class="font-weight-bold">Username*</label>
-        <small v-if="submitted && !profile.user" class="p-error">{{
+        <small v-if="submitted && !profile.login" class="p-error">{{
           requiredField
         }}</small>
       </div>
@@ -61,7 +61,7 @@
       >
         <Password
           id="password_confirmation"
-          v-model="profile.password_confirmation"
+          v-model="profile.confirmPassword"
           class="w-100"
           required
           toggleMask
@@ -70,17 +70,15 @@
         <label for="password_confirmation" class="font-weight-bold"
           >Confirmar Senha</label
         >
-        <small
-          v-if="submitted && !profile.password_confirmation"
-          class="p-error"
-          >{{ requiredField }}</small
-        >
+        <small v-if="submitted && !profile.confirmPassword" class="p-error">{{
+          requiredField
+        }}</small>
         <small
           v-if="
             submitted &&
             profile.password &&
-            profile.password_confirmation &&
-            profile.password !== profile.password_confirmation
+            profile.confirmPassword &&
+            profile.password !== profile.confirmPassword
           "
           class="p-error"
           >As senhas não estão iguais.</small
@@ -93,6 +91,9 @@
   </div>
 </template>
 <script>
+import { UserRest } from "@/services/user.service";
+import { toast } from "vue3-toastify";
+
 export default {
   name: "Register",
 
@@ -108,6 +109,7 @@ export default {
       },
       requiredField: "Campo obrigatório",
       submitted: false,
+      service: new UserRest(),
     };
   },
   methods: {
@@ -115,18 +117,23 @@ export default {
       this.submitted = true;
       if (this.isValid()) {
         console.log("Profile data:", this.profile);
-        // Adicione a lógica de registro aqui
+        this.service.create(this.profile).then((res) => {
+          toast.success("Conta criada com sucesso!");
+        });
       }
     },
 
+    teste() {
+      toast.success("Conta criada com sucesso!");
+    },
     isValid() {
       return (
         this.profile.name &&
-        this.profile.user &&
+        this.profile.login &&
         this.profile.email &&
         this.profile.password &&
-        this.profile.password_confirmation &&
-        this.profile.password === this.profile.password_confirmation &&
+        this.profile.confirmPassword &&
+        this.profile.password === this.profile.confirmPassword &&
         this.profile.cpf
       );
     },
@@ -137,6 +144,7 @@ export default {
 form {
   gap: 15px;
   min-width: 320px;
+  padding-bottom: 25px;
   .form-group {
     input {
       width: 100%;
