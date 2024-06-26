@@ -5,7 +5,7 @@ import Topbar from "./components/topbar.vue";
 
 <template>
   <Topbar />
-  <div class="mt-5">
+  <div>
     <router-view />
   </div>
 </template>

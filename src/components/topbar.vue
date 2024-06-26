@@ -93,7 +93,7 @@ export default {
   position: fixed !important;
   top: 0;
   left: 0;
-  z-index: 10000;
+  z-index: 1001;
   padding: 10px;
 
   .topbar-items {

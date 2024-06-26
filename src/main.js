@@ -17,6 +17,7 @@ import "primeicons/primeicons.css";
 import "primevue/resources/themes/lara-light-indigo/theme.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
+import "vue3-toastify/dist/index.css";
 import "./style.scss";
 import router from "./router";
 

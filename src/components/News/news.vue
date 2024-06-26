@@ -68,7 +68,6 @@ export default {
       params: {
         pageNumber: 1,
         limit: 10,
-        title: "",
       },
       generics: new Generics(),
       items: {},
