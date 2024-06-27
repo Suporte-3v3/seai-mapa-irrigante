@@ -31,6 +31,8 @@ export default {
       }),
       showStations: true,
       showPluviometers: true,
+      stationPolyline: null,
+      pluviometerPolyline: null,
     };
   },
   async created() {
@@ -82,7 +84,7 @@ export default {
             weight: 0.5,
             opacity: 1,
             fillOpacity: 0.2,
-            className: 'leaflet-interactive' // aplica a classe CSS personalizada
+            className: 'leaflet-interactive'
           };
         },
       }).addTo(this.map);
@@ -119,6 +121,7 @@ export default {
     highlightFeature(e) {
     },
     resetHighlight(e) {
+      const geojsonLayer = e.target;
       geojsonLayer.resetStyle(e.target);
     },
     addMarkers() {
@@ -160,20 +163,31 @@ export default {
 
       legend.onAdd = () => {
         const div = L.DomUtil.create('div', 'info legend');
-        div.innerHTML += '<div><i id="station-legend" style="background: #EF760F; width: 20px; height: 18px; display: inline-block; cursor: pointer;" onclick="toggleStations()"></i> <b>Estação</b></div>';
-        div.innerHTML += '<div><i id="pluviometer-legend" style="background: #9023A1; width: 20px; height: 18px; display: inline-block; cursor: pointer;" onclick="togglePluviometers()"></i> <b>Pluviômetro</b></div>';
+        div.innerHTML += '<div><i id="station-legend" style="background: #EF760F; width: 20px; height: 18px; display: inline-block;"></i> <b>Estação</b></div>';
+        div.innerHTML += '<div><i id="pluviometer-legend" style="background: #9023A1; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetro</b></div>';
         return div;
       };
 
       legend.addTo(this.map);
+
+      setTimeout(() => {
+        document.getElementById('station-legend').addEventListener('click', this.toggleStations);
+        document.getElementById('pluviometer-legend').addEventListener('click', this.togglePluviometers);
+      }, 100);
     },
     toggleStations() {
       const stationLegend = document.getElementById('station-legend');
       if (this.showStations) {
         this.map.removeLayer(this.stationMarkers);
+        if (this.stationPolyline) {
+          this.map.removeLayer(this.stationPolyline);
+        }
         stationLegend.classList.add('legend-disabled');
       } else {
         this.map.addLayer(this.stationMarkers);
+        if (this.stationPolyline) {
+          this.map.addLayer(this.stationPolyline);
+        }
         stationLegend.classList.remove('legend-disabled');
       }
       this.showStations = !this.showStations;
@@ -182,9 +196,15 @@ export default {
       const pluviometerLegend = document.getElementById('pluviometer-legend');
       if (this.showPluviometers) {
         this.map.removeLayer(this.pluviometerMarkers);
+        if (this.pluviometerPolyline) {
+          this.map.removeLayer(this.pluviometerPolyline);
+        }
         pluviometerLegend.classList.add('legend-disabled');
       } else {
         this.map.addLayer(this.pluviometerMarkers);
+        if (this.pluviometerPolyline) {
+          this.map.addLayer(this.pluviometerPolyline);
+        }
         pluviometerLegend.classList.remove('legend-disabled');
       }
       this.showPluviometers = !this.showPluviometers;
@@ -251,7 +271,7 @@ export default {
       });
 
       if (closestStation) {
-        const stationPolyline = L.polyline([this.userLocation, closestStation], {
+        this.stationPolyline = L.polyline([this.userLocation, closestStation], {
           color: '#EF760F',
           weight: 1,
           dashArray: '4,4',
@@ -261,10 +281,9 @@ export default {
         console.log('Nenhuma estação próxima encontrada');
       }
 
-      // Adiciona um pequeno atraso para garantir que ambos os polylines sejam desenhados
       setTimeout(() => {
         if (closestPluviometer) {
-          const pluviometerPolyline = L.polyline([this.userLocation, closestPluviometer], {
+          this.pluviometerPolyline = L.polyline([this.userLocation, closestPluviometer], {
             color: '#9023A1',
             weight: 1,
             dashArray: '4,4',
@@ -273,7 +292,7 @@ export default {
         } else {
           console.log('Nenhum pluviômetro próximo encontrado');
         }
-      }, 500); // atraso de 0.5 segundos
+      }, 500);
     }
   }
 };
@@ -341,10 +360,10 @@ export default {
 }
 
 .leaflet-interactive {
-  cursor: grab; /* cursor de arrastar para as áreas */
+  cursor: grab;
 }
 
 .leaflet-marker-icon {
-  cursor: pointer; /* cursor de seleção para os ícones */
+  cursor: pointer;
 }
 </style>
