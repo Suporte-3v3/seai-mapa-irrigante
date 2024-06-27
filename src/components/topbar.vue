@@ -59,6 +59,7 @@ export default {
         { title: "Lâmina", link: "/", active: true },
         { title: "Notícias", link: "/noticias", active: false },
         { title: "FAQ", link: "/faq", active: false },
+        { title: "Login", link: "/login", active: false },
       ],
       isMenuOpen: false,
       router: useRoute(),

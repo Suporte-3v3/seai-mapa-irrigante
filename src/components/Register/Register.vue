@@ -101,10 +101,10 @@ export default {
     return {
       profile: {
         name: "",
-        user: "",
+        login: "",
         email: "",
         password: "",
-        password_confirmation: "",
+        confirmPassword: "",
         cpf: "",
       },
       requiredField: "Campo obrigatório",
