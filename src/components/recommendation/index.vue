@@ -364,7 +364,14 @@
         </div>
       </div>
       <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-12 d-flex justify-content-end w-100 pb-2">
+    <button
+      class="btn"
+      style="background-color: #1b3f82; color: white; margin-right: 8px"
+      @click="validateAndCalculate"
+    >
+      Simular Lâmina
+    </button>
     <button
       class="btn"
       style="background-color: #1b3f82; color: white; margin-right: 8px"
