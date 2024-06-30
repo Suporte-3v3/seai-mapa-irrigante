@@ -97,22 +97,20 @@
         />
       </div>
 
-    <div class="form-group mb-4">
-      <label for="option3" class="tab-label">Cultura</label>
-      <div class="input-group">
-        <select
-          id="option3"
-          v-model="selectedCulture"
-          class="form-control"
-        >
-          <option value="">Selecione a Cultura</option>
-          <option v-for="crop in crops" :key="crop.Id" :value="crop.Id">
-            {{ crop.Name }}
-          </option>
-        </select>
-      </div>
-      <p v-if="errors.selectedCulture" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
-    </div>
+        <div class="form-group mb-4">
+          <label for="option3" class="tab-label">Cultura</label>
+          <div class="input-group">
+            <select id="option3" v-model="selectedCulture" class="form-control">
+              <option value="">Selecione a Cultura</option>
+              <option v-for="crop in crops" :key="crop.Id" :value="crop.Id">
+                {{ crop.Name }}
+              </option>
+            </select>
+          </div>
+          <p v-if="errors.selectedCulture" style="color: red; font-size: 12px">
+            * Campo Obrigatório
+          </p>
+        </div>
       </div>
       <div class="row">
         <div class="col-md-4">
@@ -120,18 +118,20 @@
             <label for="input1" class="tab-label">Data de Plantio</label>
             <div class="input-group">
               <input
-              id="input1"
-              v-model="dateplanting"
-              type="date"
-              class="form-control"
-              placeholder="Digite a Data"
-              :max="maxDate"
-              @blur="validateDateplanting"
+                id="input1"
+                v-model="dateplanting"
+                type="date"
+                class="form-control"
+                placeholder="Digite a Data"
+                :max="maxDate"
+                @blur="validateDateplanting"
               />
             </div>
-            <p v-if="errors.dateplanting" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+            <p v-if="errors.dateplanting" style="color: red; font-size: 12px">
+              * Campo Obrigatório
+            </p>
           </div>
-          </div>
+        </div>
         <div class="col-md-4">
           <div class="form-group mb-4">
             <label for="option4" class="tab-label">Sistema de Irrigação</label>
@@ -150,7 +150,12 @@
                 <option value="Sulcos">Sulcos</option>
               </select>
             </div>
-            <p v-if="errors.selectedSystemIrrigation" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+            <p
+              v-if="errors.selectedSystemIrrigation"
+              style="color: red; font-size: 12px"
+            >
+              * Campo Obrigatório
+            </p>
           </div>
         </div>
         <div class="col-md-4">
@@ -160,15 +165,15 @@
             >
             <div class="input-group">
               <input
-              id="input2"
-        v-model.number="IrrigationEfficiency"
-        type="number"
-        class="form-control"
-        placeholder="Digite a Eficiência"
-        :disabled="isFieldDisabled"
-        min="1"
-        max="100"
-        @input="validateEfficiency"
+                id="input2"
+                v-model.number="IrrigationEfficiency"
+                type="number"
+                class="form-control"
+                placeholder="Digite a Eficiência"
+                :disabled="isFieldDisabled"
+                min="1"
+                max="100"
+                @input="validateEfficiency"
               />
               <div class="input-group-append">
                 <div class="input-group-text">
@@ -185,8 +190,8 @@
         </div>
       </div>
       <div v-if="showAdditionalFields" ref="additionalFields">
-      <div ref="scrollTarget"></div>
-    </div>
+        <div ref="scrollTarget"></div>
+      </div>
       <!-- Campos adicionais -->
       <div v-if="showAdditionalFields" class="row">
         <div v-if="selectedSystemIrrigation === 'Aspersão'" class="col-md-12">
@@ -194,12 +199,24 @@
             <label class="tab-label" style="color: #bb4430"
               >Precipitação por Aspersor (mm/h)</label
             >
-            <input v-model.number="PrecipitationSprinkler"
-           type="number"
-           class="form-control"
-           placeholder="Digite o valor da Precipitação por Aspersor"
-           @input="validateMinimum(PrecipitationSprinkler, 'PrecipitationSprinkler')">
-           <p v-if="errors.PrecipitationSprinkler" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+            <input
+              v-model.number="PrecipitationSprinkler"
+              type="number"
+              class="form-control"
+              placeholder="Digite o valor da Precipitação por Aspersor"
+              @input="
+                validateMinimum(
+                  PrecipitationSprinkler,
+                  'PrecipitationSprinkler'
+                )
+              "
+            />
+            <p
+              v-if="errors.PrecipitationSprinkler"
+              style="color: red; font-size: 12px"
+            >
+              * Valor Inserido Inválido
+            </p>
           </div>
         </div>
         <div
@@ -210,45 +227,61 @@
             <label class="tab-label" style="color: #bb4430"
               >Vazão do Sistema (l/h)</label
             >
-            <input v-model.number="FlowSystem"
-           type="number"
-           class="form-control"
-           placeholder="Digite o valor da Vazão do Sistema"
-           @input="validateMinimum(FlowSystem, 'FlowSystem')">
-           <p v-if="errors.FlowSystem" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+            <input
+              v-model.number="FlowSystem"
+              type="number"
+              class="form-control"
+              placeholder="Digite o valor da Vazão do Sistema"
+              @input="validateMinimum(FlowSystem, 'FlowSystem')"
+            />
+            <p v-if="errors.FlowSystem" style="color: red; font-size: 12px">
+              * Valor Inserido Inválido
+            </p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Área Plantada (m²)</label
             >
-            <input v-model.number="PlantedArea"
-           type="number"
-           class="form-control"
-           placeholder="Digite o valor da Área Plantada"
-           @input="validateMinimum(PlantedArea, 'PlantedArea')">
-           <p v-if="errors.PlantedArea" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+            <input
+              v-model.number="PlantedArea"
+              type="number"
+              class="form-control"
+              placeholder="Digite o valor da Área Plantada"
+              @input="validateMinimum(PlantedArea, 'PlantedArea')"
+            />
+            <p v-if="errors.PlantedArea" style="color: red; font-size: 12px">
+              * Valor Inserido Inválido
+            </p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Área efetiva de cada planta (m²/planta)</label
             >
-            <input v-model.number="EffectiveArea"
-           type="number"
-           class="form-control"
-           placeholder="Digite o valor da Área efetiva de cada planta"
-           @input="validateMinimum(EffectiveArea, 'EffectiveArea')">
-           <p v-if="errors.EffectiveArea" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+            <input
+              v-model.number="EffectiveArea"
+              type="number"
+              class="form-control"
+              placeholder="Digite o valor da Área efetiva de cada planta"
+              @input="validateMinimum(EffectiveArea, 'EffectiveArea')"
+            />
+            <p v-if="errors.EffectiveArea" style="color: red; font-size: 12px">
+              * Valor Inserido Inválido
+            </p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Número de Plantas por Área (plantas/m²)</label
             >
-            <input v-model.number="NumberPlants"
-           type="number"
-           class="form-control"
-           placeholder="Digite o valor de Número de Plantas por Área"
-           @input="validateMinimum(NumberPlants, 'NumberPlants')">
-           <p v-if="errors.NumberPlants" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+            <input
+              v-model.number="NumberPlants"
+              type="number"
+              class="form-control"
+              placeholder="Digite o valor de Número de Plantas por Área"
+              @input="validateMinimum(NumberPlants, 'NumberPlants')"
+            />
+            <p v-if="errors.NumberPlants" style="color: red; font-size: 12px">
+              * Valor Inserido Inválido
+            </p>
           </div>
         </div>
         <div
@@ -259,45 +292,61 @@
             <label class="tab-label" style="color: #bb4430"
               >Vazão do Sistema (l/h)</label
             >
-            <input v-model.number="FlowSystem"
-           type="number"
-           class="form-control"
-           placeholder="Digite o valor da Vazão do Sistema"
-           @input="validateMinimum(FlowSystem, 'FlowSystem')">
-           <p v-if="errors.FlowSystem" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+            <input
+              v-model.number="FlowSystem"
+              type="number"
+              class="form-control"
+              placeholder="Digite o valor da Vazão do Sistema"
+              @input="validateMinimum(FlowSystem, 'FlowSystem')"
+            />
+            <p v-if="errors.FlowSystem" style="color: red; font-size: 12px">
+              * Valor Inserido Inválido
+            </p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Área Plantada (m²)</label
             >
-            <input v-model.number="PlantedArea"
-           type="number"
-           class="form-control"
-           placeholder="Digite o valor da Área Plantada"
-           @input="validateMinimum(PlantedArea, 'PlantedArea')">
-           <p v-if="errors.PlantedArea" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+            <input
+              v-model.number="PlantedArea"
+              type="number"
+              class="form-control"
+              placeholder="Digite o valor da Área Plantada"
+              @input="validateMinimum(PlantedArea, 'PlantedArea')"
+            />
+            <p v-if="errors.PlantedArea" style="color: red; font-size: 12px">
+              * Valor Inserido Inválido
+            </p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Área efetiva de cada planta (m²/planta)</label
             >
-            <input v-model.number="EffectiveArea"
-           type="number"
-           class="form-control"
-           placeholder="Digite o valor da Área efetiva de cada planta"
-           @input="validateMinimum(EffectiveArea, 'EffectiveArea')">
-           <p v-if="errors.EffectiveArea" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+            <input
+              v-model.number="EffectiveArea"
+              type="number"
+              class="form-control"
+              placeholder="Digite o valor da Área efetiva de cada planta"
+              @input="validateMinimum(EffectiveArea, 'EffectiveArea')"
+            />
+            <p v-if="errors.EffectiveArea" style="color: red; font-size: 12px">
+              * Valor Inserido Inválido
+            </p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Número de Plantas por Área (plantas/m²)</label
             >
-            <input v-model.number="NumberPlants"
-           type="number"
-           class="form-control"
-           placeholder="Digite o valor do Número de Plantas por Área"
-           @input="validateMinimum(NumberPlants, 'NumberPlants')">
-           <p v-if="errors.NumberPlants" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+            <input
+              v-model.number="NumberPlants"
+              type="number"
+              class="form-control"
+              placeholder="Digite o valor do Número de Plantas por Área"
+              @input="validateMinimum(NumberPlants, 'NumberPlants')"
+            />
+            <p v-if="errors.NumberPlants" style="color: red; font-size: 12px">
+              * Valor Inserido Inválido
+            </p>
           </div>
         </div>
         <div
@@ -308,12 +357,21 @@
             <label class="tab-label" style="color: #bb4430"
               >Precipitação por Volta (mm/volta)</label
             >
-            <input v-model.number="PrecipitationAround"
-           type="number"
-           class="form-control"
-           placeholder="Digite o valor da Precipitação por Volta"
-           @input="validateMinimum(PrecipitationAround, 'PrecipitationAround')">
-           <p v-if="errors.PrecipitationAround" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+            <input
+              v-model.number="PrecipitationAround"
+              type="number"
+              class="form-control"
+              placeholder="Digite o valor da Precipitação por Volta"
+              @input="
+                validateMinimum(PrecipitationAround, 'PrecipitationAround')
+              "
+            />
+            <p
+              v-if="errors.PrecipitationAround"
+              style="color: red; font-size: 12px"
+            >
+              * Valor Inserido Inválido
+            </p>
           </div>
         </div>
         <div v-if="selectedSystemIrrigation === 'Sulcos'" class="col-md-12">
@@ -321,61 +379,74 @@
             <label class="tab-label" style="color: #bb4430"
               >Comprimento dos Sulcos (m)</label
             >
-            <input v-model.number="FurrowLength"
-           type="number"
-           class="form-control"
-           placeholder="Digite o valor do Comprimento por Sulcos"
-           @input="validateMinimum(FurrowLength, 'FurrowLength')">
-           <p v-if="errors.FurrowLength" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+            <input
+              v-model.number="FurrowLength"
+              type="number"
+              class="form-control"
+              placeholder="Digite o valor do Comprimento por Sulcos"
+              @input="validateMinimum(FurrowLength, 'FurrowLength')"
+            />
+            <p v-if="errors.FurrowLength" style="color: red; font-size: 12px">
+              * Valor Inserido Inválido
+            </p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Espaçamento entre os Sulcos (m)</label
             >
-            <input v-model.number="GrooveSpacing"
-           type="number"
-           class="form-control"
-           placeholder="Digite o valor do Espaçamento entre os Sulcos"
-           @input="validateMinimum(GrooveSpacing, 'GrooveSpacing')">
-           <p v-if="errors.GrooveSpacing" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+            <input
+              v-model.number="GrooveSpacing"
+              type="number"
+              class="form-control"
+              placeholder="Digite o valor do Espaçamento entre os Sulcos"
+              @input="validateMinimum(GrooveSpacing, 'GrooveSpacing')"
+            />
+            <p v-if="errors.GrooveSpacing" style="color: red; font-size: 12px">
+              * Valor Inserido Inválido
+            </p>
           </div>
           <div class="form-group mb-4">
             <label class="tab-label" style="color: #bb4430"
               >Vazão por Sulco (l/h)</label
             >
-            <input v-model.number="FlowGrooves"
-           type="number"
-           class="form-control"
-           placeholder="Digite o valor da Vazão por Sulco"
-           @input="validateMinimum(FlowGrooves, 'FlowGrooves')">
-           <p v-if="errors.FlowGrooves" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+            <input
+              v-model.number="FlowGrooves"
+              type="number"
+              class="form-control"
+              placeholder="Digite o valor da Vazão por Sulco"
+              @input="validateMinimum(FlowGrooves, 'FlowGrooves')"
+            />
+            <p v-if="errors.FlowGrooves" style="color: red; font-size: 12px">
+              * Valor Inserido Inválido
+            </p>
           </div>
         </div>
       </div>
       <div class="row">
-  <div class="col-md-12">
-    <button
-      class="btn"
-      style="background-color: #1b3f82; color: white; margin-right: 8px"
-      @click="validateAndCalculate"
-    >
-      Simular Lâmina
-    </button>
-    <button
-      class="btn"
-      style="background-color: #b1151f; color: white"
-      @click="ClearFields"
-    >
-      Limpar Campos
-    </button>
+        <div
+          class="col-md-12 d-flex flex-column justify-content-end gap-3 w-100 pb-2"
+        >
+          <div class="w-100 d-flex justify-content-end gap-2">
+            <Button
+              class="btn-danger"
+              @click="ClearFields"
+              label="Limpar Campos"
+            >
+            </Button>
+            <Button
+              class="btn-primary"
+              @click="validateAndCalculate"
+              label="Simular Lâmina"
+            >
+            </Button>
+          </div>
 
-  <div v-if="isLoading" class="loader"></div>
-  <div v-if="resultsVisible && results" class="card mt-4 shadow">
-    <div
-      class="card-header text-white text-center"
-      :style="{ backgroundColor: '#1b3f82' }"
-    >
-
+          <ProgressSpinner v-if="isLoading" />
+          <div v-if="resultsVisible && results" class="card mt-4 shadow">
+            <div
+              class="card-header text-white text-center"
+              :style="{ backgroundColor: '#1b3f82' }"
+            >
               <h3>Resultado Simulação de Lâmina</h3>
             </div>
             <div v-if="isLoading" class="loading">Carregando...</div>
@@ -385,10 +456,12 @@
                   <strong>ET0:</strong> {{ results.data.Et0 }} {{ "mm" }}
                 </li>
                 <li class="list-group-item">
-                  <strong>Precipitação:</strong> {{ results.data.Precipitation }} {{ "mm" }}
+                  <strong>Precipitação:</strong>
+                  {{ results.data.Precipitation }} {{ "mm" }}
                 </li>
                 <li class="list-group-item">
-                  <strong>Eficiência de Irrigação:</strong> {{ results.data.IrrigationEfficiency *100 }} {{ "%" }}
+                  <strong>Eficiência de Irrigação:</strong>
+                  {{ results.data.IrrigationEfficiency * 100 }} {{ "%" }}
                 </li>
                 <li class="list-group-item">
                   <strong>Dias da Cultura:</strong> {{ results.data.CropDays }}
@@ -400,15 +473,18 @@
                   <strong>Etc:</strong> {{ results.data.Etc }} {{ "mm" }}
                 </li>
                 <li class="list-group-item">
-                  <strong>Lâmina de Reposição:</strong> {{ results.data.RepositionBlade }}
+                  <strong>Lâmina de Reposição:</strong>
+                  {{ results.data.RepositionBlade }}
                 </li>
                 <li class="list-group-item">
-                  <strong>Tempo de Irrigação:</strong> {{ results.data.IrrigationTime }}
+                  <strong>Tempo de Irrigação:</strong>
+                  {{ results.data.IrrigationTime }}
                 </li>
               </ul>
             </div>
           </div>
-          <br> <br/>
+          <br />
+          <br />
         </div>
       </div>
     </div>
@@ -418,45 +494,49 @@
 <script>
 import axios from "axios";
 import Resultados from "./result.vue";
+import SaveModal from "../Slide/SaveModal.vue/SaveModal.vue";
+import { Generics } from "../../utils/generics.utils";
 
 export default {
   name: "RecomendationComponent",
   components: {
-    Resultados
+    Resultados,
+    SaveModal,
   },
   data() {
     return {
-      selectedStation: '',
+      selectedStation: "",
       isLoading: false,
       stations: [],
       pluviometers: [],
       crops: [],
       resultsVisible: false,
       results: null,
-      response: '',
-      selectedPluviometer: '',
-      selectedCulture: '',
-      selectedSystemIrrigation: '',
-      dateplanting: '',
-      maxDate: new Date().toISOString().split('T')[0],
-      IrrigationEfficiency: '',
-      PrecipitationSprinkler: '',
-      FlowSystem: '',
-      PlantedArea: '',
-      EffectiveArea: '',
-      NumberPlants: '',
-      PrecipitationAround: '',
-      FurrowLength: '',
-      GrooveSpacing: '',
-      FlowGrooves: '',
-      selectedET0Manual: '', 
-      selectedPrecipitationManual: '', 
+      response: "",
+      responseBlade: null,
+      selectedPluviometer: "",
+      selectedCulture: "",
+      selectedSystemIrrigation: "",
+      dateplanting: "",
+      maxDate: new Date().toISOString().split("T")[0],
+      IrrigationEfficiency: "",
+      PrecipitationSprinkler: "",
+      FlowSystem: "",
+      PlantedArea: "",
+      EffectiveArea: "",
+      NumberPlants: "",
+      PrecipitationAround: "",
+      FurrowLength: "",
+      GrooveSpacing: "",
+      FlowGrooves: "",
+      selectedET0Manual: "",
+      selectedPrecipitationManual: "",
       showAdditionalFields: false,
       useDefault: true,
       toggleSwitchStation: true,
       toggleSwitchPluviometer: true,
       anotherField: null,
-      myField: '',
+      myField: "",
       errors: {
         selectedStation: false,
         selectedPluviometer: false,
@@ -473,6 +553,8 @@ export default {
         GrooveSpacing: false,
         FlowGrooves: false,
       },
+      saveBlade: false,
+      generics: new Generics(),
     };
   },
   computed: {
@@ -484,84 +566,104 @@ export default {
     },
     isPluviometerDisabled() {
       return this.toggleSwitchPluviometer;
-    }
+    },
   },
   async created() {
     try {
-      const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
+      const responseStation = await axios.get(
+        "http://seai.3v3.farm/api/v1/equipments/activated?type=station"
+      );
       this.stations = responseStation.data.data;
 
-      const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');
+      const responsePluviometer = await axios.get(
+        "http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer"
+      );
       this.pluviometers = responsePluviometer.data.data;
 
-      const responseCrop = await axios.get('http://seai.3v3.farm/api/v2/management/crops');
+      const responseCrop = await axios.get(
+        "http://seai.3v3.farm/api/v2/management/crops"
+      );
       this.crops = responseCrop.data.data;
-
     } catch (error) {
       console.error(error);
     }
   },
   mounted() {
-      this.setMaxDate();
-    },
-    methods: {
-      /*validateDateplanting() {
+    this.setMaxDate();
+  },
+  methods: {
+    /*validateDateplanting() {
             if (this.dateplanting > this.maxDate) {
                 this.showErrordp = true;
-                this.dateplanting = ''; 
+                this.dateplanting = '';
             } else {
                 this.showErrordp = false;
             }
         },*/
 
-        validateAndCalculate() {
-  console.log("Validando os dados...");
-  this.errors.selectedStation = !this.selectedStation;
-  this.errors.selectedPluviometer = !this.selectedPluviometer;
-  this.errors.selectedCulture = !this.selectedCulture;
-  this.errors.dateplanting = !this.dateplanting;
-  this.errors.selectedSystemIrrigation = !this.selectedSystemIrrigation;
+    validateAndCalculate() {
+      console.log("Validando os dados...");
+      this.errors.selectedStation = !this.selectedStation;
+      this.errors.selectedPluviometer = !this.selectedPluviometer;
+      this.errors.selectedCulture = !this.selectedCulture;
+      this.errors.dateplanting = !this.dateplanting;
+      this.errors.selectedSystemIrrigation = !this.selectedSystemIrrigation;
 
-  switch (this.selectedSystemIrrigation) {
-    case "Aspersão":
-      this.errors.PrecipitationSprinkler = !this.PrecipitationSprinkler || this.PrecipitationSprinkler === 0;
-      break;
-    case "Pivô Central":
-      this.errors.PrecipitationAround = !this.PrecipitationAround || this.PrecipitationAround === 0;
-      break;
-    case "Sulcos":
-      this.errors.FurrowLength = !this.FurrowLength || this.FurrowLength === 0;
-      this.errors.GrooveSpacing = !this.GrooveSpacing || this.GrooveSpacing === 0;
-      this.errors.FlowGrooves = !this.FlowGrooves || this.FlowGrooves === 0;
-      break;
-    case "Gotejamento":
-    case "Microaspersão":
-      this.errors.FlowSystem = !this.FlowSystem || this.FlowSystem === 0;
-      this.errors.PlantedArea = !this.PlantedArea || this.PlantedArea === 0;
-      this.errors.EffectiveArea = !this.EffectiveArea || this.EffectiveArea === 0;
-      this.errors.NumberPlants = !this.NumberPlants || this.NumberPlants === 0;
-      break;
-    default:
-      console.log("Sistema de irrigação desconhecido.");
-      break;
-  }
+      switch (this.selectedSystemIrrigation) {
+        case "Aspersão":
+          this.errors.PrecipitationSprinkler =
+            !this.PrecipitationSprinkler || this.PrecipitationSprinkler === 0;
+          break;
+        case "Pivô Central":
+          this.errors.PrecipitationAround =
+            !this.PrecipitationAround || this.PrecipitationAround === 0;
+          break;
+        case "Sulcos":
+          this.errors.FurrowLength =
+            !this.FurrowLength || this.FurrowLength === 0;
+          this.errors.GrooveSpacing =
+            !this.GrooveSpacing || this.GrooveSpacing === 0;
+          this.errors.FlowGrooves = !this.FlowGrooves || this.FlowGrooves === 0;
+          break;
+        case "Gotejamento":
+        case "Microaspersão":
+          this.errors.FlowSystem = !this.FlowSystem || this.FlowSystem === 0;
+          this.errors.PlantedArea = !this.PlantedArea || this.PlantedArea === 0;
+          this.errors.EffectiveArea =
+            !this.EffectiveArea || this.EffectiveArea === 0;
+          this.errors.NumberPlants =
+            !this.NumberPlants || this.NumberPlants === 0;
+          break;
+        default:
+          console.log("Sistema de irrigação desconhecido.");
+          break;
+      }
 
-  const hasError = Object.values(this.errors).some(error => error);
+      const hasError = Object.values(this.errors).some((error) => error);
 
-  if (!hasError) {
-    console.log("Sem erros nos campos, Começando cálculo da Lâmina de Irrigação...");
-    this.calculateRecomendation();
-  }
-},
+      if (!hasError) {
+        console.log(
+          "Sem erros nos campos, Começando cálculo da Lâmina de Irrigação..."
+        );
+        this.calculateRecomendation();
+      }
+    },
     async calculateRecomendation() {
       this.isLoading = true;
       try {
-        const formattedDate = this.dateplanting ? this.formatDate(this.dateplanting) : '';
+        const formattedDate = this.dateplanting
+          ? this.formatDate(this.dateplanting)
+          : "";
 
         let measurements = {};
 
-        if (this.isEfficiencyCheckboxChecked && this.IrrigationEfficiencyFromAPI) {
-          measurements.Efficiency = parseFloat(this.IrrigationEfficiencyFromAPI);
+        if (
+          this.isEfficiencyCheckboxChecked &&
+          this.IrrigationEfficiencyFromAPI
+        ) {
+          measurements.Efficiency = parseFloat(
+            this.IrrigationEfficiencyFromAPI
+          );
         } else if (this.IrrigationEfficiency) {
           measurements.Efficiency = parseFloat(this.IrrigationEfficiency);
         }
@@ -570,7 +672,10 @@ export default {
           measurements.Precipitation = parseFloat(this.PrecipitationSprinkler);
         } else if (this.selectedSystemIrrigation === "Pivô Central") {
           measurements.Precipitation = parseFloat(this.PrecipitationAround);
-        } else if (this.selectedSystemIrrigation === "Microaspersão" || this.selectedSystemIrrigation === "Gotejamento") {
+        } else if (
+          this.selectedSystemIrrigation === "Microaspersão" ||
+          this.selectedSystemIrrigation === "Gotejamento"
+        ) {
           measurements.Flow = parseFloat(this.FlowSystem);
           measurements.Area = parseFloat(this.PlantedArea);
           measurements.EfectiveArea = parseFloat(this.EffectiveArea);
@@ -584,40 +689,40 @@ export default {
         const data = {
           Station: this.isStationDisabled
             ? {
-              Id: parseInt(this.selectedStation),
-              Et0: parseFloat(
-                this.stations.find(
-                  (station) => station.Id === parseInt(this.selectedStation)
-                ).Et0
-              ),
-            }
+                Id: parseInt(this.selectedStation),
+                Et0: parseFloat(
+                  this.stations.find(
+                    (station) => station.Id === parseInt(this.selectedStation)
+                  ).Et0
+                ),
+              }
             : {
-              Id: null,
-              Et0: parseFloat(this.selectedET0Manual),
-            },
+                Id: null,
+                Et0: parseFloat(this.selectedET0Manual),
+              },
           CropId: parseInt(this.selectedCulture),
           Pluviometer: this.isPluviometerDisabled
             ? {
-              Id: parseInt(this.selectedPluviometer),
-              Precipitation: parseFloat(
-                this.pluviometers.find(
-                  (pluviometer) =>
-                    pluviometer.Id === parseInt(this.selectedPluviometer)
-                ).Precipitation
-              ),
-            }
+                Id: parseInt(this.selectedPluviometer),
+                Precipitation: parseFloat(
+                  this.pluviometers.find(
+                    (pluviometer) =>
+                      pluviometer.Id === parseInt(this.selectedPluviometer)
+                  ).Precipitation
+                ),
+              }
             : {
-              Id: null,
-              Precipitation: parseFloat(this.selectedPrecipitationManual),
-            },
+                Id: null,
+                Precipitation: parseFloat(this.selectedPrecipitationManual),
+              },
           PlantingDate: formattedDate,
           System: {
             Type: this.selectedSystemIrrigation,
-            Measurements: measurements
+            Measurements: measurements,
           },
         };
 
-        console.log("Dados do formulário:", data);
+        this.responseBlade = data;
 
         const responseBladeSuggestion = await axios.post(
           "http://seai.3v3.farm/api/v2/management/blade_suggestion",
@@ -637,7 +742,7 @@ export default {
       }
     },
 
-validateEfficiency() {
+    validateEfficiency() {
       if (this.IrrigationEfficiency < 1) {
         this.IrrigationEfficiency = 1;
       } else if (this.IrrigationEfficiency > 100) {
@@ -646,32 +751,32 @@ validateEfficiency() {
     },
 
     validateMinimum(value, field) {
-  if (value === '' || value === null || value === undefined) {
-    this[field] = value;
-  } else {
-    const parsedValue = parseFloat(value);
-    if (!isNaN(parsedValue) && parsedValue >= 0.0) {
-      this[field] = parsedValue;
-    } else {
-      this[field] = 0.0;
-    }
-  }
-},
-// Função para formatar a data para DD/MM/YYYY
-formatDate(date) {
-  if (!date) return '';
-  const [year, month, day] = date.split('-');
-  return `${day}/${month}/${year}`;
-},
+      if (value === "" || value === null || value === undefined) {
+        this[field] = value;
+      } else {
+        const parsedValue = parseFloat(value);
+        if (!isNaN(parsedValue) && parsedValue >= 0.0) {
+          this[field] = parsedValue;
+        } else {
+          this[field] = 0.0;
+        }
+      }
+    },
+    // Função para formatar a data para DD/MM/YYYY
+    formatDate(date) {
+      if (!date) return "";
+      const [year, month, day] = date.split("-");
+      return `${day}/${month}/${year}`;
+    },
 
-preventTyping(event) {
+    preventTyping(event) {
       event.preventDefault();
     },
 
-setMaxDate() {
-        const today = new Date().toISOString().split('T')[0];
-        this.maxDate = today;
-      },
+    setMaxDate() {
+      const today = new Date().toISOString().split("T")[0];
+      this.maxDate = today;
+    },
     ClearFields() {
       this.selectedStation = "";
       this.selectedPluviometer = "";
@@ -713,21 +818,23 @@ setMaxDate() {
         "Microaspersão",
         "Gotejamento",
         "Pivô Central",
-        "Sulcos"
+        "Sulcos",
       ];
-      
-      this.showAdditionalFields = validSelections.includes(this.selectedSystemIrrigation);
-      
+
+      this.showAdditionalFields = validSelections.includes(
+        this.selectedSystemIrrigation
+      );
+
       this.$nextTick(() => {
         if (this.showAdditionalFields && this.$refs.additionalFields) {
           // Adiciona um pequeno atraso para garantir que a renderização esteja completa
           setTimeout(() => {
-            this.$refs.additionalFields.scrollIntoView({ behavior: 'smooth' });
+            this.$refs.additionalFields.scrollIntoView({ behavior: "smooth" });
           }, 100);
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -759,26 +866,26 @@ body {
 }
 
 .card {
-    border-radius: 20px;
-  }
-  .list-group-item {
-    font-size: 1.1em;
-    background-color: #f8f9fa;
-  }
-  .list-group-item strong {
-    color: #1b3f82;
-  }
-  .btn {
-    font-size: 1.2em;
-  }
-  .shadow {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+  border-radius: 20px;
+}
+.list-group-item {
+  font-size: 1.1em;
+  background-color: #f8f9fa;
+}
+.list-group-item strong {
+  color: #1b3f82;
+}
+.btn {
+  font-size: 1.2em;
+}
+.shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-  .loader {
+.loader {
   width: 48px;
   height: 48px;
-  border: 10px solid #FFF;
+  border: 10px solid #fff;
   border-radius: 50%;
   position: relative;
   transform: rotate(45deg);
@@ -812,5 +919,4 @@ body {
     clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
   }
 }
-
 </style>

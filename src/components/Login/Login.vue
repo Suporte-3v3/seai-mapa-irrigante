@@ -53,7 +53,7 @@ import { useRouter } from "vue-router";
 
 export default {
   name: "Login",
-
+  emits: ["onConfirmLogin"],
   data() {
     return {
       profile: {
@@ -72,7 +72,7 @@ export default {
       if (this.isValid()) {
         this.service.login(this.profile).then((res) => {
           localStorage.setItem("tkn", String(res.data.accessToken));
-          this.router.push("/")
+          this.$emit("onConfirmLogin")
         });
       }
     },
