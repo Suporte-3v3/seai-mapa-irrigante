@@ -26,11 +26,11 @@
               <input
                 id="toggleSwitchStation"
                 v-model="toggleSwitchStation"
-                class="form-check-input"
+                class="form-check-input1"
                 type="checkbox"
               />
               <label class="form-check-label" for="toggleSwitchStation">
-                Automático
+                ET0 Automática
               </label>
             </div>
           </div>
@@ -74,11 +74,11 @@
               <input
                 id="toggleSwitchPluviometer"
                 v-model="toggleSwitchPluviometer"
-                class="form-check-input"
+                class="form-check-input2"
                 type="checkbox"
               />
               <label class="form-check-label" for="toggleSwitchPluviometer">
-                Automático
+                Pluv. Automática
               </label>
             </div>
           </div>
@@ -749,7 +749,12 @@ body {
   margin-right: 8px;
 }
 
-.form-check-input {
+.form-check-input1 {
+  margin-right: 8px;
+  margin-left: 8px;
+}
+
+.form-check-input2 {
   margin-right: 8px;
 }
 
