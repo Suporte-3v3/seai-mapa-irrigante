@@ -1,112 +1,101 @@
 <template>
-  <div class="container">
-    <!-- Card para envolver os toogle switches -->
-    <div class="card">
-      <div class="card-body">
-        <!-- Primeiro par de toogle switches -->
-        <div class="row">
-          <div class="col-md-4">
-            <div class="form-check form-switch">
+<div class="container">
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <!-- Campo da Estação com toggle -->
+      <div class="form-group mb-4">
+        <label for="option1" class="tab-label">Estação</label>
+        <div class="input-group">
+          <select
+            id="option1"
+            v-model="selectedStation"
+            class="form-control"
+            :disabled="!isStationDisabled"
+          >
+            <option value="">Selecione a Estação</option>
+            <option
+              v-for="equipment in stations"
+              :key="equipment.Id"
+              :value="equipment.Id"
+            >
+              ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Et0: {{ equipment.Et0 }}]
+            </option>
+          </select>
+          <div class="input-group-append">
+            <div class="input-group-text">
               <input
-                id="toggleSwitch"
+                id="toggleSwitchStation"
                 v-model="toggleSwitchStation"
                 class="form-check-input"
                 type="checkbox"
               />
-              <label class="form-check-label" for="toggleSwitch"
-                >Utilizar ET0 Automática?</label
-              >
+              <label class="form-check-label" for="toggleSwitchStation">
+                Automático
+              </label>
             </div>
           </div>
         </div>
-        <!-- Segundo par de toogle switches -->
-        <div class="row mt-2">
-          <div class="col-md-12">
-            <div class="form-check form-switch">
+        <p v-if="errors.selectedStation" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+      </div>
+
+      <div v-if="!isStationDisabled" class="form-group mb-4">
+        <label for="newFormET0" class="tab-label" style="color: #bb4430">ET0 Manual (mm)</label>
+        <input
+          id="newFormET0"
+          v-model="selectedET0Manual"
+          class="form-control"
+          type="number"
+          placeholder="Digite o Valor da ET0"
+          @input="validateMinimum(selectedET0Manual, 'selectedET0Manual')"
+        />
+      </div>
+
+      <!-- Campo do Pluviômetro com toggle -->
+      <div class="form-group mb-4">
+        <label for="option2" class="tab-label">Pluviômetro</label>
+        <div class="input-group">
+          <select
+            id="option2"
+            v-model="selectedPluviometer"
+            class="form-control"
+            :disabled="!isPluviometerDisabled"
+          >
+            <option value="">Selecione o Pluviômetro</option>
+            <option
+              v-for="equipment in pluviometers"
+              :key="equipment.Id"
+              :value="equipment.Id"
+            >
+              ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Precipitação: {{ equipment.Precipitation }} mm]
+            </option>
+          </select>
+          <div class="input-group-append">
+            <div class="input-group-text">
               <input
-                id="toggleSwitch"
+                id="toggleSwitchPluviometer"
                 v-model="toggleSwitchPluviometer"
                 class="form-check-input"
                 type="checkbox"
               />
-              <label class="form-check-label" for="toggleSwitch"
-                >Utilizar Precipitação Automática?</label
-              >
+              <label class="form-check-label" for="toggleSwitchPluviometer">
+                Automático
+              </label>
             </div>
           </div>
         </div>
+        <p v-if="errors.selectedPluviometer" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
       </div>
-    </div>
-  </div>
-  <div class="container">
-    <div class="row mt-3">
-      <div class="col-md-12">
-        <div class="form-group mb-4">
-      <label for="option1" class="tab-label">Estação</label>
-      <div class="input-group">
-        <select
-          id="option1"
-          v-model="selectedStation"
+
+      <div v-if="!isPluviometerDisabled" class="form-group mb-4">
+        <label for="newFormPrecipitation" class="tab-label" style="color: #bb4430">Precipitação Manual (mm)</label>
+        <input
+          id="newFormPrecipitation"
+          v-model="selectedPrecipitationManual"
           class="form-control"
-          :disabled="!isStationDisabled"
-        >
-          <option value="">Selecione a Estação</option>
-          <option
-            v-for="equipment in stations"
-            :key="equipment.Id"
-            :value="equipment.Id"
-          >
-            ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Et0: {{ equipment.Et0 }}]
-          </option>
-        </select>
+          type="number"
+          placeholder="Digite o Valor da Precipitação"
+        />
       </div>
-      <p v-if="errors.selectedStation" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
-    </div>
-
-    <div v-if="!isStationDisabled" class="form-group mb-4">
-      <label for="newFormET0" class="tab-label" style="color: #bb4430">ET0 Manual (mm)</label>
-      <input
-        id="newFormET0"
-        v-model="selectedET0Manual"
-        class="form-control"
-        type="number"
-        placeholder="Digite o Valor da ET0"
-        @input="validateMinimum(selectedET0Manual, 'selectedET0Manual')"
-      />
-    </div>
-
-    <div class="form-group mb-4">
-      <label for="option2" class="tab-label">Pluviômetro</label>
-      <div class="input-group">
-        <select
-          id="option2"
-          v-model="selectedPluviometer"
-          class="form-control"
-          :disabled="!isPluviometerDisabled"
-        >
-          <option value="">Selecione o Pluviômetro</option>
-          <option
-            v-for="equipment in pluviometers"
-            :key="equipment.Id"
-            :value="equipment.Id"
-          >
-            ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Precipitação: {{ equipment.Precipitation }} mm]
-          </option>
-        </select>
-      </div>
-      <p v-if="errors.selectedPluviometer" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
-    </div>
-
-    <div v-if="!isPluviometerDisabled" class="form-group mb-4">
-      <label for="newFormPrecipitation" class="tab-label" style="color: #bb4430">Precipitação Manual (mm)</label>
-      <input
-        id="newFormPrecipitation"
-        v-model="selectedPrecipitationManual"
-        class="form-control"
-        type="number"
-        placeholder="Digite o Valor da Precipitação"
-      />
-    </div>
 
     <div class="form-group mb-4">
       <label for="option3" class="tab-label">Cultura</label>
@@ -757,6 +746,10 @@ body {
 }
 
 .checkbox-margin {
+  margin-right: 8px;
+}
+
+.form-check-input {
   margin-right: 8px;
 }
 
