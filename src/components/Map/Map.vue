@@ -125,31 +125,33 @@ export default {
       geojsonLayer.resetStyle(e.target);
     },
     addMarkers() {
-      if (this.stations && Array.isArray(this.stations)) {
-        this.stations.forEach((station) => {
-          const coordinates = station.Location.Coordinates;
-          if (coordinates && coordinates.length === 2) {
-            const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.stationIcon });
-            marker.bindPopup(`<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} [${station.Code}]<br><b>Et0:</b> ${station.Et0}`);
-            this.stationMarkers.addLayer(marker);
-          } else {
-            console.error('Coordenadas de Estação inválidas:', station);
-          }
+  if (this.stations && Array.isArray(this.stations)) {
+    this.stations.forEach((station) => {
+      const coordinates = station.Location.Coordinates;
+      if (coordinates && coordinates.length === 2) {
+        const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.stationIcon });
+        const et0Text = (station.Et0 === null || station.Et0 === undefined) ? 'Sem Dados Coletados' : station.Et0;
+        marker.bindPopup(`<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} [${station.Code}]<br><b>Et0:</b> ${et0Text}`);
+        this.stationMarkers.addLayer(marker);
+      } else {
+        console.error('Coordenadas de Estação inválidas:', station);
+      }
         });
       } else {
         console.error('Dados das estações são inválidos');
       }
 
       if (this.pluviometers && Array.isArray(this.pluviometers)) {
-        this.pluviometers.forEach((pluviometer) => {
-          const coordinates = pluviometer.Location.Coordinates;
-          if (coordinates && coordinates.length === 2) {
-            const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.pluviometerIcon });
-            marker.bindPopup(`<b>Nome:</b> ${pluviometer.Name}<br><b>Orgão:</b> ${pluviometer.Organ.Name} [${pluviometer.Code}]<br><b>Precipitação:</b> ${pluviometer.Precipitation} mm`);
-            this.pluviometerMarkers.addLayer(marker);
-          } else {
-            console.error('Coordenadas do Pluviômetro inválidas', pluviometer);
-          }
+  this.pluviometers.forEach((pluviometer) => {
+    const coordinates = pluviometer.Location.Coordinates;
+    if (coordinates && coordinates.length === 2) {
+      const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.pluviometerIcon });
+      const precipitationText = (pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) ? 'Sem Dados Coletados' : `${pluviometer.Precipitation} mm`;
+      marker.bindPopup(`<b>Nome:</b> ${pluviometer.Name}<br><b>Orgão:</b> ${pluviometer.Organ.Name} [${pluviometer.Code}]<br><b>Precipitação:</b> ${precipitationText}`);
+      this.pluviometerMarkers.addLayer(marker);
+    } else {
+      console.error('Coordenadas do Pluviômetro inválidas', pluviometer);
+    }
         });
       } else {
         console.error('Dados dos pluviômetros são inválidos');
