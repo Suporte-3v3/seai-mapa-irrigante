@@ -1,5 +1,13 @@
 <template>
 <div class="container">
+  <div
+    class="container d-flex justify-content-end mb-3"
+    v-if="generics.verifyToken()"
+  >
+    <router-link to="/laminas" style="color: #1b3f82">
+      Lâminas cadastradas
+    </router-link>
+  </div>
   <div class="row mt-3">
     <div class="col-md-12">
       <!-- Campo da Estação com toggle -->

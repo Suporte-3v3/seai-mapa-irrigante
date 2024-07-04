@@ -19,6 +19,9 @@
             </p>
           </button>
         </router-link>
+        <button v-if="generics.verifyToken()" class="btn-simple" @click="logout()">
+          <p class="">Sair</p>
+        </button>
       </div>
       <div class="hamburger-menu" @click="toggleMenu">
         <InputIcon class="pi pi-bars"> </InputIcon>
@@ -43,6 +46,7 @@
               {{ navLink.title }}
             </p>
           </router-link>
+          <p v-if="generics.verifyToken()" @click="logout()">Sair</p>
         </div>
       </div>
     </div>
@@ -50,7 +54,7 @@
 </template>
 
 <script>
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { Generics } from "../utils/generics.utils";
 export default {
   name: "Topbar",
@@ -63,7 +67,7 @@ export default {
         { title: "Login", link: "/login", active: false },
       ],
       isMenuOpen: false,
-      router: useRoute(),
+      router: useRouter(),
       generics: new Generics(),
     };
   },
@@ -86,6 +90,10 @@ export default {
     },
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
+    },
+    logout() {
+      localStorage.removeItem("tkn");
+      this.router.push("/login");
     },
   },
 };

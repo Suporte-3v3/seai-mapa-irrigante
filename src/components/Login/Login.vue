@@ -4,15 +4,8 @@
   >
     <form @submit.prevent="login" class="w-50 d-flex flex-column">
       <div class="form-group form-group-text text-left p-float-label w-full">
-        <InputText
-          id="login"
-          v-model="profile.login"
-          class="w-100"
-          required
-        />
-        <label for="login" class="font-weight-bold"
-          >Email ou Username*</label
-        >
+        <InputText id="login" v-model="profile.login" class="w-100" required />
+        <label for="login" class="font-weight-bold">Email ou Username*</label>
         <small v-if="submitted && !profile.login" class="p-error">{{
           requiredField
         }}</small>
@@ -36,7 +29,12 @@
       </div>
 
       <div class="form-group form-group-text text-left mt-4 w-100">
-        <Button label="Entrar" type="submit" class="w-100 btn-login" />
+        <Button
+          :disabled="disabledBtn"
+          label="Entrar"
+          type="submit"
+          class="w-100 btn-login"
+        />
       </div>
       <div
         class="form-group form-group-text text-left mt-4 w-100 d-flex w-100 justify-content-center"
@@ -62,6 +60,7 @@ export default {
       },
       requiredField: "Campo obrigatório",
       submitted: false,
+      disabledBtn: false,
       service: new UserRest(),
       router: useRouter(),
     };
@@ -72,7 +71,8 @@ export default {
       if (this.isValid()) {
         this.service.login(this.profile).then((res) => {
           localStorage.setItem("tkn", String(res.data.accessToken));
-          this.$emit("onConfirmLogin")
+          // this.$emit("onConfirmLogin")
+          location.href = "/"
         });
       }
     },
