@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import News from "../views/News.vue";
 import NewsById from "../views/NewsById.vue";
 import Login from "../views/User/User.vue";
+import Slide from "../views/Slide.vue";
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login,
+  },
+  {
+    path: "/laminas",
+    name: "slide",
+    component: Slide,
   },
 ];
 

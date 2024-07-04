@@ -51,6 +51,7 @@
 
 <script>
 import { useRoute } from "vue-router";
+import { Generics } from "../utils/generics.utils";
 export default {
   name: "Topbar",
   data() {
@@ -63,6 +64,7 @@ export default {
       ],
       isMenuOpen: false,
       router: useRoute(),
+      generics: new Generics(),
     };
   },
   watch: {
@@ -72,6 +74,9 @@ export default {
   },
   mounted() {
     this.getActiveButtons(this.$route.path);
+    if (this.generics.verifyToken()) {
+      this.navLinks.pop();
+    }
   },
   methods: {
     getActiveButtons(path) {
@@ -105,6 +110,10 @@ export default {
     .nav-buttons {
       display: flex;
       gap: 5px;
+    }
+    .btn-simple {
+      padding: 10px;
+      padding: 11px !important;
     }
     a {
       text-decoration: none;
