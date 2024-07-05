@@ -19,9 +19,40 @@
             </p>
           </button>
         </router-link>
-        <button v-if="generics.verifyToken()" class="btn-simple" @click="logout()">
-          <p class="">Sair</p>
-        </button>
+        <Button
+          icon="pi pi-user"
+          v-if="generics.verifyToken()"
+          class="btn-simple"
+          @click.stop="toggleLoginMenu"
+        >
+        </Button>
+        <div
+          class="login-menu"
+          ref="loginMenu"
+          v-if="loginMenu && generics.verifyToken()"
+        >
+          <router-link
+            :to="navLink.link"
+            v-for="(navLink, i) in navLinksLogin"
+            :key="i"
+            @click.native="toggleLoginMenu"
+          >
+            <Button
+              :icon="navLink.icon"
+              :label="navLink.title"
+              class="btn-simple"
+            >
+            </Button>
+          </router-link>
+          <Button
+            icon="pi pi-user"
+            v-if="generics.verifyToken()"
+            class="btn-simple"
+            label="Sair"
+            @click="logout(); toggleLoginMenu()"
+          >
+          </Button>
+        </div>
       </div>
       <div class="hamburger-menu" @click="toggleMenu">
         <InputIcon class="pi pi-bars"> </InputIcon>
@@ -31,7 +62,7 @@
       <div class="mobile-content">
         <div class="d-flex w-100 justify-content-between">
           <h6>SEAI</h6>
-          <button @click="toggleMenu()">
+          <button @click="toggleMenu">
             <i class="pi pi-times" style="font-size: 1rem"></i>
           </button>
         </div>
@@ -66,7 +97,16 @@ export default {
         { title: "FAQ", link: "/faq", active: false },
         { title: "Login", link: "/login", active: false },
       ],
+      navLinksLogin: [
+        {
+          title: "Lâminas cadastradas",
+          link: "/laminas",
+          icon: "pi pi-bookmark",
+        },
+        // { title: "Configurações", link: "/laminas", icon: "pi pi-cog" },
+      ],
       isMenuOpen: false,
+      loginMenu: false,
       router: useRouter(),
       generics: new Generics(),
     };
@@ -93,11 +133,31 @@ export default {
     },
     logout() {
       localStorage.removeItem("tkn");
-      this.router.push("/login");
+      location.href = "#/login"
+    },
+    toggleLoginMenu() {
+      this.loginMenu = !this.loginMenu;
+      if (this.loginMenu) {
+        document.addEventListener("click", this.handleClickOutside);
+      } else {
+        document.removeEventListener("click", this.handleClickOutside);
+      }
+    },
+    handleClickOutside(event) {
+      const loginMenu = this.$refs.loginMenu;
+
+      if (loginMenu && !loginMenu.contains(event.target)) {
+        this.loginMenu = false;
+        document.removeEventListener("click", this.handleClickOutside);
+      }
+    },
+    beforeDestroy() {
+      document.removeEventListener("click", this.handleClickOutside);
     },
   },
 };
 </script>
+
 
 <style lang="scss" scoped>
 .topbar {
@@ -114,7 +174,23 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 
+    .login-menu {
+      position: absolute;
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      top: 30px;
+      right: -180px;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      button {
+        color: #0d2d5c !important;
+        text-align: start;
+      }
+    }
     .nav-buttons {
       display: flex;
       gap: 5px;

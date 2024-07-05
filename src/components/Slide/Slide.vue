@@ -1,10 +1,16 @@
 <template>
   <EditCard
-    v-if="currentCard"
+    v-if="currentCard && editMode"
     :card="currentCard"
     :service="service"
-    @onCloseEditMode="currentCard = null"
+    @onCloseEditMode="openEditMode(null, false)"
     @onSaveItem="editItem"
+  />
+  <ViewRecommendation
+    v-if="currentCard && viewRecommendation"
+    :service="service"
+    :card="currentCard"
+    @on-close-view-mode="openViewRecommendation(null, false)"
   />
   <div class="container content d-flex justify-content-between">
     <h4>Lâminas cadastradas</h4>
@@ -33,6 +39,7 @@
       :card="card"
       @onDeleteItem="confirmDelete"
       @onEditItem="openEditMode"
+      @on-view-item="openViewRecommendation"
     />
   </div>
   <!-- <div class="more container mt-4 faq d-flex gap-3 justify-content-center pb-4">
@@ -47,17 +54,20 @@
 <script>
 import SlideCard from "./Card/Card.vue";
 import EditCard from "./Edit/Edit.vue";
+import ViewRecommendation from "./ViewRecommendation/ViewRecommendation.vue";
 import { toast } from "vue3-toastify";
 import { useConfirm } from "primevue/useconfirm";
 import { SlideRest } from "../../services/slide.service";
 
 export default {
   name: "SlideComponent",
-  components: { SlideCard, EditCard },
+  components: { SlideCard, EditCard, ViewRecommendation },
   data() {
     return {
       loading: false,
       loadingMore: false,
+      editMode: false,
+      viewRecommendation: false,
       service: new SlideRest(),
       currentCard: null,
       confirm: useConfirm(),
@@ -155,22 +165,23 @@ export default {
     },
     deleteItem(id) {
       this.loading = true;
-      console.log(id);
       this.service
         .deleteById(id)
         .then(() => {
           this.cards = this.cards.filter((card) => card.Id != id);
           toast.success("Lâmina removida!");
         })
-        .catch((error) => {
-          console.log(error);
-        })
         .finally(() => {
           this.loading = false;
         });
     },
-    openEditMode(item) {
-      this.currentCard = item;
+    openEditMode(item, value = true) {
+      this.currentCard = { ...item };
+      this.editMode = value;
+    },
+    openViewRecommendation(item, value = true) {
+      this.currentCard = { ...item };
+      this.viewRecommendation = value;
     },
     editItem(editedCard) {
       this.loading = true;
@@ -183,7 +194,7 @@ export default {
           })
           .finally(() => {
             this.loading = false;
-            this.currentCard = null;
+            this.openEditMode(null, false);
           });
       } else {
         this.service
@@ -193,7 +204,7 @@ export default {
           })
           .finally(() => {
             this.loading = false;
-            this.currentCard = null;
+            this.openEditMode(null, false);
           });
       }
     },
