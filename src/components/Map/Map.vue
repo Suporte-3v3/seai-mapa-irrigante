@@ -29,6 +29,14 @@ export default {
         iconUrl: '/icon-user.png',
         iconSize: [25, 25],
       }),
+      stationDisableIcon: L.icon({
+        iconUrl: '/icon-stationdisable.png',
+        iconSize: [25,25],
+      }),
+      pluviometerdisableIcon: L.icon({
+        iconUrl: '/icon-pluviometerdisable.png',
+        iconSize: [25,25],
+      }),
       showStations: true,
       showPluviometers: true,
       stationPolyline: null,
