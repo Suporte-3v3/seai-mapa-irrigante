@@ -31,7 +31,7 @@
       <div class="form-group form-group-text text-left mt-4 w-100">
         <Button
           :disabled="disabledBtn"
-          label="Entrar"
+          :label="!disabledBtn ? 'Entrar' : 'Entrando'"
           type="submit"
           class="w-100 btn-login"
         />
@@ -68,11 +68,12 @@ export default {
   methods: {
     login() {
       this.submitted = true;
+      this.disabledBtn = true;
       if (this.isValid()) {
         this.service.login(this.profile).then((res) => {
           localStorage.setItem("tkn", String(res.data.accessToken));
           // this.$emit("onConfirmLogin")
-          location.href = "/"
+          location.href = "/";
         });
       }
     },

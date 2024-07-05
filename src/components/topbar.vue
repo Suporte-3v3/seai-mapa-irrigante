@@ -49,7 +49,10 @@
             v-if="generics.verifyToken()"
             class="btn-simple"
             label="Sair"
-            @click="logout(); toggleLoginMenu()"
+            @click="
+              logout();
+              toggleLoginMenu();
+            "
           >
           </Button>
         </div>
@@ -70,6 +73,17 @@
           <router-link
             :to="navLink.link"
             v-for="(navLink, i) in navLinks"
+            :key="i"
+            @click.native="toggleMenu"
+          >
+            <p class="">
+              {{ navLink.title }}
+            </p>
+          </router-link>
+          <router-link
+            v-if="generics.verifyToken()"
+            :to="navLink.link"
+            v-for="(navLink, i) in navLinksLogin"
             :key="i"
             @click.native="toggleMenu"
           >
@@ -133,7 +147,7 @@ export default {
     },
     logout() {
       localStorage.removeItem("tkn");
-      location.href = "#/login"
+      location.href = "#/login";
     },
     toggleLoginMenu() {
       this.loginMenu = !this.loginMenu;
@@ -158,7 +172,6 @@ export default {
 };
 </script>
 
-
 <style lang="scss" scoped>
 .topbar {
   background-color: #1b3f82;
@@ -182,7 +195,7 @@ export default {
       display: flex;
       flex-direction: column;
       top: 30px;
-      right: -180px;
+      right: 0px;
       padding: 10px;
       border-radius: 5px;
       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
