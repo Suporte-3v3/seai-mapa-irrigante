@@ -16,7 +16,11 @@
       </div>
     </div>
     <div class="slide-buttons d-flex flex-column gap-2">
-      <Button class="btn-primary" label="Ver Recomendações"></Button>
+      <Button
+        class="btn-primary"
+        label="Ver Recomendações"
+        @click="onViewItem(card)"
+      ></Button>
       <Button
         class="btn-secondary"
         label="Editar"
@@ -40,7 +44,7 @@ export default {
       required: true,
     },
   },
-  emits: ["onDeleteItem", "onEditItem"],
+  emits: ["onDeleteItem", "onEditItem", "onViewItem"],
   data() {
     return {
       bodies: [],
@@ -65,12 +69,13 @@ export default {
   },
   methods: {
     onDeleteItem(id) {
-      console.log(id);
       this.$emit("onDeleteItem", id);
     },
     onEditItem(item) {
-      console.log(item);
       this.$emit("onEditItem", item);
+    },
+    onViewItem(item) {
+      this.$emit("onViewItem", item);
     },
   },
 };

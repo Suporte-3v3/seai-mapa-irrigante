@@ -279,7 +279,6 @@ export default {
 
   mounted() {
     this.cards = this.card;
-    console.log(this.cards.PlantingDate);
     if (typeof this.cards.PlantingDate === "string") {
       this.cards.PlantingDate =
         this.cards.PlantingDate === null
@@ -319,10 +318,12 @@ export default {
       this.cards.CropId = this.selectedCrop.Id;
       this.cards.System.Type = this.selectedSystem.name;
       this.$emit("onSaveItem", this.cards);
+      this.resetForm();
     },
     onCloseEditMode() {
       this.$emit("onCloseEditMode");
     },
+
   },
 };
 </script>

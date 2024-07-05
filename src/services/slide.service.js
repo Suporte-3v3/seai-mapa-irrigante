@@ -9,6 +9,10 @@ export class SlideRest {
     const result = await http.get(`/v2/management/crops`);
     return result.data;
   }
+  async getRecommendations(id) {
+    const result = await http.get(`/v2/management/user/irrigation_crops/recommendation/${id}`);
+    return result.data;
+  }
   async create(data) {
     const result = await http.post(
       `/v2/management/user/irrigation_crops`,
