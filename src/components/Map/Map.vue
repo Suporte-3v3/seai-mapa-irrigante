@@ -125,31 +125,33 @@ export default {
       geojsonLayer.resetStyle(e.target);
     },
     addMarkers() {
-      if (this.stations && Array.isArray(this.stations)) {
-        this.stations.forEach((station) => {
-          const coordinates = station.Location.Coordinates;
-          if (coordinates && coordinates.length === 2) {
-            const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.stationIcon });
-            marker.bindPopup(`<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} [${station.Code}]<br><b>Et0:</b> ${station.Et0}`);
-            this.stationMarkers.addLayer(marker);
-          } else {
-            console.error('Coordenadas de Estação inválidas:', station);
-          }
+  if (this.stations && Array.isArray(this.stations)) {
+    this.stations.forEach((station) => {
+      const coordinates = station.Location.Coordinates;
+      if (coordinates && coordinates.length === 2) {
+        const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.stationIcon });
+        const et0Text = (station.Et0 === null || station.Et0 === undefined) ? 'Sem Dados Coletados' : station.Et0;
+        marker.bindPopup(`<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} [${station.Code}]<br><b>Et0:</b> ${et0Text}`);
+        this.stationMarkers.addLayer(marker);
+      } else {
+        console.error('Coordenadas de Estação inválidas:', station);
+      }
         });
       } else {
         console.error('Dados das estações são inválidos');
       }
 
       if (this.pluviometers && Array.isArray(this.pluviometers)) {
-        this.pluviometers.forEach((pluviometer) => {
-          const coordinates = pluviometer.Location.Coordinates;
-          if (coordinates && coordinates.length === 2) {
-            const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.pluviometerIcon });
-            marker.bindPopup(`<b>Nome:</b> ${pluviometer.Name}<br><b>Orgão:</b> ${pluviometer.Organ.Name} [${pluviometer.Code}]<br><b>Precipitação:</b> ${pluviometer.Precipitation} mm`);
-            this.pluviometerMarkers.addLayer(marker);
-          } else {
-            console.error('Coordenadas do Pluviômetro inválidas', pluviometer);
-          }
+  this.pluviometers.forEach((pluviometer) => {
+    const coordinates = pluviometer.Location.Coordinates;
+    if (coordinates && coordinates.length === 2) {
+      const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.pluviometerIcon });
+      const precipitationText = (pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) ? 'Sem Dados Coletados' : `${pluviometer.Precipitation} mm`;
+      marker.bindPopup(`<b>Nome:</b> ${pluviometer.Name}<br><b>Orgão:</b> ${pluviometer.Organ.Name} [${pluviometer.Code}]<br><b>Precipitação:</b> ${precipitationText}`);
+      this.pluviometerMarkers.addLayer(marker);
+    } else {
+      console.error('Coordenadas do Pluviômetro inválidas', pluviometer);
+    }
         });
       } else {
         console.error('Dados dos pluviômetros são inválidos');
@@ -163,20 +165,22 @@ export default {
 
       legend.onAdd = () => {
         const div = L.DomUtil.create('div', 'info legend');
-        div.innerHTML += '<div><i id="station-legend" style="background: #EF760F; width: 20px; height: 18px; display: inline-block;"></i> <b>Estação</b></div>';
-        div.innerHTML += '<div><i id="pluviometer-legend" style="background: #9023A1; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetro</b></div>';
+        div.innerHTML += '<div><i id="stationenable-legend" style="background: #EF760F; width: 20px; height: 18px; display: inline-block;"></i> <b>Estações Válidas</b></div>';
+        div.innerHTML += '<div><i id="pluviometerenable-legend" style="background: #9023A1; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetros Válidos</b></div>';
+        div.innerHTML += '<div><i id="stationdisabled-legend" style="background: #d8ab88; width: 20px; height: 18px; display: inline-block;"></i> <b>Estações Não-Válidas</b></div>';
+        div.innerHTML += '<div><i id="pluviometerdisabled-legend" style="background: #bcaacf; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetros Não-Válidos</b></div>';
         return div;
       };
 
       legend.addTo(this.map);
 
       setTimeout(() => {
-        document.getElementById('station-legend').addEventListener('click', this.toggleStations);
-        document.getElementById('pluviometer-legend').addEventListener('click', this.togglePluviometers);
+        document.getElementById('stationenable-legend').addEventListener('click', this.toggleStations);
+        document.getElementById('pluviometerenable-legend').addEventListener('click', this.togglePluviometers);
       }, 100);
     },
     toggleStations() {
-      const stationLegend = document.getElementById('station-legend');
+      const stationLegend = document.getElementById('stationenable-legend');
       if (this.showStations) {
         this.map.removeLayer(this.stationMarkers);
         if (this.stationPolyline) {
@@ -193,7 +197,7 @@ export default {
       this.showStations = !this.showStations;
     },
     togglePluviometers() {
-      const pluviometerLegend = document.getElementById('pluviometer-legend');
+      const pluviometerLegend = document.getElementById('pluviometerenable-legend');
       if (this.showPluviometers) {
         this.map.removeLayer(this.pluviometerMarkers);
         if (this.pluviometerPolyline) {
@@ -235,64 +239,64 @@ export default {
       }
     },
     addPolylines() {
-      if (!this.userLocation) {
-        console.error('Localização do usuário não definida');
-        return;
+    if (!this.userLocation) {
+      console.error('Localização do usuário não definida');
+      return;
+    }
+
+    let closestStation = null;
+    let minStationDistance = Number.MAX_SAFE_INTEGER;
+    this.stations.forEach((station) => {
+      const stationCoords = station.Location.Coordinates;
+      if (stationCoords && stationCoords.length === 2 && station.Enable && station.Et0 !== null && station.Et0 !== undefined) {
+        const distance = L.latLng(this.userLocation[0], this.userLocation[1]).distanceTo(L.latLng(stationCoords[0], stationCoords[1]));
+        if (distance < minStationDistance) {
+          minStationDistance = distance;
+          closestStation = stationCoords;
+        }
+      } else {
+        console.error('Coordenadas de estação inválidas ou dados não habilitados para:', station);
       }
+    });
 
-      let closestStation = null;
-      let minStationDistance = Number.MAX_SAFE_INTEGER;
-      this.stations.forEach((station) => {
-        const stationCoords = station.Location.Coordinates;
-        if (stationCoords && stationCoords.length === 2) {
-          const distance = L.latLng(this.userLocation[0], this.userLocation[1]).distanceTo(L.latLng(stationCoords[0], stationCoords[1]));
-          if (distance < minStationDistance) {
-            minStationDistance = distance;
-            closestStation = stationCoords;
-          }
-        } else {
-          console.error('Coordenadas de estação inválidas para:', station);
+    let closestPluviometer = null;
+    let minPluviometerDistance = Number.MAX_SAFE_INTEGER;
+    this.pluviometers.forEach((pluviometer) => {
+      const pluviometerCoords = pluviometer.Location.Coordinates;
+      if (pluviometerCoords && pluviometerCoords.length === 2 && pluviometer.Enable && pluviometer.Precipitation !== null && pluviometer.Precipitation !== undefined) {
+        const distance = L.latLng(this.userLocation[0], this.userLocation[1]).distanceTo(L.latLng(pluviometerCoords[0], pluviometerCoords[1]));
+        if (distance < minPluviometerDistance) {
+          minPluviometerDistance = distance;
+          closestPluviometer = pluviometerCoords;
         }
-      });
+      } else {
+        console.error('Coordenadas do pluviômetro inválidas ou dados não habilitados para:', pluviometer);
+      }
+    });
 
-      let closestPluviometer = null;
-      let minPluviometerDistance = Number.MAX_SAFE_INTEGER;
-      this.pluviometers.forEach((pluviometer) => {
-        const pluviometerCoords = pluviometer.Location.Coordinates;
-        if (pluviometerCoords && pluviometerCoords.length === 2) {
-          const distance = L.latLng(this.userLocation[0], this.userLocation[1]).distanceTo(L.latLng(pluviometerCoords[0], pluviometerCoords[1]));
-          if (distance < minPluviometerDistance) {
-            minPluviometerDistance = distance;
-            closestPluviometer = pluviometerCoords;
-          }
-        } else {
-          console.error('Coordenadas do Pluviômetro inválidas para:', pluviometer);
-        }
-      });
+    if (closestStation) {
+      this.stationPolyline = L.polyline([this.userLocation, closestStation], {
+        color: '#EF760F',
+        weight: 1,
+        dashArray: '4,4',
+      }).addTo(this.map);
+      console.log('Polyline traçada para a estação mais próxima:', closestStation);
+    } else {
+      console.log('Nenhuma estação próxima encontrada');
+    }
 
-      if (closestStation) {
-        this.stationPolyline = L.polyline([this.userLocation, closestStation], {
-          color: '#EF760F',
+    setTimeout(() => {
+      if (closestPluviometer) {
+        this.pluviometerPolyline = L.polyline([this.userLocation, closestPluviometer], {
+          color: '#9023A1',
           weight: 1,
           dashArray: '4,4',
         }).addTo(this.map);
-        console.log('Polyline traçada para a estação mais próxima:', closestStation);
+        console.log('Polyline traçada para o pluviômetro mais próximo:', closestPluviometer);
       } else {
-        console.log('Nenhuma estação próxima encontrada');
+        console.log('Nenhum pluviômetro próximo encontrado');
       }
-
-      setTimeout(() => {
-        if (closestPluviometer) {
-          this.pluviometerPolyline = L.polyline([this.userLocation, closestPluviometer], {
-            color: '#9023A1',
-            weight: 1,
-            dashArray: '4,4',
-          }).addTo(this.map);
-          console.log('Polyline traçada para o pluviômetro mais próximo:', closestPluviometer);
-        } else {
-          console.log('Nenhum pluviômetro próximo encontrado');
-        }
-      }, 500);
+    }, 500);
     }
   }
 };

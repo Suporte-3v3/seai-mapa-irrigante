@@ -9,25 +9,25 @@
     </router-link>
   </div>
   <div class="row mt-3">
-    <div class="col-md-12">
-      <!-- Campo da Estação com toggle -->
-      <div class="form-group mb-4">
-        <label for="option1" class="tab-label">Estação</label>
-        <div class="input-group">
-          <select
-            id="option1"
-            v-model="selectedStation"
-            class="form-control"
-            :disabled="!isStationDisabled"
+  <div class="col-md-12">
+    <!-- Campo da Estação com toggle -->
+    <div class="form-group mb-4">
+      <label for="option1" class="tab-label">Estação</label>
+      <div class="input-group">
+        <select
+          id="option1"
+          v-model="selectedStation"
+          class="form-control"
+          :disabled="!isStationDisabled"
+        >
+          <option value="">Selecione a Estação</option>
+          <option
+            v-for="equipment in filteredStations"
+            :key="equipment.Id"
+            :value="equipment.Id"
           >
-            <option value="">Selecione a Estação</option>
-            <option
-              v-for="equipment in stations"
-              :key="equipment.Id"
-              :value="equipment.Id"
-            >
-              ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Et0: {{ equipment.Et0 }}]
-            </option>
+            ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Et0: {{ equipment.Et0 }}]
+          </option>
           </select>
           <div class="input-group-append">
             <div class="input-group-text">
@@ -70,7 +70,7 @@
           >
             <option value="">Selecione o Pluviômetro</option>
             <option
-              v-for="equipment in pluviometers"
+              v-for="equipment in filteredPluviometer"
               :key="equipment.Id"
               :value="equipment.Id"
             >
@@ -575,6 +575,12 @@ export default {
     isPluviometerDisabled() {
       return this.toggleSwitchPluviometer;
     },
+    filteredStations() {
+      return this.stations.filter(equipment => equipment.Enable && equipment.Et0 !== null && equipment.Et0 !== undefined);
+    },
+    filteredPluviometer(){
+      return this.pluviometers.filter(equipment => equipment.Enable && equipment.Precipitation !== null && equipment.Precipitation !== undefined);
+    }
   },
   async created() {
     try {
