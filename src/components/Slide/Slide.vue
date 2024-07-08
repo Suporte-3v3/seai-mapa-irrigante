@@ -31,7 +31,7 @@
     <ProgressSpinner />
   </div>
   <div class="container mt-4 faq d-flex gap-3 flex-wrap pb-4" v-if="!loading">
-    <div v-if="cards.length === 0">Nenhuma lâmina cadastrada!</div>
+    <div v-if="!cards || cards.length === 0">Nenhuma lâmina cadastrada!</div>
     <SlideCard
       v-else
       v-for="(card, i) in cards"

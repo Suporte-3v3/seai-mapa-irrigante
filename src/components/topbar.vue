@@ -45,7 +45,7 @@
             </Button>
           </router-link>
           <Button
-            icon="pi pi-user"
+            icon="pi pi-sign-out"
             v-if="generics.verifyToken()"
             class="btn-simple"
             label="Sair"
@@ -117,7 +117,7 @@ export default {
           link: "/laminas",
           icon: "pi pi-bookmark",
         },
-        // { title: "Configurações", link: "/laminas", icon: "pi pi-cog" },
+        { title: "Configurações", link: "/configuracoes", icon: "pi pi-cog" },
       ],
       isMenuOpen: false,
       loginMenu: false,
