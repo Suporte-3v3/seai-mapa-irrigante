@@ -5,6 +5,7 @@ import News from "../views/News.vue";
 import NewsById from "../views/NewsById.vue";
 import Login from "../views/User/User.vue";
 import Slide from "../views/Slide.vue";
+import Settings from "../views/Settings.vue";
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: "/laminas",
     name: "slide",
     component: Slide,
+  },
+  {
+    path: "/configuracoes",
+    name: "settings",
+    component: Settings,
   },
 ];
 

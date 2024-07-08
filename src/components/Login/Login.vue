@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-100 d-flex justify-content-center align-items-center flex-column"
+    class="login w-100 d-flex justify-content-center align-items-center flex-column"
   >
     <form @submit.prevent="login" class="w-50 d-flex flex-column">
       <div class="form-group form-group-text text-left p-float-label w-full">
@@ -86,26 +86,28 @@ export default {
 </script>
 
 <style lang="scss">
-form {
-  gap: 15px;
-  min-width: 320px;
-  min-height: 450px;
-  justify-content: center;
-  .form-group {
-    input {
-      width: 100%;
-      border: 2px solid #2c5ebb7d;
-    }
-    a {
-      color: #163268 !important;
-      text-decoration: underline !important;
+.login {
+  form {
+    gap: 15px;
+    min-width: 320px;
+    min-height: 450px;
+    justify-content: center;
+    .form-group {
+      input {
+        width: 100%;
+        border: 2px solid #2c5ebb7d;
+      }
+      a {
+        color: #163268 !important;
+        text-decoration: underline !important;
+      }
     }
   }
-}
-.btn-login {
-  background-color: #99bdff;
-  border-color: #2c5ebb7d;
-  color: #1b3f82;
-  border-radius: 3px;
+  .btn-login {
+    background-color: #99bdff;
+    border-color: #2c5ebb7d;
+    color: #1b3f82;
+    border-radius: 3px;
+  }
 }
 </style>

@@ -9,7 +9,7 @@
       </div>
 
       <form
-        v-else
+        v-else-if="!loading && !createUserMode"
         @submit.prevent="onSaveItem"
         class="w-100 d-flex flex-column"
       >
@@ -221,16 +221,33 @@
           <Button label="Salvar" type="submit" class="w-50 btn-primary" />
         </div>
       </form>
+
+      <div class="equipments-user" v-else-if="!loading && createUserMode">
+        <div class="equipment-msg">
+          <i class="pi pi-info-circle" style="font-size: 1rem"></i>
+
+          <p>
+            Você precisa pré-selecionar os equipamentos para realizar os
+            cálculos
+          </p>
+        </div>
+        <Equipments @on-save-equipments="getUserEquipments" />
+      </div>
     </div>
+    <div></div>
   </div>
 </template>
 <script>
-import { Dropdown } from "bootstrap";
 import { SlideRest } from "../../../services/slide.service";
 import { Generics } from "../../../utils/generics.utils";
+import { SettingsRest } from "@/services/settings.service";
+import Equipments from "../../SettingsComponent/Equipments.vue";
 
 export default {
   name: "SlideEditComponent",
+  components: {
+    Equipments,
+  },
   props: {
     card: {
       type: Object,
@@ -274,6 +291,8 @@ export default {
         { id: 4, name: "Pivô Central" },
         { id: 5, name: "Sulcos" },
       ],
+      equipmentsServices: new SettingsRest(),
+      createUserMode: false,
     };
   },
 
@@ -285,15 +304,25 @@ export default {
           ? new Date()
           : new Date(this.generics.convertDateString(this.cards.PlantingDate));
     }
-
-    this.getAllCulture();
-    this.getAllSystem();
+    this.getUserEquipments();
   },
   methods: {
     getAllSystem() {
       this.selectedSystem = this.systemTypes.find(
         (type) => type.name === this.cards.System.Type
       );
+    },
+    getUserEquipments() {
+      this.loading = true;
+      this.equipmentsServices.getUserEquipments().then((res) => {
+        this.userEquipments = res.data[0];
+        if (this.userEquipments) {
+          this.getAllCulture();
+          this.getAllSystem();
+        } else {
+          this.createUserMode = true;
+        }
+      });
     },
     getAllCulture() {
       this.service
@@ -323,7 +352,6 @@ export default {
     onCloseEditMode() {
       this.$emit("onCloseEditMode");
     },
-
   },
 };
 </script>
@@ -340,11 +368,34 @@ export default {
   justify-content: end;
   .edit-form {
     background-color: white;
-    width: 360px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    min-width: 360px;
     height: 100vh;
     padding: 10px;
+    .equipments-user {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      .equipment-msg {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        i {
+          margin-top: -20px;
+        }
+      }
+    }
     form {
-      height: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
     }
     h5 {
       color: #1b3f82;
