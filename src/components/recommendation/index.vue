@@ -34,11 +34,11 @@
               <input
                 id="toggleSwitchStation"
                 v-model="toggleSwitchStation"
-                class="form-check-input1"
+                class="form-check-input2"
                 type="checkbox"
               />
               <label class="form-check-label" for="toggleSwitchStation">
-                ET0 Automática
+                Dados Automáticos
               </label>
             </div>
           </div>
@@ -86,7 +86,7 @@
                 type="checkbox"
               />
               <label class="form-check-label" for="toggleSwitchPluviometer">
-                Pluv. Automática
+                Dados Automáticos
               </label>
             </div>
           </div>
@@ -473,6 +473,9 @@
                 </li>
                 <li class="list-group-item">
                   <strong>Dias da Cultura:</strong> {{ results.data.CropDays }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Estágio Fenológico:</strong> {{ results.data.Stage }}
                 </li>
                 <li class="list-group-item">
                   <strong>Kc:</strong> {{ results.data.Kc }}
