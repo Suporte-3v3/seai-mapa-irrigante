@@ -33,7 +33,7 @@ export default {
         iconUrl: '/icon-stationdisable.png',
         iconSize: [25,25],
       }),
-      pluviometerdisableIcon: L.icon({
+      pluviometerDisableIcon: L.icon({
         iconUrl: '/icon-pluviometerdisable.png',
         iconSize: [25,25],
       }),
@@ -132,42 +132,56 @@ export default {
       const geojsonLayer = e.target;
       geojsonLayer.resetStyle(e.target);
     },
+
     addMarkers() {
+  // Função para adicionar um marcador ao mapa
+  const addMarker = (item, icon, popupContent) => {
+    const coordinates = item.Location.Coordinates;
+    if (coordinates && coordinates.length === 2) {
+      const marker = L.marker([coordinates[0], coordinates[1]], { icon });
+      marker.bindPopup(popupContent);
+      return marker;
+    } else {
+      console.error('Coordenadas inválidas:', item);
+      return null;
+    }
+  };
+
+  // Função para criar o conteúdo do popup
+  const createPopupContent = (name, organName, code, dataText) => {
+    return `<b>Nome:</b> ${name}<br><b>Orgão:</b> ${organName} [${code}]<br><b>Dados:</b> ${dataText}`;
+  };
+
+  // Adiciona marcadores de estações
   if (this.stations && Array.isArray(this.stations)) {
     this.stations.forEach((station) => {
-      const coordinates = station.Location.Coordinates;
-      if (coordinates && coordinates.length === 2) {
-        const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.stationIcon });
-        const et0Text = (station.Et0 === null || station.Et0 === undefined) ? 'Sem Dados Coletados' : station.Et0;
-        marker.bindPopup(`<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} [${station.Code}]<br><b>Et0:</b> ${et0Text}`);
-        this.stationMarkers.addLayer(marker);
-      } else {
-        console.error('Coordenadas de Estação inválidas:', station);
-      }
-        });
-      } else {
-        console.error('Dados das estações são inválidos');
-      }
+      const et0Text = (station.Et0 === null || station.Et0 === undefined) ? 'Sem Dados Coletados' : station.Et0;
+      const icon = (station.Enable === false || station.Et0 === null || station.Et0 === undefined) ? this.stationDisableIcon : this.stationIcon;
+      const popupContent = createPopupContent(station.Name, station.Organ.Name, station.Code, et0Text);
+      const marker = addMarker(station, icon, popupContent);
+      if (marker) this.stationMarkers.addLayer(marker);
+    });
+  } else {
+    console.error('Dados das estações são inválidos');
+  }
 
-      if (this.pluviometers && Array.isArray(this.pluviometers)) {
-  this.pluviometers.forEach((pluviometer) => {
-    const coordinates = pluviometer.Location.Coordinates;
-    if (coordinates && coordinates.length === 2) {
-      const marker = L.marker([coordinates[0], coordinates[1]], { icon: this.pluviometerIcon });
+  // Adiciona marcadores de pluviômetros
+  if (this.pluviometers && Array.isArray(this.pluviometers)) {
+    this.pluviometers.forEach((pluviometer) => {
       const precipitationText = (pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) ? 'Sem Dados Coletados' : `${pluviometer.Precipitation} mm`;
-      marker.bindPopup(`<b>Nome:</b> ${pluviometer.Name}<br><b>Orgão:</b> ${pluviometer.Organ.Name} [${pluviometer.Code}]<br><b>Precipitação:</b> ${precipitationText}`);
-      this.pluviometerMarkers.addLayer(marker);
-    } else {
-      console.error('Coordenadas do Pluviômetro inválidas', pluviometer);
-    }
-        });
-      } else {
-        console.error('Dados dos pluviômetros são inválidos');
-      }
+      const icon = (pluviometer.Enable === false || pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) ? this.pluviometerDisableIcon : this.pluviometerIcon;
+      const popupContent = createPopupContent(pluviometer.Name, pluviometer.Organ.Name, pluviometer.Code, precipitationText);
+      const marker = addMarker(pluviometer, icon, popupContent);
+      if (marker) this.pluviometerMarkers.addLayer(marker);
+    });
+  } else {
+    console.error('Dados dos pluviômetros são inválidos');
+  }
 
-      this.stationMarkers.addTo(this.map);
-      this.pluviometerMarkers.addTo(this.map);
-    },
+  // Adiciona as camadas de marcadores ao mapa
+  this.stationMarkers.addTo(this.map);
+  this.pluviometerMarkers.addTo(this.map);
+},
     addLegend() {
       const legend = L.control({ position: 'topright' });
 
