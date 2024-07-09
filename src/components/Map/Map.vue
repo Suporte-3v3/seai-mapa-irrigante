@@ -134,7 +134,6 @@ export default {
     },
 
     addMarkers() {
-  // Função para adicionar um marcador ao mapa
   const addMarker = (item, icon, popupContent) => {
     const coordinates = item.Location.Coordinates;
     if (coordinates && coordinates.length === 2) {
@@ -147,15 +146,13 @@ export default {
     }
   };
 
-  // Função para criar o conteúdo do popup
   const createPopupContent = (name, organName, code, dataText) => {
     return `<b>Nome:</b> ${name}<br><b>Orgão:</b> ${organName} [${code}]<br><b>Dados:</b> ${dataText}`;
   };
 
-  // Adiciona marcadores de estações
   if (this.stations && Array.isArray(this.stations)) {
     this.stations.forEach((station) => {
-      const et0Text = (station.Et0 === null || station.Et0 === undefined) ? 'Sem Dados Coletados' : station.Et0;
+      const et0Text = (station.Et0 === null || station.Et0 === undefined) ? 'Sem Dados Coletados' : `${station.Et0} mm`;
       const icon = (station.Enable === false || station.Et0 === null || station.Et0 === undefined) ? this.stationDisableIcon : this.stationIcon;
       const popupContent = createPopupContent(station.Name, station.Organ.Name, station.Code, et0Text);
       const marker = addMarker(station, icon, popupContent);
@@ -165,7 +162,6 @@ export default {
     console.error('Dados das estações são inválidos');
   }
 
-  // Adiciona marcadores de pluviômetros
   if (this.pluviometers && Array.isArray(this.pluviometers)) {
     this.pluviometers.forEach((pluviometer) => {
       const precipitationText = (pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) ? 'Sem Dados Coletados' : `${pluviometer.Precipitation} mm`;
@@ -178,7 +174,6 @@ export default {
     console.error('Dados dos pluviômetros são inválidos');
   }
 
-  // Adiciona as camadas de marcadores ao mapa
   this.stationMarkers.addTo(this.map);
   this.pluviometerMarkers.addTo(this.map);
 },
@@ -187,10 +182,10 @@ export default {
 
       legend.onAdd = () => {
         const div = L.DomUtil.create('div', 'info legend');
-        div.innerHTML += '<div><i id="stationenable-legend" style="background: #EF760F; width: 20px; height: 18px; display: inline-block;"></i> <b>Estações Válidas</b></div>';
-        div.innerHTML += '<div><i id="pluviometerenable-legend" style="background: #9023A1; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetros Válidos</b></div>';
-        div.innerHTML += '<div><i id="stationdisabled-legend" style="background: #d8ab88; width: 20px; height: 18px; display: inline-block;"></i> <b>Estações Não-Válidas</b></div>';
-        div.innerHTML += '<div><i id="pluviometerdisabled-legend" style="background: #bcaacf; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetros Não-Válidos</b></div>';
+        div.innerHTML += '<div><i id="stationenable-legend" style="background: #EF760F; width: 20px; height: 18px; display: inline-block;"></i> <b>Estações</b></div>';
+        div.innerHTML += '<div><i id="pluviometerenable-legend" style="background: #9023A1; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetros</b></div>';
+        div.innerHTML += '<div><i id="stationdisabled-legend" style="background: #d8ab88; width: 20px; height: 18px; display: inline-block;"></i> <b>Estações Inativas</b></div>';
+        div.innerHTML += '<div><i id="pluviometerdisabled-legend" style="background: #bcaacf; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetros Inativos</b></div>';
         return div;
       };
 
