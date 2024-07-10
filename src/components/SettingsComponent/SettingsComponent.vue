@@ -8,9 +8,10 @@
   >
     <ProgressSpinner />
   </div>
-  <div class="container mt-4" v-if="!loading">
+  <div class="container mt-4 d-flex flex-column gap-5" v-if="!loading">
+    <Email />
     <Equipments />
-    <div class="d-flex flex-column gap-4 " >
+    <div class="d-flex flex-column gap-4 " style="margin-top: 100px;">
       <h5>Sair da conta</h5>
       <Button
         class="btn-danger"
@@ -26,10 +27,12 @@
 <script>
 import { SettingsRest } from "@/services/settings.service";
 import Equipments from "./Equipments.vue";
+import Email from "./Email.vue";
 export default {
   name: "SettingsComponent",
   components: {
     Equipments,
+    Email
   },
   data() {
     return {
