@@ -10,7 +10,7 @@
   </div>
   <div class="container mt-4" v-if="!loading">
     <Equipments />
-    <div class="d-flex flex-column gap-4 " style="margin-top: 100px;">
+    <div class="d-flex flex-column gap-4 " >
       <h5>Sair da conta</h5>
       <Button
         class="btn-danger"

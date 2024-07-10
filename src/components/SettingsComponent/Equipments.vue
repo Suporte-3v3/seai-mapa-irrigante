@@ -4,7 +4,7 @@
     <h4>Equipamentos</h4>
     <div class="equipments">
       <div
-        class="form-group form-group-text text-left p-float-label w-100 mt-4"
+        class="form-group form-group-text text-left p-float-label mt-4"
       >
         <Dropdown
           v-model="selectedStation"
@@ -17,7 +17,7 @@
         <label for="login" class="font-weight-bold">Estações </label>
       </div>
       <div
-        class="form-group form-group-text text-left p-float-label w-100 mt-4"
+        class="form-group form-group-text text-left p-float-label mt-4"
       >
         <Dropdown
           v-model="selectedPluv"
@@ -30,7 +30,7 @@
         <label for="login" class="font-weight-bold">Pluviômetros</label>
       </div>
       <div
-        class="form-group form-group-text text-left p-float-label w-25 mt-4 d-flex justify-content-end"
+        class="form-button text-left p-float-label  mt-4 d-flex justify-content-end"
       >
         <Button
           :disabled="loadingBtn"
@@ -169,7 +169,7 @@ export default {
 <style lang="scss">
 .form-equipments {
   flex-direction: column;
-  height: 240px !important;
+  height: 150px !important;
   .equipments {
     display: flex;
     gap: 12px;
@@ -179,6 +179,16 @@ export default {
       height: 50px;
       display: flex;
       flex-direction: row;
+      width: 43%;
+      min-width: 350px;
+    }
+    .form-button{
+      height: 50px;
+      width: 10%;
+      min-width: 100px;
+      button{
+        width: 100%;
+      }
     }
   }
 }
