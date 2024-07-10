@@ -224,14 +224,16 @@
 
       <div class="equipments-user" v-else-if="!loading && createUserMode">
         <div class="equipment-msg">
-          <i class="pi pi-info-circle" style="font-size: 1rem"></i>
+          <i class="pi pi-info-circle" style="font-size: 12px; color: #bb4430;"></i>
 
-          <p>
+          <p style="font-size: 12px; color: #bb4430;">
             Você precisa pré-selecionar os equipamentos para realizar os
             cálculos
           </p>
         </div>
-        <Equipments @on-save-equipments="getUserEquipments" />
+        <span class="mt-2">
+          <Equipments @on-save-equipments="getUserEquipments" />
+        </span>
       </div>
     </div>
     <div></div>
@@ -372,8 +374,8 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 30%;
-    min-width: 360px;
+    
+    width: 380px;
     height: 100vh;
     padding: 10px;
     .equipments-user {
