@@ -23,4 +23,15 @@ export class SettingsRest {
     );
     return result.data;
   }
+  async getNotifications() {
+    const result = await http.get(`v2/management/user/settings/notifications`);
+    return result.data;
+  }
+  async updateNotifications(id, data){
+    const result = await http.patch(
+      `/v2/management/user/settings/notifications/${id}`,
+      data
+    );
+    return result.data;
+  }
 }

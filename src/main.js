@@ -18,6 +18,7 @@ import ConfirmationService from "primevue/confirmationservice";
 import Dropdown from "primevue/dropdown";
 import Dialog from "primevue/dialog";
 import Calendar from "primevue/calendar";
+import InputSwitch from 'primevue/inputswitch';
 import "leaflet/dist/leaflet.css";
 import "primeicons/primeicons.css";
 import "primevue/resources/themes/lara-light-indigo/theme.css";
@@ -47,4 +48,5 @@ createApp(App)
   .component("Dialog", Dialog)
   .component("Dropdown", Dropdown)
   .component("Calendar", Calendar)
+  .component("InputSwitch", InputSwitch)
   .mount("#app");
