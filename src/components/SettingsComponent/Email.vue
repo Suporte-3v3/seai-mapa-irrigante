@@ -1,11 +1,11 @@
 <template>
   <ProgressSpinner v-if="loading" />
-  <div class="email-component" v-else>
-    <h4>E-mail</h4>
-    <div class="email-body w-50">
+  <div class="email-component mt-2" v-else>
+    <h5>E-mail</h5>
+    <div class="email-body">
       <div class="email-item w-100">
         <div class="notification">
-          <i class="pi pi-bell" style="font-size: 1.2rem"></i>
+          <i class="pi pi-bell" ></i>
         </div>
         <div class="text w-75" style="width: 400px">
           <p>Receber recomendações de lâmina por e-mail</p>
@@ -18,7 +18,7 @@
       </div>
       <div class="email-item">
         <div class="notification">
-          <i class="pi pi-bell" style="font-size: 1.2rem"></i>
+          <i class="pi pi-bell" ></i>
         </div>
         <div class="text w-75">
           <p>Receber notícias por e-mail</p>
@@ -79,17 +79,21 @@ export default {
 </script>
 <style lang="scss">
 .email-component {
+  border-bottom: 1px solid #1b3f821c;
+  padding-bottom: 50px;
   .email-body {
     display: flex;
     flex-direction: column;
+    min-width: 350px;
+    width: 50%;
     .email-item {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
       margin-top: 20px;
       height: 50px;
-      gap: 30px;
       p {
         margin-top: 14px;
         font-size: 20px;
@@ -103,6 +107,9 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+       i{
+        font-size: 20px;
+       }
       }
     }
   }
@@ -121,6 +128,39 @@ export default {
     .p-inputswitch-slider {
       background-color: transparent;
       border: 1px solid #1b3f82;
+    }
+  }
+}
+@media (max-width: 992px) {
+  .email-component {
+    .email-body {
+      width: 100%;
+    }
+  }
+}
+@media (max-width: 765px) {
+  .email-component {
+    .email-body {
+      .email-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      height: 50px;
+      p {
+        margin-top: 14px;
+        font-size: 15px;
+      }
+      .notification {
+        width: 30px;
+        height:30px;
+        i{
+        font-size: 15px;
+       }
+      }
+    }
     }
   }
 }

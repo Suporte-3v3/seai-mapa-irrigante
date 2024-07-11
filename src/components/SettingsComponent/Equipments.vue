@@ -1,8 +1,8 @@
 <template>
   <ProgressSpinner v-if="loading" />
   <form @submit.prevent="save" v-else class="form-equipments">
-    <h4>Equipamentos</h4>
-    <div class="equipments">
+    <h5>Equipamentos</h5>
+    <div class="equipments mt-4">
       <div
         class="form-group form-group-text text-left p-float-label mt-4"
       >
@@ -169,11 +169,12 @@ export default {
 <style lang="scss">
 .form-equipments {
   flex-direction: column;
-  height: 150px !important;
+  min-height: 170px !important;
+  border-bottom: 1px solid #1B3F821C;
   .equipments {
     display: flex;
     gap: 12px;
-    height: 100px !important;
+    min-height: 100px !important;
     flex-wrap: wrap;
     .form-group {
       height: 50px;

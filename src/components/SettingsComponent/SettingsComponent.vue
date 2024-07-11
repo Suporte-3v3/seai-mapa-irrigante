@@ -1,5 +1,5 @@
 <template>
-  <div class="container content">
+  <div class="container content title-settings">
     <h4>Configurações</h4>
   </div>
   <div
@@ -11,7 +11,8 @@
   <div class="container mt-4 d-flex flex-column gap-5" v-if="!loading">
     <Email />
     <Equipments />
-    <div class="d-flex flex-column gap-4 " style="margin-top: 100px;">
+
+    <div class="d-flex flex-column gap-4 ">
       <h5>Sair da conta</h5>
       <Button
         class="btn-danger"
@@ -60,8 +61,11 @@ export default {
 .spinner {
   margin-top: 100px;
 }
-.content {
+.title-settings {
   margin-top: 100px;
   color: #1b3f82;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #1B3F821C;
+
 }
 </style>
