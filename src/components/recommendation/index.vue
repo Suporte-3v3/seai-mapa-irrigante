@@ -662,6 +662,8 @@ export default {
         console.log(
           "Sem erros nos campos, Começando cálculo da Lâmina de Irrigação..."
         );
+        this.results = null;
+        this.resultsVisible = false;
         this.calculateRecomendation();
       }
     },
@@ -754,6 +756,8 @@ export default {
       } catch (error) {
         console.error("Erro ao chamar a API:", error);
         console.log("Dados enviados:", data);
+        this.results = null;
+        this.resultsVisible = false;
       } finally {
         this.isLoading = false; // Esconde o spinner
       }
@@ -794,6 +798,11 @@ export default {
       const today = new Date().toISOString().split("T")[0];
       this.maxDate = today;
     },
+
+    CleanResults() {
+      this.results = null;
+    },
+
     ClearFields() {
       this.selectedStation = "";
       this.selectedPluviometer = "";
