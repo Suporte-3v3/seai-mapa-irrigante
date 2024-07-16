@@ -43,7 +43,7 @@
             </div>
           </div>
         </div>
-        <p v-if="errors.selectedStation" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+        <p v-if="errors.selectedStation && toggleSwitchStation" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
       </div>
 
       <div v-if="!isStationDisabled" class="form-group mb-4">
@@ -56,6 +56,7 @@
           placeholder="Digite o Valor da ET0"
           @input="validateMinimum(selectedET0Manual, 'selectedET0Manual')"
         />
+        <p v-if="errors.selectedET0Manual && !toggleSwitchStation" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
       </div>
 
       <!-- Campo do Pluviômetro com toggle -->
@@ -91,7 +92,7 @@
             </div>
           </div>
         </div>
-        <p v-if="errors.selectedPluviometer" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+        <p v-if="errors.selectedPluviometer && toggleSwitchPluviometer" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
       </div>
 
       <div v-if="!isPluviometerDisabled" class="form-group mb-4">
@@ -103,6 +104,7 @@
           type="number"
           placeholder="Digite o Valor da Precipitação"
         />
+        <p v-if="errors.selectedPrecipitationManual && !toggleSwitchPluviometer" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
       </div>
 
         <div class="form-group mb-4">
@@ -617,15 +619,20 @@ export default {
                 this.showErrordp = false;
             }
         },*/
-
     validateAndCalculate() {
       console.log("Validando os dados...");
-      this.errors.selectedStation = !this.selectedStation;
-      this.errors.selectedPluviometer = !this.selectedPluviometer;
-      this.errors.selectedCulture = !this.selectedCulture;
-      this.errors.dateplanting = !this.dateplanting;
-      this.errors.selectedSystemIrrigation = !this.selectedSystemIrrigation;
 
+      if (this.toggleSwitchStation) {
+    this.errors.selectedStation = !this.selectedStation;
+  } else {
+    this.errors.selectedET0Manual = !this.selectedET0Manual;
+  }
+
+  if (this.toggleSwitchPluviometer) {
+    this.errors.selectedPluviometer = !this.selectedPluviometer;
+  } else {
+    this.errors.selectedPrecipitationManual = !this.selectedPrecipitationManual;
+  }
       switch (this.selectedSystemIrrigation) {
         case "Aspersão":
           this.errors.PrecipitationSprinkler =
@@ -824,7 +831,9 @@ export default {
       this.results = null;
       this.resultsVisible = false;
       this.errors.selectedStation = false;
+      this.errors.selectedET0Manual = false;
       this.errors.selectedPluviometer = false;
+      this.errors.selectedPrecipitationManual = false;
       this.errors.selectedCulture = false;
       this.errors.dateplanting = false;
       this.errors.selectedSystemIrrigation = false;
