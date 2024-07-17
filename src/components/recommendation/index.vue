@@ -56,6 +56,7 @@
           placeholder="Digite o Valor da ET0"
           @input="validateMinimum(selectedET0Manual, 'selectedET0Manual')"
         />
+        <p v-if="errors.selectedET0Manual" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
       </div>
 
       <!-- Campo do Pluviômetro com toggle -->
@@ -103,6 +104,7 @@
           type="number"
           placeholder="Digite o Valor da Precipitação"
         />
+        <p v-if="errors.selectedPrecipitationManual" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
       </div>
 
         <div class="form-group mb-4">
@@ -621,7 +623,9 @@ export default {
     validateAndCalculate() {
       console.log("Validando os dados...");
       this.errors.selectedStation = !this.selectedStation;
+      this.errors.selectedET0Manual = !this.selectedET0Manual;
       this.errors.selectedPluviometer = !this.selectedPluviometer;
+      this.errors.selectedPrecipitationManual = !this.selectedPrecipitationManual;
       this.errors.selectedCulture = !this.selectedCulture;
       this.errors.dateplanting = !this.dateplanting;
       this.errors.selectedSystemIrrigation = !this.selectedSystemIrrigation;
@@ -824,7 +828,9 @@ export default {
       this.results = null;
       this.resultsVisible = false;
       this.errors.selectedStation = false;
+      this.errors.selectedET0Manual = false;
       this.errors.selectedPluviometer = false;
+      this.errors.selectedPrecipitationManual = false;
       this.errors.selectedCulture = false;
       this.errors.dateplanting = false;
       this.errors.selectedSystemIrrigation = false;
