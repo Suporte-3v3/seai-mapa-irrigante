@@ -43,7 +43,7 @@
             </div>
           </div>
         </div>
-        <p v-if="errors.selectedStation" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+        <p v-if="errors.selectedStation && toggleSwitchStation" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
       </div>
 
       <div v-if="!isStationDisabled" class="form-group mb-4">
@@ -92,7 +92,7 @@
             </div>
           </div>
         </div>
-        <p v-if="errors.selectedPluviometer" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+        <p v-if="errors.selectedPluviometer && toggleSwitchPluviometer" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
       </div>
 
       <div v-if="!isPluviometerDisabled" class="form-group mb-4">
@@ -619,7 +619,6 @@ export default {
                 this.showErrordp = false;
             }
         },*/
-
     validateAndCalculate() {
       console.log("Validando os dados...");
       this.errors.selectedStation = !this.selectedStation;
@@ -829,7 +828,9 @@ export default {
       this.resultsVisible = false;
       this.errors.selectedStation = false;
       this.errors.selectedET0Manual = false;
+      this.errors.selectedET0Manual = false;
       this.errors.selectedPluviometer = false;
+      this.errors.selectedPrecipitationManual = false;
       this.errors.selectedPrecipitationManual = false;
       this.errors.selectedCulture = false;
       this.errors.dateplanting = false;
