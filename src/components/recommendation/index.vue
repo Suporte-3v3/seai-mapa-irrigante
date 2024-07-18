@@ -589,9 +589,7 @@ export default {
   },
   async created() {
     try {
-      const responseStation = await axios.get(
-        "http://seai.3v3.farm/api/v1/equipments/activated?type=station"
-      );
+      const responseStation = await axios.get("http://seai.3v3.farm/api/v1/equipments/activated?type=station");
       this.stations = responseStation.data.data;
 
       const responsePluviometer = await axios.get(
@@ -619,153 +617,152 @@ export default {
                 this.showErrordp = false;
             }
         },*/
-    validateAndCalculate() {
-      console.log("Validando os dados...");
-      this.errors.selectedStation = !this.selectedStation;
-      this.errors.selectedET0Manual = !this.selectedET0Manual;
-      this.errors.selectedPluviometer = !this.selectedPluviometer;
-      this.errors.selectedPrecipitationManual = !this.selectedPrecipitationManual;
-      this.errors.selectedCulture = !this.selectedCulture;
-      this.errors.dateplanting = !this.dateplanting;
-      this.errors.selectedSystemIrrigation = !this.selectedSystemIrrigation;
+        validateAndCalculate() {
+  console.log("Validando os dados...");
+  this.errors.selectedStation = !this.selectedStation && this.isStationDisabled;
+  this.errors.selectedET0Manual = !this.selectedET0Manual && !this.isStationDisabled;
+  this.errors.selectedPluviometer = !this.selectedPluviometer && this.isPluviometerDisabled;
+  this.errors.selectedPrecipitationManual = !this.selectedPrecipitationManual && !this.isPluviometerDisabled;
+  this.errors.selectedCulture = !this.selectedCulture;
+  this.errors.dateplanting = !this.dateplanting;
+  this.errors.selectedSystemIrrigation = !this.selectedSystemIrrigation;
 
-      switch (this.selectedSystemIrrigation) {
-        case "Aspersão":
-          this.errors.PrecipitationSprinkler =
-            !this.PrecipitationSprinkler || this.PrecipitationSprinkler === 0;
-          break;
-        case "Pivô Central":
-          this.errors.PrecipitationAround =
-            !this.PrecipitationAround || this.PrecipitationAround === 0;
-          break;
-        case "Sulcos":
-          this.errors.FurrowLength =
-            !this.FurrowLength || this.FurrowLength === 0;
-          this.errors.GrooveSpacing =
-            !this.GrooveSpacing || this.GrooveSpacing === 0;
-          this.errors.FlowGrooves = !this.FlowGrooves || this.FlowGrooves === 0;
-          break;
-        case "Gotejamento":
-        case "Microaspersão":
-          this.errors.FlowSystem = !this.FlowSystem || this.FlowSystem === 0;
-          this.errors.PlantedArea = !this.PlantedArea || this.PlantedArea === 0;
-          this.errors.EffectiveArea =
-            !this.EffectiveArea || this.EffectiveArea === 0;
-          this.errors.NumberPlants =
-            !this.NumberPlants || this.NumberPlants === 0;
-          break;
-        default:
-          console.log("Sistema de irrigação desconhecido.");
-          break;
-      }
+  switch (this.selectedSystemIrrigation) {
+    case "Aspersão":
+      this.errors.PrecipitationSprinkler =
+        !this.PrecipitationSprinkler || this.PrecipitationSprinkler === 0;
+      break;
+    case "Pivô Central":
+      this.errors.PrecipitationAround =
+        !this.PrecipitationAround || this.PrecipitationAround === 0;
+      break;
+    case "Sulcos":
+      this.errors.FurrowLength =
+        !this.FurrowLength || this.FurrowLength === 0;
+      this.errors.GrooveSpacing =
+        !this.GrooveSpacing || this.GrooveSpacing === 0;
+      this.errors.FlowGrooves = !this.FlowGrooves || this.FlowGrooves === 0;
+      break;
+    case "Gotejamento":
+    case "Microaspersão":
+      this.errors.FlowSystem = !this.FlowSystem || this.FlowSystem === 0;
+      this.errors.PlantedArea = !this.PlantedArea || this.PlantedArea === 0;
+      this.errors.EffectiveArea =
+        !this.EffectiveArea || this.EffectiveArea === 0;
+      this.errors.NumberPlants =
+        !this.NumberPlants || this.NumberPlants === 0;
+      break;
+    default:
+      console.log("Sistema de irrigação desconhecido.");
+      break;
+  }
 
-      const hasError = Object.values(this.errors).some((error) => error);
+  const hasError = Object.values(this.errors).some((error) => error);
 
-      if (!hasError) {
-        console.log(
-          "Sem erros nos campos, Começando cálculo da Lâmina de Irrigação..."
-        );
-        this.results = null;
-        this.resultsVisible = false;
-        this.calculateRecomendation();
-      }
-    },
-    async calculateRecomendation() {
-      this.isLoading = true;
-      try {
-        const formattedDate = this.dateplanting
-          ? this.formatDate(this.dateplanting)
-          : "";
+  if (!hasError) {
+    console.log(
+      "Sem erros nos campos, Começando cálculo da Lâmina de Irrigação..."
+    );
+    this.results = null;
+    this.resultsVisible = false;
+    this.calculateRecomendation();
+  }
+},
+async calculateRecomendation() {
+  this.isLoading = true;
+  try {
+    const formattedDate = this.dateplanting
+      ? this.formatDate(this.dateplanting)
+      : "";
 
-        let measurements = {};
+    let measurements = {};
 
-        if (
-          this.isEfficiencyCheckboxChecked &&
-          this.IrrigationEfficiencyFromAPI
-        ) {
-          measurements.Efficiency = parseFloat(
-            this.IrrigationEfficiencyFromAPI
-          );
-        } else if (this.IrrigationEfficiency) {
-          measurements.Efficiency = parseFloat(this.IrrigationEfficiency);
+    if (
+      this.isEfficiencyCheckboxChecked &&
+      this.IrrigationEfficiencyFromAPI
+    ) {
+      measurements.Efficiency = parseFloat(this.IrrigationEfficiencyFromAPI);
+    } else if (this.IrrigationEfficiency) {
+      measurements.Efficiency = parseFloat(this.IrrigationEfficiency);
+    }
+
+    if (this.selectedSystemIrrigation === "Aspersão") {
+      measurements.Precipitation = parseFloat(this.PrecipitationSprinkler);
+    } else if (this.selectedSystemIrrigation === "Pivô Central") {
+      measurements.Precipitation = parseFloat(this.PrecipitationAround);
+    } else if (
+      this.selectedSystemIrrigation === "Microaspersão" ||
+      this.selectedSystemIrrigation === "Gotejamento"
+    ) {
+      measurements.Flow = parseFloat(this.FlowSystem);
+      measurements.Area = parseFloat(this.PlantedArea);
+      measurements.EfectiveArea = parseFloat(this.EffectiveArea);
+      measurements.PlantsQtd = parseFloat(this.NumberPlants);
+    } else if (this.selectedSystemIrrigation === "Sulcos") {
+      measurements.Flow = parseFloat(this.FlowGrooves);
+      measurements.Length = parseFloat(this.FurrowLength);
+      measurements.Spacing = parseFloat(this.GrooveSpacing);
+    }
+
+    const stationData = this.isStationDisabled
+      ? {
+          Id: parseInt(this.selectedStation),
+          Et0: parseFloat(
+            this.stations.find(
+              (station) => station.Id === parseInt(this.selectedStation)
+            ).Et0
+          ),
         }
-
-        if (this.selectedSystemIrrigation === "Aspersão") {
-          measurements.Precipitation = parseFloat(this.PrecipitationSprinkler);
-        } else if (this.selectedSystemIrrigation === "Pivô Central") {
-          measurements.Precipitation = parseFloat(this.PrecipitationAround);
-        } else if (
-          this.selectedSystemIrrigation === "Microaspersão" ||
-          this.selectedSystemIrrigation === "Gotejamento"
-        ) {
-          measurements.Flow = parseFloat(this.FlowSystem);
-          measurements.Area = parseFloat(this.PlantedArea);
-          measurements.EfectiveArea = parseFloat(this.EffectiveArea);
-          measurements.PlantsQtd = parseFloat(this.NumberPlants);
-        } else if (this.selectedSystemIrrigation === "Sulcos") {
-          measurements.Flow = parseFloat(this.FlowGrooves);
-          measurements.Length = parseFloat(this.FurrowLength);
-          measurements.Spacing = parseFloat(this.GrooveSpacing);
-        }
-
-        const data = {
-          Station: this.isStationDisabled
-            ? {
-                Id: parseInt(this.selectedStation),
-                Et0: parseFloat(
-                  this.stations.find(
-                    (station) => station.Id === parseInt(this.selectedStation)
-                  ).Et0
-                ),
-              }
-            : {
-                Id: null,
-                Et0: parseFloat(this.selectedET0Manual),
-              },
-          CropId: parseInt(this.selectedCulture),
-          Pluviometer: this.isPluviometerDisabled
-            ? {
-                Id: parseInt(this.selectedPluviometer),
-                Precipitation: parseFloat(
-                  this.pluviometers.find(
-                    (pluviometer) =>
-                      pluviometer.Id === parseInt(this.selectedPluviometer)
-                  ).Precipitation
-                ),
-              }
-            : {
-                Id: null,
-                Precipitation: parseFloat(this.selectedPrecipitationManual),
-              },
-          PlantingDate: formattedDate,
-          System: {
-            Type: this.selectedSystemIrrigation,
-            Measurements: measurements,
-          },
+      : {
+          Et0: parseFloat(this.selectedET0Manual),
         };
 
-        this.responseBlade = data;
+    const pluviometerData = this.isPluviometerDisabled
+      ? {
+          Id: parseInt(this.selectedPluviometer),
+          Precipitation: parseFloat(
+            this.pluviometers.find(
+              (pluviometer) =>
+                pluviometer.Id === parseInt(this.selectedPluviometer)
+            ).Precipitation
+          ),
+        }
+      : {
+          Precipitation: parseFloat(this.selectedPrecipitationManual),
+        };
 
-        const responseBladeSuggestion = await axios.post(
-          "http://seai.3v3.farm/api/v2/management/blade_suggestion",
-          data
-        );
+    const data = {
+      Station: stationData,
+      CropId: parseInt(this.selectedCulture),
+      Pluviometer: pluviometerData,
+      PlantingDate: formattedDate,
+      System: {
+        Type: this.selectedSystemIrrigation,
+        Measurements: measurements,
+      },
+    };
 
-        console.log("Resposta da API:", responseBladeSuggestion);
-        this.results = responseBladeSuggestion.data;
-        this.resultsVisible = true;
-        console.log("Resultados Atualizados:", this.results);
-        console.log("Resultados Visíveis:", this.resultsVisible);
-      } catch (error) {
-        console.error("Erro ao chamar a API:", error);
-        console.log("Dados enviados:", data);
-        this.results = null;
-        this.resultsVisible = false;
-      } finally {
-        this.isLoading = false; // Esconde o spinner
-      }
-    },
+    this.responseBlade = data;
 
+    const responseBladeSuggestion = await axios.post(
+      "http://seai.3v3.farm/api/v2/management/blade_suggestion",
+      data
+    );
+
+    console.log("Resposta da API:", responseBladeSuggestion);
+    this.results = responseBladeSuggestion.data;
+    this.resultsVisible = true;
+    console.log("Resultados Atualizados:", this.results);
+    console.log("Resultados Visíveis:", this.resultsVisible);
+  } catch (error) {
+    console.error("Erro ao chamar a API:", error);
+    console.log("Dados enviados:", data);
+    this.results = null;
+    this.resultsVisible = false;
+  } finally {
+    this.isLoading = false;
+  }
+},
     validateEfficiency() {
       if (this.IrrigationEfficiency < 1) {
         this.IrrigationEfficiency = 1;
@@ -860,7 +857,6 @@ export default {
 
       this.$nextTick(() => {
         if (this.showAdditionalFields && this.$refs.additionalFields) {
-          // Adiciona um pequeno atraso para garantir que a renderização esteja completa
           setTimeout(() => {
             this.$refs.additionalFields.scrollIntoView({ behavior: "smooth" });
           }, 100);
