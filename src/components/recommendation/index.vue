@@ -202,7 +202,6 @@
       <div v-if="showAdditionalFields" ref="additionalFields">
         <div ref="scrollTarget"></div>
       </div>
-      <!-- Campos adicionais -->
       <div v-if="showAdditionalFields" class="row">
         <div v-if="selectedSystemIrrigation === 'Aspersão'" class="col-md-12">
           <div class="form-group mb-4">
@@ -783,7 +782,6 @@ async calculateRecomendation() {
         }
       }
     },
-    // Função para formatar a data para DD/MM/YYYY
     formatDate(date) {
       if (!date) return "";
       const [year, month, day] = date.split("-");
