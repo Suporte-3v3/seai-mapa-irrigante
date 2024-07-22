@@ -17,6 +17,8 @@ export default {
       userLocation: null,
       stationMarkers: L.layerGroup(),
       pluviometerMarkers: L.layerGroup(),
+      stationInactiveMarkers: L.layerGroup(),
+      pluviometerInactiveMarkers: L.layerGroup(),
       stationIcon: L.icon({
         iconUrl: '/icon-station.png',
         iconSize: [25, 25],
@@ -39,6 +41,8 @@ export default {
       }),
       showStations: true,
       showPluviometers: true,
+      showInactiveStations: true,
+      showInactivePluviometers: true,
       stationPolyline: null,
       pluviometerPolyline: null,
     };
@@ -151,31 +155,45 @@ export default {
   };
 
   if (this.stations && Array.isArray(this.stations)) {
-    this.stations.forEach((station) => {
-      const et0Text = (station.Et0 === null || station.Et0 === undefined) ? 'Sem Dados Coletados' : `${station.Et0} mm`;
-      const icon = (station.Enable === false || station.Et0 === null || station.Et0 === undefined) ? this.stationDisableIcon : this.stationIcon;
-      const popupContent = createPopupContent(station.Name, station.Organ.Name, station.Code, et0Text);
-      const marker = addMarker(station, icon, popupContent);
-      if (marker) this.stationMarkers.addLayer(marker);
-    });
-  } else {
-    console.error('Dados das estações são inválidos');
+        this.stations.forEach((station) => {
+          const et0Text = (station.Et0 === null || station.Et0 === undefined) ? 'Sem Dados Coletados' : `${station.Et0} mm`;
+          const icon = (station.Enable === false || station.Et0 === null || station.Et0 === undefined) ? this.stationDisableIcon : this.stationIcon;
+          const popupContent = createPopupContent(station.Name, station.Organ.Name, station.Code, et0Text);
+          const marker = addMarker(station, icon, popupContent);
+          if (marker) {
+            if (station.Enable === false || station.Et0 === null || station.Et0 === undefined) {
+              this.stationInactiveMarkers.addLayer(marker);
+            } else {
+              this.stationMarkers.addLayer(marker);
+            }
+          }
+        });
+      } else {
+        console.error('Dados das estações são inválidos');
   }
 
   if (this.pluviometers && Array.isArray(this.pluviometers)) {
-    this.pluviometers.forEach((pluviometer) => {
-      const precipitationText = (pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) ? 'Sem Dados Coletados' : `${pluviometer.Precipitation} mm`;
-      const icon = (pluviometer.Enable === false || pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) ? this.pluviometerDisableIcon : this.pluviometerIcon;
-      const popupContent = createPopupContent(pluviometer.Name, pluviometer.Organ.Name, pluviometer.Code, precipitationText);
-      const marker = addMarker(pluviometer, icon, popupContent);
-      if (marker) this.pluviometerMarkers.addLayer(marker);
-    });
-  } else {
-    console.error('Dados dos pluviômetros são inválidos');
+        this.pluviometers.forEach((pluviometer) => {
+          const precipitationText = (pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) ? 'Sem Dados Coletados' : `${pluviometer.Precipitation} mm`;
+          const icon = (pluviometer.Enable === false || pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) ? this.pluviometerDisableIcon : this.pluviometerIcon;
+          const popupContent = createPopupContent(pluviometer.Name, pluviometer.Organ.Name, pluviometer.Code, precipitationText);
+          const marker = addMarker(pluviometer, icon, popupContent);
+          if (marker) {
+            if (pluviometer.Enable === false || pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) {
+              this.pluviometerInactiveMarkers.addLayer(marker);
+            } else {
+              this.pluviometerMarkers.addLayer(marker);
+            }
+          }
+        });
+      } else {
+        console.error('Dados dos pluviômetros são inválidos');
   }
 
-  this.stationMarkers.addTo(this.map);
-  this.pluviometerMarkers.addTo(this.map);
+      this.stationMarkers.addTo(this.map);
+      this.pluviometerMarkers.addTo(this.map);
+      this.stationInactiveMarkers.addTo(this.map);
+      this.pluviometerInactiveMarkers.addTo(this.map);
 },
     addLegend() {
       const legend = L.control({ position: 'topright' });
@@ -194,41 +212,41 @@ export default {
       setTimeout(() => {
         document.getElementById('stationenable-legend').addEventListener('click', this.toggleStations);
         document.getElementById('pluviometerenable-legend').addEventListener('click', this.togglePluviometers);
-      }, 100);
+        document.getElementById('stationdisabled-legend').addEventListener('click', this.toggleInactiveStations);
+        document.getElementById('pluviometerdisabled-legend').addEventListener('click', this.toggleInactivePluviometers);
+      }, 500);
     },
     toggleStations() {
-      const stationLegend = document.getElementById('stationenable-legend');
-      if (this.showStations) {
-        this.map.removeLayer(this.stationMarkers);
-        if (this.stationPolyline) {
-          this.map.removeLayer(this.stationPolyline);
-        }
-        stationLegend.classList.add('legend-disabled');
-      } else {
-        this.map.addLayer(this.stationMarkers);
-        if (this.stationPolyline) {
-          this.map.addLayer(this.stationPolyline);
-        }
-        stationLegend.classList.remove('legend-disabled');
-      }
       this.showStations = !this.showStations;
+      if (this.showStations) {
+        this.map.addLayer(this.stationMarkers);
+      } else {
+        this.map.removeLayer(this.stationMarkers);
+      }
     },
     togglePluviometers() {
-      const pluviometerLegend = document.getElementById('pluviometerenable-legend');
-      if (this.showPluviometers) {
-        this.map.removeLayer(this.pluviometerMarkers);
-        if (this.pluviometerPolyline) {
-          this.map.removeLayer(this.pluviometerPolyline);
-        }
-        pluviometerLegend.classList.add('legend-disabled');
-      } else {
-        this.map.addLayer(this.pluviometerMarkers);
-        if (this.pluviometerPolyline) {
-          this.map.addLayer(this.pluviometerPolyline);
-        }
-        pluviometerLegend.classList.remove('legend-disabled');
-      }
       this.showPluviometers = !this.showPluviometers;
+      if (this.showPluviometers) {
+        this.map.addLayer(this.pluviometerMarkers);
+      } else {
+        this.map.removeLayer(this.pluviometerMarkers);
+      }
+    },
+    toggleInactiveStations() {
+      this.showInactiveStations = !this.showInactiveStations;
+      if (this.showInactiveStations) {
+        this.map.addLayer(this.stationInactiveMarkers);
+      } else {
+        this.map.removeLayer(this.stationInactiveMarkers);
+      }
+    },
+    toggleInactivePluviometers() {
+      this.showInactivePluviometers = !this.showInactivePluviometers;
+      if (this.showInactivePluviometers) {
+        this.map.addLayer(this.pluviometerInactiveMarkers);
+      } else {
+        this.map.removeLayer(this.pluviometerInactiveMarkers);
+      }
     },
     getUserLocation() {
       if (navigator.geolocation) {
