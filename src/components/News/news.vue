@@ -3,26 +3,26 @@
     <div class="d-flex w-100 flex-column content-cards" v-if="loading">
       <ProgressSpinner />
     </div>
-    <span v-if="items">
-      <div
-        class="d-flex justify-content-between w-100 flex-column flex-lg-row"
-        v-if="!loading"
-      >
-        <h4>Notícias</h4>
-        <div>
-          <IconField>
-            <InputText
-              v-model="searchTerm"
-              placeholder="Pesquisar por título"
-              class="w-100"
-              @input="searchItems"
-            />
-            <InputIcon class="pi pi-search"> </InputIcon>
-          </IconField>
-        </div>
+    <div
+      class="d-flex justify-content-between w-100 flex-column flex-lg-row"
+      v-if="!loading"
+    >
+      <h4>Notícias</h4>
+      <div>
+        <IconField>
+          <InputText
+            v-model="searchTerm"
+            placeholder="Pesquisar por título"
+            class="w-100"
+            @input="searchItems"
+          />
+          <InputIcon class="pi pi-search"> </InputIcon>
+        </IconField>
       </div>
-      <h4 class="mt-4" v-if="!loading">Todas as notícias</h4>
+    </div>
 
+    <span v-if="items">
+      <h4 class="mt-4" v-if="!loading">Todas as notícias</h4>
       <div
         class="d-flex w-100 flex-column content-cards scroll-style"
         v-if="!loading"
@@ -47,9 +47,7 @@
         v-if="!loading"
       />
     </span>
-    <div v-else>
-      Nenhuma notícia cadastrada
-    </div>
+    <div v-else>Nenhuma notícia encontrada</div>
   </div>
 </template>
 <script>
@@ -105,6 +103,7 @@ export default {
         });
     },
     handlePageChange(page) {
+      console.log(page);
       this.params.pageNumber = page;
       this.getNews();
     },

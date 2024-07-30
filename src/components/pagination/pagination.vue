@@ -47,7 +47,7 @@ export default {
     },
 
     handlePageChange(page) {
-      emit("onHandlePageChange", page.page + 1);
+      this.$emit("onHandlePageChange", page.page + 1);
     },
   },
 };
