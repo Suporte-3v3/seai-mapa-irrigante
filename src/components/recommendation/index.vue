@@ -508,6 +508,8 @@ import axios from "axios";
 import Resultados from "./result.vue";
 import SaveModal from "../Slide/SaveModal.vue/SaveModal.vue";
 import { Generics } from "../../utils/generics.utils";
+import { API_BASE_URL } from '../../config';
+import { API_BASE_URL2 } from '../../config';
 
 export default {
   name: "RecomendationComponent",
@@ -588,16 +590,19 @@ export default {
   },
   async created() {
     try {
-      const responseStation = await axios.get("http://seai.3v3.farm/api/v1/equipments/activated?type=station");
+      const baseUrl = API_BASE_URL;
+      const baseUrl2 = API_BASE_URL2;
+
+      const responseStation = await axios.get(`${baseUrl}/equipments/activated?type=station`);
       this.stations = responseStation.data.data;
 
       const responsePluviometer = await axios.get(
-        "http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer"
+        `${baseUrl}/equipments/activated?type=pluviometer`
       );
       this.pluviometers = responsePluviometer.data.data;
 
       const responseCrop = await axios.get(
-        "http://seai.3v3.farm/api/v2/management/crops"
+        `${baseUrl2}/management/crops`
       );
       this.crops = responseCrop.data.data;
     } catch (error) {
@@ -670,6 +675,7 @@ export default {
 async calculateRecomendation() {
   this.isLoading = true;
   try {
+    const baseUrl2 = API_BASE_URL2;
     const formattedDate = this.dateplanting
       ? this.formatDate(this.dateplanting)
       : "";
@@ -744,7 +750,7 @@ async calculateRecomendation() {
     this.responseBlade = data;
 
     const responseBladeSuggestion = await axios.post(
-      "http://seai.3v3.farm/api/v2/management/blade_suggestion",
+      `${baseUrl2}/management/blade_suggestion`,
       data
     );
 

@@ -6,6 +6,7 @@
 import L from "leaflet";
 import axios from "axios";
 import { data as ceara_data } from "@/assets/leaflet/cearaGeojson.js";
+import { API_BASE_URL } from '../../config';
 
 export default {
   name: "MapView",
@@ -49,11 +50,13 @@ export default {
   },
   async created() {
     try {
-      const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
+      const baseUrl = API_BASE_URL;
+
+      const responseStation = await axios.get(`${baseUrl}/equipments/activated?type=station`);
       this.stations = responseStation.data.data || [];
       console.log('Dados das Estações:', this.stations);
 
-      const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');
+      const responsePluviometer = await axios.get(`${baseUrl}/equipments/activated?type=pluviometer`);
       this.pluviometers = responsePluviometer.data ? responsePluviometer.data.data : [];
       console.log('Dados dos Pluviômetros:', this.pluviometers);
 
