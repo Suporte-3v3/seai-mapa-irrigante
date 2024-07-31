@@ -6,6 +6,7 @@
 import L from "leaflet";
 import axios from "axios";
 import { data as ceara_data } from "@/assets/leaflet/cearaGeojson.js";
+import { API_BASE_URL } from '../../config';
 
 export default {
   name: "MapView",
@@ -49,11 +50,13 @@ export default {
   },
   async created() {
     try {
-      const responseStation = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=station');
+      const baseUrl = API_BASE_URL;
+
+      const responseStation = await axios.get(`${baseUrl}/equipments/activated?type=station`);
       this.stations = responseStation.data.data || [];
       console.log('Dados das Estações:', this.stations);
 
-      const responsePluviometer = await axios.get('http://seai.3v3.farm/api/v1/equipments/activated?type=pluviometer');
+      const responsePluviometer = await axios.get(`${baseUrl}/equipments/activated?type=pluviometer`);
       this.pluviometers = responsePluviometer.data ? responsePluviometer.data.data : [];
       console.log('Dados dos Pluviômetros:', this.pluviometers);
 
@@ -216,38 +219,65 @@ export default {
         document.getElementById('pluviometerdisabled-legend').addEventListener('click', this.toggleInactivePluviometers);
       }, 500);
     },
-    toggleStations() {
-      this.showStations = !this.showStations;
-      if (this.showStations) {
-        this.map.addLayer(this.stationMarkers);
-      } else {
-        this.map.removeLayer(this.stationMarkers);
+    updateLegendOpacity() {
+    const stationLegend = document.getElementById('stationenable-legend');
+    const pluviometerLegend = document.getElementById('pluviometerenable-legend');
+    const stationInactiveLegend = document.getElementById('stationdisabled-legend');
+    const pluviometerInactiveLegend = document.getElementById('pluviometerdisabled-legend');
+
+    stationLegend.style.opacity = this.showStations ? '1' : '0.5';
+    pluviometerLegend.style.opacity = this.showPluviometers ? '1' : '0.5';
+    stationInactiveLegend.style.opacity = this.showInactiveStations ? '1' : '0.5';
+    pluviometerInactiveLegend.style.opacity = this.showInactivePluviometers ? '1' : '0.5';
+  },
+  toggleStations() {
+    this.showStations = !this.showStations;
+    if (this.showStations) {
+      this.map.addLayer(this.stationMarkers);
+      if (this.stationPolyline) {
+        this.map.addLayer(this.stationPolyline);
       }
-    },
-    togglePluviometers() {
-      this.showPluviometers = !this.showPluviometers;
-      if (this.showPluviometers) {
-        this.map.addLayer(this.pluviometerMarkers);
-      } else {
-        this.map.removeLayer(this.pluviometerMarkers);
+    } else {
+      this.map.removeLayer(this.stationMarkers);
+      if (this.stationPolyline) {
+        this.map.removeLayer(this.stationPolyline);
       }
-    },
-    toggleInactiveStations() {
-      this.showInactiveStations = !this.showInactiveStations;
-      if (this.showInactiveStations) {
-        this.map.addLayer(this.stationInactiveMarkers);
-      } else {
-        this.map.removeLayer(this.stationInactiveMarkers);
+    }
+    this.updateLegendOpacity();
+  },
+  togglePluviometers() {
+    this.showPluviometers = !this.showPluviometers;
+    if (this.showPluviometers) {
+      this.map.addLayer(this.pluviometerMarkers);
+      if (this.pluviometerPolyline) {
+        this.map.addLayer(this.pluviometerPolyline);
       }
-    },
-    toggleInactivePluviometers() {
-      this.showInactivePluviometers = !this.showInactivePluviometers;
-      if (this.showInactivePluviometers) {
-        this.map.addLayer(this.pluviometerInactiveMarkers);
-      } else {
-        this.map.removeLayer(this.pluviometerInactiveMarkers);
+    } else {
+      this.map.removeLayer(this.pluviometerMarkers);
+      if (this.pluviometerPolyline) {
+        this.map.removeLayer(this.pluviometerPolyline);
       }
-    },
+    }
+    this.updateLegendOpacity();
+  },
+  toggleInactiveStations() {
+    this.showInactiveStations = !this.showInactiveStations;
+    if (this.showInactiveStations) {
+      this.map.addLayer(this.stationInactiveMarkers);
+    } else {
+      this.map.removeLayer(this.stationInactiveMarkers);
+    }
+    this.updateLegendOpacity();
+  },
+  toggleInactivePluviometers() {
+    this.showInactivePluviometers = !this.showInactivePluviometers;
+    if (this.showInactivePluviometers) {
+      this.map.addLayer(this.pluviometerInactiveMarkers);
+    } else {
+      this.map.removeLayer(this.pluviometerInactiveMarkers);
+    }
+    this.updateLegendOpacity();
+  },
     getUserLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
