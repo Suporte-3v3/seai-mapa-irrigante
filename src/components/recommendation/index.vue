@@ -508,8 +508,8 @@ import axios from "axios";
 import Resultados from "./result.vue";
 import SaveModal from "../Slide/SaveModal.vue/SaveModal.vue";
 import { Generics } from "../../utils/generics.utils";
-import { API_BASE_URL } from '../../config';
-import { API_BASE_URL2 } from '../../config';
+import { API_BASE_URL } from '../../services/config';
+import { API_BASE_URL2 } from '../../services/config';
 
 export default {
   name: "RecomendationComponent",

@@ -6,7 +6,7 @@
 import L from "leaflet";
 import axios from "axios";
 import { data as ceara_data } from "@/assets/leaflet/cearaGeojson.js";
-import { API_BASE_URL } from '../../config';
+import { API_BASE_URL } from '../../services/config';
 
 export default {
   name: "MapView",
