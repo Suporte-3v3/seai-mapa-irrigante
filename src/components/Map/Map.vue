@@ -7,6 +7,7 @@ import L from "leaflet";
 import axios from "axios";
 import { data as ceara_data } from "@/assets/leaflet/cearaGeojson.js";
 import { API_BASE_URL } from '../../services/config';
+import { toast } from "vue3-toastify";
 
 export default {
   name: "MapView",
@@ -62,6 +63,7 @@ export default {
 
       this.addMarkers();
     } catch (error) {
+      toast.error('Erro ao buscar dados de Estações e Pluviômetros');
       console.error('Erro ao buscar dados da API:', error);
     }
   },

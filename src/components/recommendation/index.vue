@@ -508,8 +508,9 @@ import axios from "axios";
 import Resultados from "./result.vue";
 import SaveModal from "../Slide/SaveModal.vue/SaveModal.vue";
 import { Generics } from "../../utils/generics.utils";
-import { API_BASE_URL } from '../../services/config';
-import { API_BASE_URL2 } from '../../services/config';
+import { API_BASE_URL } from '../../services/config.js';
+import { API_BASE_URL2 } from '../../services/config.js';
+import { toast } from "vue3-toastify";
 
 export default {
   name: "RecomendationComponent",
@@ -590,7 +591,7 @@ export default {
   },
   async created() {
     try {
-      const baseUrl = API_BASE_URL;
+     const baseUrl = API_BASE_URL; 
       const baseUrl2 = API_BASE_URL2;
 
       const responseStation = await axios.get(`${baseUrl}/equipments/activated?type=station`);
@@ -606,6 +607,7 @@ export default {
       );
       this.crops = responseCrop.data.data;
     } catch (error) {
+      toast.error('Erro ao buscar dados de Estações, Pluviômetros e Culturas');
       console.error(error);
     }
   },
@@ -657,6 +659,7 @@ export default {
         !this.NumberPlants || this.NumberPlants === 0;
       break;
     default:
+      toast.warning('Sistema de Irrigação não definido');
       console.log("Sistema de irrigação desconhecido.");
       break;
   }
@@ -760,6 +763,10 @@ async calculateRecomendation() {
     console.log("Resultados Atualizados:", this.results);
     console.log("Resultados Visíveis:", this.resultsVisible);
   } catch (error) {
+    const errorMessage = error.response && error.response.data && error.response.data.error 
+      ? error.response.data.error 
+      : 'Erro ao realizar cálculo de lâmina';
+    toast.error(errorMessage);
     console.error("Erro ao chamar a API:", error);
     console.log("Dados enviados:", data);
     this.results = null;

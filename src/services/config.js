@@ -1,8 +1,8 @@
 import axios from "axios";
 import { toast } from "vue3-toastify";
 
-export const API_BASE_URL = "http://seai.3v3.farm/v1";
-export const API_BASE_URL2 = "http://seai.3v3.farm/v2";
+export const API_BASE_URL = "http://seai.3v3.farm/api/v1";
+export const API_BASE_URL2 = "http://seai.3v3.farm/api/v2";
 
 const extractBaseUrl = () => {
   // const urlObj = new URL(window.location.href);
