@@ -590,27 +590,34 @@ export default {
     }
   },
   async created() {
-    try {
-     const baseUrl = API_BASE_URL; 
-      const baseUrl2 = API_BASE_URL2;
+  const baseUrl = API_BASE_URL; 
+  const baseUrl2 = API_BASE_URL2;
 
-      const responseStation = await axios.get(`${baseUrl}/equipments/activated?type=station`);
-      this.stations = responseStation.data.data;
+  try {
+    const responseStation = await axios.get(`${baseUrl}/equipments/activated?type=station`);
+    this.stations = responseStation.data.data;
+  } catch (error) {
+    toast.error('Erro ao buscar dados de Estações');
+    console.error(error);
+  }
 
-      const responsePluviometer = await axios.get(
-        `${baseUrl}/equipments/activated?type=pluviometer`
-      );
-      this.pluviometers = responsePluviometer.data.data;
+  try {
+    const responsePluviometer = await axios.get(`${baseUrl}/equipments/activated?type=pluviometer`);
+    this.pluviometers = responsePluviometer.data.data;
+  } catch (error) {
+    toast.error('Erro ao buscar dados de Pluviômetros');
+    console.error(error);
+  }
 
-      const responseCrop = await axios.get(
-        `${baseUrl2}/management/crops`
-      );
-      this.crops = responseCrop.data.data;
-    } catch (error) {
-      toast.error('Erro ao buscar dados de Estações, Pluviômetros e Culturas');
-      console.error(error);
-    }
-  },
+  try {
+    const responseCrop = await axios.get(`${baseUrl2}/management/crops`);
+    this.crops = responseCrop.data.data;
+  } catch (error) {
+    toast.error('Erro ao buscar dados de Culturas');
+    console.error(error);
+  }
+},
+
   mounted() {
     this.setMaxDate();
   },
@@ -838,7 +845,6 @@ async calculateRecomendation() {
       this.errors.selectedET0Manual = false;
       this.errors.selectedET0Manual = false;
       this.errors.selectedPluviometer = false;
-      this.errors.selectedPrecipitationManual = false;
       this.errors.selectedPrecipitationManual = false;
       this.errors.selectedCulture = false;
       this.errors.dateplanting = false;

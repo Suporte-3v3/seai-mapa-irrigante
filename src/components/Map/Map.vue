@@ -63,7 +63,7 @@ export default {
 
       this.addMarkers();
     } catch (error) {
-      toast.error('Erro ao buscar dados de Estações e Pluviômetros');
+      toast.error('Erro ao mostrar dados de Estações e Pluviômetros');
       console.error('Erro ao buscar dados da API:', error);
     }
   },
