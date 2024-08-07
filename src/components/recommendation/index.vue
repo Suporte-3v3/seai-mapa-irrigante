@@ -103,6 +103,7 @@
           class="form-control"
           type="number"
           placeholder="Digite o Valor da Precipitação"
+          @input="validateMinimum(selectedPrecipitationManual, 'selectedPrecipitationManual')"
         />
         <p v-if="errors.selectedPrecipitationManual" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
       </div>
