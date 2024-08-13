@@ -12,7 +12,7 @@
     <Email />
     <Equipments />
 
-    <div class="d-flex flex-column gap-4 ">
+    <!-- <div class="d-flex flex-column gap-4 ">
       <h5>Sair da conta</h5>
       <Button
         class="btn-danger"
@@ -21,7 +21,7 @@
         label="Sair"
         @click="logout()"
       ></Button>
-    </div>
+    </div> -->
   </div>
 </template>
 

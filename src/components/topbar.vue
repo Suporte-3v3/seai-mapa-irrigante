@@ -148,6 +148,7 @@ export default {
     logout() {
       localStorage.removeItem("tkn");
       location.href = "#/login";
+      this.navLinks.push({ title: "Login", link: "/login", active: false })
     },
     toggleLoginMenu() {
       this.loginMenu = !this.loginMenu;
