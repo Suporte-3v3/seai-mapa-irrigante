@@ -37,15 +37,7 @@ httpClient.interceptors.response.use(
     return response;
   },
   function (error) {
-    if (error.response.status == 401) {
-      toast.error("Sem permissão de acesso para este recurso");
-    } else if (error.response.status == 404) {
-      toast.error("Recurso não encontrado");
-    }
-    else if (error.response.status == 500) {
-      toast.error("Erro interno");
-    }
-
+    toast.error(error.response.data.error);
     return Promise.reject(error);
   }
 );

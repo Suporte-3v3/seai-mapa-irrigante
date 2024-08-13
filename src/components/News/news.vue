@@ -41,7 +41,7 @@
         </div>
       </div>
       <Pagination
-        :rows="numberResultsFound"
+        :rows="params.limit"
         :totalRecords="items?.TotalItems || 0"
         @onHandlePageChange="handlePageChange"
         v-if="!loading"

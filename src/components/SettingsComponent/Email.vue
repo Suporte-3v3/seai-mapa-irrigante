@@ -5,7 +5,7 @@
     <div class="email-body">
       <div class="email-item w-100">
         <div class="notification">
-          <i class="pi pi-bell" ></i>
+          <i class="pi pi-bell"></i>
         </div>
         <div class="text w-75" style="width: 400px">
           <p>Receber recomendações de lâmina por e-mail</p>
@@ -18,7 +18,7 @@
       </div>
       <div class="email-item">
         <div class="notification">
-          <i class="pi pi-bell" ></i>
+          <i class="pi pi-bell"></i>
         </div>
         <div class="text w-75">
           <p>Receber notícias por e-mail</p>
@@ -66,6 +66,9 @@ export default {
         .getNotifications()
         .then((response) => {
           this.notification = response.data;
+          if (!this.notification0) {
+            this.setDefaultNotification();
+          }
         })
         .finally(() => (this.loading = false));
     },
@@ -73,6 +76,20 @@ export default {
       this.service.updateNotifications(data.ServiceId, data).then(() => {
         toast.success("Configurações salvas com sucesso!");
       });
+    },
+    setDefaultNotification() {
+      this.notification = [
+        {
+          ServiceId: 1,
+          Service: "newsletter",
+          Enabled: false,
+        },
+        {
+          ServiceId: 2,
+          Service: "irrigation",
+          Enabled: false,
+        },
+      ];
     },
   },
 };
@@ -107,9 +124,9 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-       i{
-        font-size: 20px;
-       }
+        i {
+          font-size: 20px;
+        }
       }
     }
   }
@@ -142,25 +159,25 @@ export default {
   .email-component {
     .email-body {
       .email-item {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      margin-top: 20px;
-      height: 50px;
-      p {
-        margin-top: 14px;
-        font-size: 15px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        height: 50px;
+        p {
+          margin-top: 14px;
+          font-size: 15px;
+        }
+        .notification {
+          width: 30px;
+          height: 30px;
+          i {
+            font-size: 15px;
+          }
+        }
       }
-      .notification {
-        width: 30px;
-        height:30px;
-        i{
-        font-size: 15px;
-       }
-      }
-    }
     }
   }
 }

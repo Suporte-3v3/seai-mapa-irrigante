@@ -2,7 +2,11 @@
   <div
     class="w-100 d-flex justify-content-center align-items-center flex-column"
   >
-    <form @submit.prevent="register" class="w-50 d-flex flex-column">
+    <form
+      @submit.prevent="register"
+      class="w-50 d-flex flex-column"
+      v-if="!success"
+    >
       <div class="form-group form-group-text text-left p-float-label w-full">
         <InputText id="name" v-model="profile.name" class="w-full" required />
         <label for="cpf" class="font-weight-bold">Nome completo*</label>
@@ -85,18 +89,25 @@
         >
       </div>
       <div class="form-group form-group-text text-left mt-4 w-100">
-        <Button label="Cadastrar" type="submit" class="w-100 btn-register" />
+        <Button
+          :disabled="btnLoading"
+          label="Cadastrar"
+          type="submit"
+          class="w-100 btn-register"
+        />
       </div>
     </form>
+    <ConfirmRegister v-if="success" />
   </div>
 </template>
 <script>
 import { UserRest } from "@/services/user.service";
 import { toast } from "vue3-toastify";
+import ConfirmRegister from "./ConfirmRegister.vue";
 
 export default {
   name: "Register",
-
+  components: { ConfirmRegister },
   data() {
     return {
       profile: {
@@ -110,22 +121,27 @@ export default {
       requiredField: "Campo obrigatório",
       submitted: false,
       service: new UserRest(),
+      success: false,
+      btnLoading: false,
     };
   },
   methods: {
     register() {
       this.submitted = true;
+      this.btnLoading = true;
       if (this.isValid()) {
-        console.log("Profile data:", this.profile);
-        this.service.create(this.profile).then((res) => {
-          toast.success("Conta criada com sucesso!");
-        });
+        this.service
+          .create(this.profile)
+          .then((res) => {
+            toast.success("Conta criada com sucesso!");
+            this.success = true;
+          })
+          .finally(() => {
+            this.btnLoading = false;
+          });
       }
     },
 
-    teste() {
-      toast.success("Conta criada com sucesso!");
-    },
     isValid() {
       return (
         this.profile.name &&
