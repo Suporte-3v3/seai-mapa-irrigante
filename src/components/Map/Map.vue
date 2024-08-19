@@ -84,6 +84,7 @@ export default {
         scrollWheelZoom: true,
         attributionControl: false,
         zoomControl: false,
+        minZoom: 6,
       });
 
       L.tileLayer(
