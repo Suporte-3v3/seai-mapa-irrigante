@@ -518,16 +518,18 @@ import { Generics } from "../../utils/generics.utils";
 import { API_BASE_URL } from '../../services/config.js';
 import { API_BASE_URL2 } from '../../services/config.js';
 import { toast } from "vue3-toastify";
+import MapView from '../Map/Map.vue';
 
 export default {
   name: "RecomendationComponent",
   components: {
     Resultados,
     SaveModal,
+    MapView,
   },
   data() {
     return {
-      selectedStation: "",
+      selectedStation: null,
       isLoading: false,
       stations: [],
       pluviometers: [],
@@ -637,6 +639,10 @@ export default {
                 this.showErrordp = false;
             }
         },*/
+
+        handleStationSelected(station) {
+      this.selectedStation = station.Id; // Atualiza o v-model com a estação selecionada
+    },
         validateAndCalculate() {
   console.log("Validando os dados...");
   this.errors.selectedStation = !this.selectedStation && this.isStationDisabled;

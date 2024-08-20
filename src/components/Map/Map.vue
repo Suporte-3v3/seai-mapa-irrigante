@@ -144,17 +144,22 @@ export default {
     },
 
     addMarkers() {
-  const addMarker = (item, icon, popupContent) => {
-    const coordinates = item.Location.Coordinates;
-    if (coordinates && coordinates.length === 2) {
-      const marker = L.marker([coordinates[0], coordinates[1]], { icon });
-      marker.bindPopup(popupContent);
-      return marker;
-    } else {
-      console.error('Coordenadas inválidas:', item);
-      return null;
-    }
-  };
+    const addMarker = (item, icon, popupContent) => {
+      const coordinates = item.Location.Coordinates;
+      if (coordinates && coordinates.length === 2) {
+        const marker = L.marker([coordinates[0], coordinates[1]], { icon });
+        marker.bindPopup(popupContent);
+        
+        marker.on('click', () => {
+          this.$emit('station-selected', item);
+        });
+
+        return marker;
+      } else {
+        console.error('Coordenadas inválidas:', item);
+        return null;
+      }
+    };
 
   const createPopupContent = (name, organName, code, dataText) => {
     return `<b>Nome:</b> ${name}<br><b>Orgão:</b> ${organName} [${code}]<br><b>Dados:</b> ${dataText}`;
