@@ -1,49 +1,56 @@
 <template>
 <div class="container">
-  <div
-    class="container d-flex justify-content-end mb-3"
-    v-if="generics.verifyToken()"
-  >
-    <router-link to="/laminas" style="color: #1b3f82">
-      Lâminas cadastradas
-    </router-link>
-  </div>
-  <div class="row mt-3">
-  <div class="col-md-12">
-    <!-- Campo da Estação com toggle -->
-    <div class="form-group mb-4">
-      <label for="option1" class="tab-label">Estação</label>
-      <div class="input-group">
-        <select
-          id="option1"
-          v-model="selectedStation"
-          class="form-control"
-          :disabled="!isStationDisabled"
-        >
-          <option value="">Selecione a Estação</option>
-          <option
-            v-for="equipment in filteredStations"
-            :key="equipment.Id"
-            :value="equipment.Id"
-          >
-            ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Et0: {{ equipment.Et0 }}]
-          </option>
-          </select>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <input
-                id="toggleSwitchStation"
-                v-model="toggleSwitchStation"
-                class="form-check-input2"
-                type="checkbox"
-              />
-              <label class="form-check-label" for="toggleSwitchStation">
-                Dados Automáticos
-              </label>
+    <div
+      class="container d-flex justify-content-end mb-3"
+      v-if="generics.verifyToken()"
+    >
+      <router-link to="/laminas" style="color: #1b3f82">
+        Lâminas cadastradas
+      </router-link>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-12">
+        <div class="mb-4">
+          <h5 style="color: #1b3f82; text-align: left;">Simulação de Lâmina</h5>
+        </div>
+        <div class="form-group mb-4">
+          <label for="option1" class="tab-label">Estação</label>
+          <div class="input-group">
+            <select
+              id="option1"
+              v-model="selectedStation"
+              class="form-control"
+              :disabled="!isStationDisabled"
+            >
+              <option value="">Selecione a Estação</option>
+              <option
+                v-for="equipment in filteredStations"
+                :key="equipment.Id"
+                :value="equipment.Id"
+              >
+                ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Et0: {{ equipment.Et0 }}]
+              </option>
+            </select>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <input
+                  id="toggleSwitchStation"
+                  v-model="toggleSwitchStation"
+                  class="form-check-input2"
+                  type="checkbox"
+                />
+                <label class="form-check-label" for="toggleSwitchStation">
+                  Dados Automáticos
+                </label>
+              </div>
             </div>
           </div>
-        </div>
-        <p v-if="errors.selectedStation && toggleSwitchStation" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+          <p
+            v-if="errors.selectedStation && toggleSwitchStation"
+            style="color: red; font-size: 12px;"
+          >
+            * Campo Obrigatório
+          </p>
       </div>
 
       <div v-if="!isStationDisabled" class="form-group mb-4">
@@ -56,10 +63,9 @@
           placeholder="Digite o Valor da ET0"
           @input="validateMinimum(selectedET0Manual, 'selectedET0Manual')"
         />
-        <p v-if="errors.selectedET0Manual" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+        <p v-if="errors.selectedET0Manual" style="color: red; font-size: 12px;">* Digite Valores acima de 0</p>
       </div>
 
-      <!-- Campo do Pluviômetro com toggle -->
       <div class="form-group mb-4">
         <label for="option2" class="tab-label">Pluviômetro</label>
         <div class="input-group">
@@ -105,7 +111,7 @@
           placeholder="Digite o Valor da Precipitação"
           @input="validateMinimum(selectedPrecipitationManual, 'selectedPrecipitationManual')"
         />
-        <p v-if="errors.selectedPrecipitationManual" style="color: red; font-size: 12px;">* Valor Inserido Inválido</p>
+        <p v-if="errors.selectedPrecipitationManual" style="color: red; font-size: 12px;">* Digite Valores acima de 0</p>
       </div>
 
         <div class="form-group mb-4">
@@ -225,7 +231,7 @@
               v-if="errors.PrecipitationSprinkler"
               style="color: red; font-size: 12px"
             >
-              * Valor Inserido Inválido
+              * Digite Valores acima de 0
             </p>
           </div>
         </div>
@@ -245,7 +251,7 @@
               @input="validateMinimum(FlowSystem, 'FlowSystem')"
             />
             <p v-if="errors.FlowSystem" style="color: red; font-size: 12px">
-              * Valor Inserido Inválido
+              * Digite Valores acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -260,7 +266,7 @@
               @input="validateMinimum(PlantedArea, 'PlantedArea')"
             />
             <p v-if="errors.PlantedArea" style="color: red; font-size: 12px">
-              * Valor Inserido Inválido
+              * Digite Valores acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -275,7 +281,7 @@
               @input="validateMinimum(EffectiveArea, 'EffectiveArea')"
             />
             <p v-if="errors.EffectiveArea" style="color: red; font-size: 12px">
-              * Valor Inserido Inválido
+              * Digite Valores acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -290,7 +296,7 @@
               @input="validateMinimum(NumberPlants, 'NumberPlants')"
             />
             <p v-if="errors.NumberPlants" style="color: red; font-size: 12px">
-              * Valor Inserido Inválido
+              * Digite Valores acima de 0
             </p>
           </div>
         </div>
@@ -310,7 +316,7 @@
               @input="validateMinimum(FlowSystem, 'FlowSystem')"
             />
             <p v-if="errors.FlowSystem" style="color: red; font-size: 12px">
-              * Valor Inserido Inválido
+              * Digite Valores acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -325,7 +331,7 @@
               @input="validateMinimum(PlantedArea, 'PlantedArea')"
             />
             <p v-if="errors.PlantedArea" style="color: red; font-size: 12px">
-              * Valor Inserido Inválido
+              * Digite Valores acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -340,7 +346,7 @@
               @input="validateMinimum(EffectiveArea, 'EffectiveArea')"
             />
             <p v-if="errors.EffectiveArea" style="color: red; font-size: 12px">
-              * Valor Inserido Inválido
+              * Digite Valores acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -355,7 +361,7 @@
               @input="validateMinimum(NumberPlants, 'NumberPlants')"
             />
             <p v-if="errors.NumberPlants" style="color: red; font-size: 12px">
-              * Valor Inserido Inválido
+              * Digite Valores acima de 0
             </p>
           </div>
         </div>
@@ -380,7 +386,7 @@
               v-if="errors.PrecipitationAround"
               style="color: red; font-size: 12px"
             >
-              * Valor Inserido Inválido
+              * Digite Valores acima de 0
             </p>
           </div>
         </div>
@@ -397,7 +403,7 @@
               @input="validateMinimum(FurrowLength, 'FurrowLength')"
             />
             <p v-if="errors.FurrowLength" style="color: red; font-size: 12px">
-              * Valor Inserido Inválido
+              * Digite Valores acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -412,7 +418,7 @@
               @input="validateMinimum(GrooveSpacing, 'GrooveSpacing')"
             />
             <p v-if="errors.GrooveSpacing" style="color: red; font-size: 12px">
-              * Valor Inserido Inválido
+              * Digite Valores acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -427,7 +433,7 @@
               @input="validateMinimum(FlowGrooves, 'FlowGrooves')"
             />
             <p v-if="errors.FlowGrooves" style="color: red; font-size: 12px">
-              * Valor Inserido Inválido
+              * Digite Valores acima de 0
             </p>
           </div>
         </div>
