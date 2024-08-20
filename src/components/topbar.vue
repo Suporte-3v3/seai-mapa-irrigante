@@ -8,6 +8,28 @@
       </router-link>
 
       <div class="nav-buttons">
+        <Button
+          label="Lâminas"
+          :class="[isLaminaRoute() ? 'btn-white' : 'btn-simple']"
+          @click.stop="toggleLaminaMenu"
+        >
+        </Button>
+        <div class="lamina-menu" ref="laminaMenu" v-if="laminaMenu">
+          <router-link to="/" @click.native="toggleLaminaMenu">
+            <img src="@/assets/icon.svg" alt="icon">
+
+            <Button label="Simular Lâmina" class="btn-simple"> </Button>
+          </router-link>
+          <router-link to="/laminas" @click.native="toggleLaminaMenu">
+            <Button
+              icon="pi pi-bookmark-fill"
+              label="Lâminas cadastradas"
+              class="btn-simple"
+            >
+
+            </Button>
+          </router-link>
+        </div>
         <router-link
           :to="navLink.link"
           v-for="(navLink, i) in navLinks"
@@ -56,6 +78,8 @@
           >
           </Button>
         </div>
+
+        <!-- Novo Menu Lâmina -->
       </div>
       <div class="hamburger-menu" @click="toggleMenu">
         <InputIcon class="pi pi-bars"> </InputIcon>
@@ -106,21 +130,16 @@ export default {
   data() {
     return {
       navLinks: [
-        { title: "Lâmina", link: "/", active: true },
         { title: "Notícias", link: "/noticias", active: false },
         { title: "FAQ", link: "/faq", active: false },
         { title: "Login", link: "/login", active: false },
       ],
       navLinksLogin: [
-        {
-          title: "Lâminas cadastradas",
-          link: "/laminas",
-          icon: "pi pi-bookmark",
-        },
         { title: "Configurações", link: "/configuracoes", icon: "pi pi-cog" },
       ],
       isMenuOpen: false,
       loginMenu: false,
+      laminaMenu: false,
       router: useRouter(),
       generics: new Generics(),
     };
@@ -148,26 +167,47 @@ export default {
     logout() {
       localStorage.removeItem("tkn");
       location.href = "#/login";
-      this.navLinks.push({ title: "Login", link: "/login", active: false })
+      this.navLinks.push({ title: "Login", link: "/login", active: false });
     },
     toggleLoginMenu() {
       this.loginMenu = !this.loginMenu;
+      this.laminaMenu = false;
       if (this.loginMenu) {
         document.addEventListener("click", this.handleClickOutside);
       } else {
         document.removeEventListener("click", this.handleClickOutside);
       }
     },
+    toggleLaminaMenu() {
+      this.laminaMenu = !this.laminaMenu;
+      this.loginMenu = false;
+      if (this.laminaMenu) {
+        document.addEventListener("click", this.handleClickOutsideLamina);
+      } else {
+        document.removeEventListener("click", this.handleClickOutsideLamina);
+      }
+    },
     handleClickOutside(event) {
       const loginMenu = this.$refs.loginMenu;
-
       if (loginMenu && !loginMenu.contains(event.target)) {
         this.loginMenu = false;
         document.removeEventListener("click", this.handleClickOutside);
       }
     },
+    isLaminaRoute() {
+      const currentPath = this.$route.path;
+      return currentPath === "/laminas" || currentPath === "/";
+    },
+    handleClickOutsideLamina(event) {
+      const laminaMenu = this.$refs.laminaMenu;
+      if (laminaMenu && !laminaMenu.contains(event.target)) {
+        this.laminaMenu = false;
+        document.removeEventListener("click", this.handleClickOutsideLamina);
+      }
+    },
     beforeDestroy() {
       document.removeEventListener("click", this.handleClickOutside);
+      document.removeEventListener("click", this.handleClickOutsideLamina);
     },
   },
 };
@@ -205,6 +245,28 @@ export default {
         text-align: start;
       }
     }
+
+    .lamina-menu {
+      position: absolute;
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      top: 30px;
+      right: 100px; /* Adjust as needed */
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      button {
+        color: #0d2d5c !important;
+        text-align: start;
+
+      }
+      img{
+          margin-top: -20px;
+          margin-left: 10px;
+        }
+    }
+
     .nav-buttons {
       display: flex;
       gap: 5px;

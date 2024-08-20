@@ -10,6 +10,7 @@
   </div>
   <div class="container mt-4 faq" v-if="!loading">
     <TabView
+      :scrollable="true"
       @tab-change="onTabChange"
       :pt="{
         inkbar: (options) => ({
@@ -120,5 +121,4 @@ export default {
   margin-top: 100px;
   color: #1b3f82;
 }
-
 </style>

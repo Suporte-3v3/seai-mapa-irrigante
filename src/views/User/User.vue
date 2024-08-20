@@ -11,6 +11,8 @@
               },
             }),
           }"
+          v-model:activeIndex="activeTab"
+          @tab-change="onTabChange"
         >
           <TabPanel header="Entrar">
             <Login></Login>
@@ -23,15 +25,40 @@
     </div>
   </div>
 </template>
+
 <script>
+import { ref, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import Login from "../../components/Login/Login.vue";
 import Register from "../../components/Register/Register.vue";
+
 export default {
   name: "User",
   components: { Login, Register },
-  data() {
+  setup() {
+    const router = useRouter();
+    const route = useRoute();
+    const activeTab = ref(0);
+
+    onMounted(() => {
+      const type = route.params.type;
+
+      if (type === "register") {
+        activeTab.value = 1;
+      } else {
+        activeTab.value = 0; // Default to login if type is not recognized
+      }
+    });
+
+    const onTabChange = (e) => {
+      console.log("mudou");
+      const selectedTab = e.index === 1 ? "register" : "login";
+      router.push({ name: "login", params: { type: selectedTab } });
+    };
+
     return {
-      titles: ["Entrar", "Cadastrar"],
+      activeTab,
+      onTabChange,
     };
   },
 };

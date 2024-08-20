@@ -5,21 +5,11 @@
     <form
       @submit.prevent="register"
       class="w-50 d-flex flex-column"
-      v-if="!success"
     >
       <div class="form-group form-group-text text-left p-float-label w-full">
         <InputText id="name" v-model="profile.name" class="w-full" required />
         <label for="cpf" class="font-weight-bold">Nome completo*</label>
         <small v-if="submitted && !profile.name" class="p-error">{{
-          requiredField
-        }}</small>
-      </div>
-      <div
-        class="form-group form-group-text text-left p-float-label mt-2 w-full"
-      >
-        <InputText id="cpf" v-model="profile.cpf" class="w-full" required />
-        <label for="cpf" class="font-weight-bold">CPF*</label>
-        <small v-if="submitted && !profile.cpf" class="p-error">{{
           requiredField
         }}</small>
       </div>
@@ -97,7 +87,7 @@
         />
       </div>
     </form>
-    <ConfirmRegister v-if="success" />
+    
   </div>
 </template>
 <script>
@@ -116,12 +106,11 @@ export default {
         email: "",
         password: "",
         confirmPassword: "",
-        cpf: "",
       },
       requiredField: "Campo obrigatório",
       submitted: false,
       service: new UserRest(),
-      success: false,
+      success: true,
       btnLoading: false,
     };
   },
@@ -149,8 +138,7 @@ export default {
         this.profile.email &&
         this.profile.password &&
         this.profile.confirmPassword &&
-        this.profile.password === this.profile.confirmPassword &&
-        this.profile.cpf
+        this.profile.password === this.profile.confirmPassword
       );
     },
   },

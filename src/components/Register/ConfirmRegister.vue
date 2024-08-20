@@ -1,26 +1,59 @@
 <template>
-  <div id="app">
+  <ProgressSpinner v-if="loading" />
+
+  <div id="app" v-else>
     <div class="check-icon">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
       </svg>
     </div>
-    <h1>Cadastro realizado com sucesso!</h1>
-    <Button
-      @click="reload"
-      class="btn-primary w-100 d-flex justify-content-center align-items-center"
-    >
-      Acessar SEAI
-    </Button>
+    <h1 v-if="registerSuccess">Cadastro realizado com sucesso!</h1>
+    <h1 v-else>
+      Não foi possível finalizar o cadastro, entre em contato com o suporte.
+    </h1>
+    <router-link to="/login">
+      <Button
+        class="btn-primary w-100 d-flex justify-content-center align-items-center"
+      >
+        Acessar SEAI
+      </Button>
+    </router-link>
   </div>
 </template>
 
 <script>
+import { UserRest } from "@/services/user.service";
+import { useRoute } from "vue-router";
+
 export default {
   name: "RegisterSucess",
+  mounted() {
+    this.confirmRegister();
+  },
+  data() {
+    return {
+      service: new UserRest(),
+      route: new useRoute(),
+      loading: false,
+      registerSuccess: false, // para controlar a exibição da mensagem
+    };
+  },
   methods: {
-    reload() {
-      window.location.reload();
+    confirmRegister() {
+      this.loading = true;
+      const code = this.route.params.code;
+      console.log(code);
+      this.service
+        .confirmRegister(code)
+        .then(() => {
+          this.registerSuccess = true;
+        })
+        .catch(() => {
+          this.registerSuccess = false;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
   },
 };
@@ -65,7 +98,6 @@ a {
   text-decoration: none;
 }
 
-/* Animação para o check-icon */
 .check-icon {
   animation: pulse 1.5s infinite;
 }
@@ -82,7 +114,6 @@ a {
   }
 }
 
-/* Media query para dispositivos móveis */
 @media (max-width: 600px) {
   h1 {
     font-size: 24px;

@@ -2,9 +2,10 @@
   <ProgressSpinner v-if="loading" />
   <form @submit.prevent="save" v-else class="form-equipments">
     <h5>Equipamentos</h5>
-    <div class="equipments mt-4">
+    <div class="equipments flex-column mt-4">
       <div
-        class="form-group form-group-text text-left p-float-label mt-4"
+        :style="maxWidthStyle"
+        class="form-group form-group-text teste text-left p-float-label mt-4"
       >
         <Dropdown
           v-model="selectedStation"
@@ -14,9 +15,10 @@
           class="w-100"
           required
         />
-        <label for="login" class="font-weight-bold">Estações </label>
+        <label for="login" class="font-weight-bold">Estações</label>
       </div>
       <div
+        :style="maxWidthStyle"
         class="form-group form-group-text text-left p-float-label mt-4"
       >
         <Dropdown
@@ -24,13 +26,13 @@
           :options="pluvs"
           optionLabel="label"
           placeholder="Selecionar pluviômetro"
-          class="w-100"
+          class="w-100 teste"
           required
         />
         <label for="login" class="font-weight-bold">Pluviômetros</label>
       </div>
       <div
-        class="form-button text-left p-float-label  mt-4 d-flex justify-content-end"
+        class="form-button text-left p-float-label mt-4 d-flex justify-content-end"
       >
         <Button
           :disabled="loadingBtn"
@@ -42,6 +44,7 @@
     </div>
   </form>
 </template>
+
 <script>
 import { SettingsRest } from "@/services/settings.service";
 import { EquipmentsRest } from "@/services/equipments.service";
@@ -49,6 +52,12 @@ import { toast } from "vue3-toastify";
 
 export default {
   name: "EquipmentsComponent",
+  props: {
+    maxWidth: {
+      type: String,
+      default: "",
+    },
+  },
   emits: ["onSaveEquipments"],
   data() {
     return {
@@ -67,6 +76,11 @@ export default {
         id_category: 0,
       },
     };
+  },
+  computed: {
+    maxWidthStyle() {
+      return this.maxWidth ? { "max-width": this.maxWidth } : {};
+    },
   },
   mounted() {
     this.getUserEquipments();
@@ -166,33 +180,54 @@ export default {
   },
 };
 </script>
+
 <style lang="scss">
 .form-equipments {
   flex-direction: column;
-  min-height: 170px !important;
-  border-bottom: 1px solid #1B3F821C;
+  border-bottom: 1px solid #1b3f821c;
+  height: 400px !important;
   .equipments {
     display: flex;
     gap: 12px;
     min-height: 100px !important;
     flex-wrap: wrap;
+    min-width: 300px;
+
     .form-group {
       height: 50px;
       display: flex;
       flex-direction: row;
       width: 43%;
-      min-width: 350px;
+      min-width: 300px;
     }
-    .form-button{
+    .form-button {
       height: 50px;
       width: 10%;
       min-width: 100px;
-      button{
+      button {
         width: 100%;
       }
     }
   }
 }
-@media (max-width: 766px) {
+.max-width-class {
+  max-width: 300px;
+}
+
+@media (max-width: 400px) {
+  .form-group {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    width: 43%;
+    max-width: 300px;
+  }
+  .p-dropdown-items-wrapper {
+    max-width: 300px !important;
+    li {
+      margin-left: -40px;
+      font-size: 10px;
+    }
+  }
 }
 </style>

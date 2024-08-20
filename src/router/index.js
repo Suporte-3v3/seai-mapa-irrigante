@@ -4,6 +4,8 @@ import Home from "../views/Home.vue";
 import News from "../views/News.vue";
 import NewsById from "../views/NewsById.vue";
 import Login from "../views/User/User.vue";
+import ResetPassword from "../views/User/ResetPassword.vue";
+import Activate from "../views/User/Activate.vue";
 import Slide from "../views/Slide.vue";
 import Settings from "../views/Settings.vue";
 
@@ -29,9 +31,19 @@ const routes = [
     component: NewsById,
   },
   {
-    path: "/login",
+    path: "/login/:type?",
     name: "login",
     component: Login,
+  },
+  {
+    path: "/reset-password/:code?",
+    name: "resetPassword",
+    component: ResetPassword,
+  },
+  {
+    path: "/activate/:code?",
+    name: "activate",
+    component: Activate,
   },
   {
     path: "/laminas",
