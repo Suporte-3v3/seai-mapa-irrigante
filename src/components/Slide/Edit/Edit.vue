@@ -222,18 +222,30 @@
         </div>
       </form>
 
-      <div class="equipments-user" v-else-if="!loading && createUserMode">
+      <div
+        class="equipments-user flex flex-column h-full"
+        v-else-if="!loading && createUserMode"
+      >
         <div class="equipment-msg">
-          <i class="pi pi-info-circle" style="font-size: 12px; color: #bb4430;"></i>
+          <button class="btn-colose-modal" @click="onCloseEditMode">
+            <i class="pi pi-times"></i>
+          </button>
+          <i
+            class="pi pi-info-circle"
+            style="font-size: 12px; color: #bb4430"
+          ></i>
 
-          <p style="font-size: 12px; color: #bb4430;">
+          <p style="font-size: 12px; color: #bb4430">
             Você precisa pré-selecionar os equipamentos para realizar os
             cálculos
           </p>
         </div>
-        <span class="mt-2">
-          <Equipments @on-save-equipments="getUserEquipments" />
-        </span>
+        <div class="mt-2">
+          <Equipments
+            :max-width="'300px'"
+            @on-save-equipments="getUserEquipments"
+          />
+        </div>
       </div>
     </div>
     <div></div>
@@ -323,6 +335,7 @@ export default {
           this.getAllSystem();
         } else {
           this.createUserMode = true;
+          this.loading = false;
         }
       });
     },
@@ -374,7 +387,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
+
     width: 380px;
     height: 100vh;
     padding: 10px;
@@ -384,13 +397,22 @@ export default {
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      position: relative;
       .equipment-msg {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 12px;
+        position: relative;
         i {
           margin-top: -20px;
+        }
+        .btn-colose-modal {
+          position: absolute;
+          top: -40px;
+          right: 0;
+          border: 0px;
+          background-color: transparent;
         }
       }
     }
