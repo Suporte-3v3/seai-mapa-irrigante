@@ -529,7 +529,7 @@ export default {
   },
   data() {
     return {
-      selectedStation: null,
+      selectedStation: "",
       isLoading: false,
       stations: [],
       pluviometers: [],
