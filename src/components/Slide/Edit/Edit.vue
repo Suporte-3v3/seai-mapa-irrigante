@@ -14,7 +14,7 @@
         class="w-100 d-flex flex-column"
       >
         <div class="w-100 d-flex justify-content-center">
-          <h5>{{ card.Id ? `Editando ${card.Name}` : "Criando lâmina" }}</h5>
+          <h5>{{ card.Id ? `Editando ${card.Name}` : "Criando Área de Plantio" }}</h5>
         </div>
 
         <div
@@ -25,7 +25,7 @@
             v-model="cards.Name"
             class="w-full"
           />
-          <label for="login" class="font-weight-bold">Nome da lâmina </label>
+          <label for="login" class="font-weight-bold">Nome da Área de Plantio </label>
         </div>
         <div
           class="form-group form-group-text text-left p-float-label w-100 mt-4"
