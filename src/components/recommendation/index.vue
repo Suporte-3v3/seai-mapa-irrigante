@@ -14,7 +14,7 @@
           <h5 style="color: #1b3f82; text-align: left;">Simulação de Lâmina</h5>
         </div>
         <div class="form-group mb-4">
-          <label for="option1" class="tab-label">Estação</label>
+          <h6 for="option1" class="tab-label" style="color: #1b3f82">Estação</h6>
           <div class="input-group">
             <select
               id="option1"
@@ -54,7 +54,7 @@
       </div>
 
       <div v-if="!isStationDisabled" class="form-group mb-4">
-        <label for="newFormET0" class="tab-label" style="color: #bb4430">ET0 Manual (mm)</label>
+        <h6 for="newFormET0" class="tab-label" style="color: #9023a1" >ET0 Manual (mm)</h6>
         <input
           id="newFormET0"
           v-model="selectedET0Manual"
@@ -67,7 +67,7 @@
       </div>
 
       <div class="form-group mb-4">
-        <label for="option2" class="tab-label">Pluviômetro</label>
+        <h6 for="option2" class="tab-label" style="color: #1b3f82">Pluviômetro</h6>
         <div class="input-group">
           <select
             id="option2"
@@ -102,7 +102,7 @@
       </div>
 
       <div v-if="!isPluviometerDisabled" class="form-group mb-4">
-        <label for="newFormPrecipitation" class="tab-label" style="color: #bb4430">Precipitação Manual (mm)</label>
+        <h6 for="newFormPrecipitation" class="tab-label" style="color: #9023a1">Precipitação Manual (mm)</h6>
         <input
           id="newFormPrecipitation"
           v-model="selectedPrecipitationManual"
@@ -115,7 +115,7 @@
       </div>
 
         <div class="form-group mb-4">
-          <label for="option3" class="tab-label">Cultura</label>
+          <h6 for="option3" class="tab-label" style="color: #1b3f82">Cultura</h6>
           <div class="input-group">
             <select id="option3" v-model="selectedCulture" class="form-control">
               <option value="">Clique para selecionar a Cultura</option>
@@ -132,7 +132,7 @@
       <div class="row">
         <div class="col-md-4">
           <div class="form-group mb-4">
-            <label for="input1" class="tab-label">Data de Plantio</label>
+            <h6 for="input1" class="tab-label" style="color: #1b3f82">Data de Plantio</h6>
             <div class="input-group">
               <input
                 id="input1"
@@ -151,7 +151,7 @@
         </div>
         <div class="col-md-4">
           <div class="form-group mb-4">
-            <label for="option4" class="tab-label">Sistema de Irrigação</label>
+            <h6 for="option4" class="tab-label" style="color: #1b3f82">Sistema de Irrigação</h6>
             <div class="input-group">
               <select
                 id="option4"
@@ -177,8 +177,8 @@
         </div>
         <div class="col-md-4">
           <div class="form-group mb-4">
-            <label for="input2" class="tab-label"
-              >Eficiência de Irrigação (%)</label
+            <h6 for="input2" class="tab-label" style="color: #1b3f82"
+              >Eficiência de Irrigação (%)</h6
             >
             <div class="input-group">
               <input
@@ -212,8 +212,8 @@
       <div v-if="showAdditionalFields" class="row">
         <div v-if="selectedSystemIrrigation === 'Aspersão'" class="col-md-12">
           <div class="form-group mb-4">
-            <label class="tab-label" style="color: #bb4430"
-              >Precipitação por Aspersor (mm/h)</label
+            <h6 class="tab-label" style="color: #9023a1"
+              >Precipitação por Aspersor (mm/h)</h6
             >
             <input
               v-model.number="PrecipitationSprinkler"
@@ -240,8 +240,8 @@
           class="col-md-12"
         >
           <div class="form-group mb-4">
-            <label class="tab-label" style="color: #bb4430"
-              >Vazão do Sistema (l/h)</label
+            <h6 class="tab-label" style="color: #9023a1"
+              >Vazão do Sistema (l/h)</h6
             >
             <input
               v-model.number="FlowSystem"
@@ -255,8 +255,8 @@
             </p>
           </div>
           <div class="form-group mb-4">
-            <label class="tab-label" style="color: #bb4430"
-              >Área Plantada (m²)</label
+            <h6 class="tab-label" style="color: #9023a1"
+              >Área Plantada (m²)</h6
             >
             <input
               v-model.number="PlantedArea"
@@ -270,8 +270,8 @@
             </p>
           </div>
           <div class="form-group mb-4">
-            <label class="tab-label" style="color: #bb4430"
-              >Área efetiva de cada planta (m²/planta)</label
+            <h6 class="tab-label" style="color: #9023a1"
+              >Área efetiva de cada planta (m²/planta)</h6
             >
             <input
               v-model.number="EffectiveArea"
@@ -285,8 +285,8 @@
             </p>
           </div>
           <div class="form-group mb-4">
-            <label class="tab-label" style="color: #bb4430"
-              >Número de Plantas por Área (plantas/m²)</label
+            <h6 class="tab-label" style="color: #9023a1"
+              >Número de Plantas por Área (plantas/m²)</h6
             >
             <input
               v-model.number="NumberPlants"
@@ -305,8 +305,8 @@
           class="col-md-12"
         >
           <div class="form-group mb-4">
-            <label class="tab-label" style="color: #bb4430"
-              >Vazão do Sistema (l/h)</label
+            <h6 class="tab-label" style="color: #9023a1"
+              >Vazão do Sistema (l/h)</h6
             >
             <input
               v-model.number="FlowSystem"
@@ -320,8 +320,8 @@
             </p>
           </div>
           <div class="form-group mb-4">
-            <label class="tab-label" style="color: #bb4430"
-              >Área Plantada (m²)</label
+            <h6 class="tab-label" style="color: #9023a1"
+              >Área Plantada (m²)</h6
             >
             <input
               v-model.number="PlantedArea"
@@ -335,8 +335,8 @@
             </p>
           </div>
           <div class="form-group mb-4">
-            <label class="tab-label" style="color: #bb4430"
-              >Área efetiva de cada planta (m²/planta)</label
+            <h6 class="tab-label" style="color: #9023a1"
+              >Área efetiva de cada planta (m²/planta)</h6
             >
             <input
               v-model.number="EffectiveArea"
@@ -350,8 +350,8 @@
             </p>
           </div>
           <div class="form-group mb-4">
-            <label class="tab-label" style="color: #bb4430"
-              >Número de Plantas por Área (plantas/m²)</label
+            <h6 class="tab-label" style="color: #9023a1"
+              >Número de Plantas por Área (plantas/m²)</h6
             >
             <input
               v-model.number="NumberPlants"
@@ -370,8 +370,8 @@
           class="col-md-12"
         >
           <div class="form-group mb-4">
-            <label class="tab-label" style="color: #bb4430"
-              >Precipitação por Volta (mm/volta)</label
+            <h6 class="tab-label" style="color: #9023a1"
+              >Precipitação por Volta (mm/volta)</h6
             >
             <input
               v-model.number="PrecipitationAround"
@@ -392,8 +392,8 @@
         </div>
         <div v-if="selectedSystemIrrigation === 'Sulcos'" class="col-md-12">
           <div class="form-group mb-4">
-            <label class="tab-label" style="color: #bb4430"
-              >Comprimento dos Sulcos (m)</label
+            <h6 class="tab-label" style="color: #9023a1"
+              >Comprimento dos Sulcos (m)</h6
             >
             <input
               v-model.number="FurrowLength"
@@ -407,8 +407,8 @@
             </p>
           </div>
           <div class="form-group mb-4">
-            <label class="tab-label" style="color: #bb4430"
-              >Espaçamento entre os Sulcos (m)</label
+            <h6 class="tab-label" style="color: #9023a1"
+              >Espaçamento entre os Sulcos (m)</h6
             >
             <input
               v-model.number="GrooveSpacing"
@@ -422,8 +422,8 @@
             </p>
           </div>
           <div class="form-group mb-4">
-            <label class="tab-label" style="color: #bb4430"
-              >Vazão por Sulco (l/h)</label
+            <h6 class="tab-label" style="color: #9023a1"
+              >Vazão por Sulco (l/h)</h6
             >
             <input
               v-model.number="FlowGrooves"
