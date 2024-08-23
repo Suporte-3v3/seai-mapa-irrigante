@@ -16,6 +16,7 @@ export default {
       stations: [],
       pluviometers: [],
       map: null,
+      lastUpdatedAt: '',
       userLocation: null,
       stationMarkers: L.layerGroup(),
       pluviometerMarkers: L.layerGroup(),
@@ -61,6 +62,10 @@ export default {
       this.pluviometers = responsePluviometer.data ? responsePluviometer.data.data : [];
       console.log('Dados dos Pluviômetros:', this.pluviometers);
 
+      const responseUpdate = await axios.get(`http://seai.3v3.farm/api/v2/equipments/last-updated-at`);
+      this.lastUpdatedAt = responseUpdate.data.data;
+      console.log('Última atualização:', this.lastUpdatedAt);
+
       this.addMarkers();
     } catch (error) {
       toast.error('Erro ao mostrar dados de Estações e Pluviômetros');
@@ -80,6 +85,7 @@ export default {
   },
   methods: {
     setupMap() {
+      
       this.map = L.map(this.$refs.map, {
         scrollWheelZoom: true,
         attributionControl: false,
@@ -88,11 +94,16 @@ export default {
       });
 
       L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-        {
-          attribution: "",
-        }
-      ).addTo(this.map);
+  "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+  {
+    attribution: false, 
+  }
+).addTo(this.map);
+
+L.control.attribution({
+  prefix: false, 
+}).addAttribution(`Dados atualizados em: ${this.lastUpdatedAt}`).addTo(this.map);
+
 
       const geojsonLayer = L.geoJSON(ceara_data, {
         onEachFeature: this.onEachFeature,
@@ -149,7 +160,7 @@ export default {
       if (coordinates && coordinates.length === 2) {
         const marker = L.marker([coordinates[0], coordinates[1]], { icon });
         marker.bindPopup(popupContent);
-        
+
         marker.on('click', () => {
           this.$emit('station-selected', item);
         });
@@ -328,7 +339,6 @@ export default {
           closestStation = stationCoords;
         }
       } else {
-        console.error('Coordenadas de estação inválidas ou dados não habilitados para:', station);
       }
     });
 
@@ -343,7 +353,6 @@ export default {
           closestPluviometer = pluviometerCoords;
         }
       } else {
-        console.error('Coordenadas do pluviômetro inválidas ou dados não habilitados para:', pluviometer);
       }
     });
 
@@ -381,7 +390,9 @@ export default {
 }
 
 .leaflet-control-attribution {
-  display: none;
+  display: block !important;
+  opacity: 1 !important;
+  color: black !important;
 }
 
 .leaflet-top.leaflet-left {
