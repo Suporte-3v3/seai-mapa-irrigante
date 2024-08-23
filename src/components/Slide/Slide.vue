@@ -13,11 +13,11 @@
     @on-close-view-mode="openViewRecommendation(null, false)"
   />
   <div class="container content d-flex justify-content-between">
-    <h4>Lâminas cadastradas</h4>
+    <h4>Áreas de Plantio cadastradas</h4>
     <div class="d-flex gap-3">
       <Button
         class="btn-primary"
-        label="Adicionar Lâmina"
+        label="Adicionar Área de Plantio"
         icon="pi pi-plus"
         @click="openEditMode(defaultCard)"
       >
@@ -31,7 +31,7 @@
     <ProgressSpinner />
   </div>
   <div class="container mt-4 faq d-flex gap-3 flex-wrap pb-4" v-if="!loading">
-    <div v-if="!cards || cards.length === 0">Nenhuma lâmina cadastrada!</div>
+    <div v-if="!cards || cards.length === 0">Nenhuma Área de Plantio cadastrada!</div>
     <SlideCard
       v-else
       v-for="(card, i) in cards"

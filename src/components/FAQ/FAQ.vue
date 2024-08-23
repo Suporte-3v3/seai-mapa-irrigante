@@ -1,6 +1,6 @@
 <template>
   <div class="container content">
-    <h4>FAQ</h4>
+    <h4>Dúvidas</h4>
   </div>
   <div
     class="container d-flex justify-content-center align-items-center spinner"

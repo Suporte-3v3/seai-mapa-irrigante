@@ -5,13 +5,13 @@
       v-if="generics.verifyToken()"
     >
       <router-link to="/laminas" style="color: #1b3f82">
-        Lâminas cadastradas
+        Áreas de Plantio cadastradas
       </router-link>
     </div>
     <div class="row mt-3">
       <div class="col-md-12">
         <div class="mb-4">
-          <h5 style="color: #1b3f82; text-align: left;">Simulação de Lâmina</h5>
+          <h5 style="color: #1b3f82; text-align: left;">Simulação de Áreas de Plantio</h5>
         </div>
         <div class="form-group mb-4">
           <h6 for="option1" class="tab-label" style="color: #1b3f82">Estação</h6>
@@ -54,7 +54,7 @@
       </div>
 
       <div v-if="!isStationDisabled" class="form-group mb-4">
-        <h6 for="newFormET0" class="tab-label" style="color: #9023a1" >ET0 Manual (mm)</h6>
+        <h6 for="newFormET0" class="tab-label" style="color: #9023a1" >Et0 Manual (mm)</h6>
         <input
           id="newFormET0"
           v-model="selectedET0Manual"
@@ -81,7 +81,7 @@
               :key="equipment.Id"
               :value="equipment.Id"
             >
-              ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Precipitação: {{ equipment.Precipitation }} mm]
+              ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Precipitação Pluviométrica: {{ equipment.Precipitation }} mm]
             </option>
           </select>
           <div class="input-group-append">
@@ -102,13 +102,13 @@
       </div>
 
       <div v-if="!isPluviometerDisabled" class="form-group mb-4">
-        <h6 for="newFormPrecipitation" class="tab-label" style="color: #9023a1">Precipitação Manual (mm)</h6>
+        <h6 for="newFormPrecipitation" class="tab-label" style="color: #9023a1">Precipitação Pluviométrica Manual (mm)</h6>
         <input
           id="newFormPrecipitation"
           v-model="selectedPrecipitationManual"
           class="form-control"
           type="number"
-          placeholder="Digite o Valor da Precipitação"
+          placeholder="Digite o Valor da Precipitação Pluviométrica"
           @input="validateMinimum(selectedPrecipitationManual, 'selectedPrecipitationManual')"
         />
         <p v-if="errors.selectedPrecipitationManual" style="color: red; font-size: 12px;">* Digite Valores acima de 0</p>
@@ -452,7 +452,7 @@
             <Button
               class="btn-primary"
               @click="validateAndCalculate"
-              label="Simular Lâmina"
+              label="Simular Áreas de Plantio"
             >
             </Button>
           </div>
@@ -463,7 +463,7 @@
               class="card-header text-white text-center"
               :style="{ backgroundColor: '#1b3f82' }"
             >
-              <h3>Resultado Simulação de Lâmina</h3>
+              <h3>Simulação de Áreas de Plantio</h3>
             </div>
             <div v-if="isLoading" class="loading">Carregando...</div>
             <div class="card-body">
@@ -472,7 +472,7 @@
                   <strong>ET0:</strong> {{ results.data.Et0 }} {{ "mm" }}
                 </li>
                 <li class="list-group-item">
-                  <strong>Precipitação:</strong>
+                  <strong>Precipitação Pluviométrica:</strong>
                   {{ results.data.Precipitation }} {{ "mm" }}
                 </li>
                 <li class="list-group-item">

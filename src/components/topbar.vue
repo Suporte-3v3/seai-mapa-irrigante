@@ -9,7 +9,7 @@
 
       <div class="nav-buttons">
         <Button
-          label="Lâminas"
+          label="Irrigação"
           :class="[isLaminaRoute() ? 'btn-white' : 'btn-simple']"
           @click.stop="toggleLaminaMenu"
         >
@@ -18,12 +18,12 @@
           <router-link to="/" @click.native="toggleLaminaMenu">
             <img src="@/assets/icon.svg" alt="icon">
 
-            <Button label="Simular Lâmina" class="btn-simple"> </Button>
+            <Button label="Simular Áreas de Plantio" class="btn-simple"> </Button>
           </router-link>
           <router-link to="/laminas" @click.native="toggleLaminaMenu">
             <Button
               icon="pi pi-bookmark-fill"
-              label="Lâminas cadastradas"
+              label="Áreas de Plantio cadastradas"
               class="btn-simple"
             >
 
@@ -131,7 +131,7 @@ export default {
     return {
       navLinks: [
         { title: "Notícias", link: "/noticias", active: false },
-        { title: "FAQ", link: "/faq", active: false },
+        { title: "Dúvidas", link: "/faq", active: false },
         { title: "Login", link: "/login", active: false },
       ],
       navLinksLogin: [
