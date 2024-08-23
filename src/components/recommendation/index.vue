@@ -63,7 +63,7 @@
           placeholder="Digite o Valor da ET0"
           @input="validateMinimum(selectedET0Manual, 'selectedET0Manual')"
         />
-        <p v-if="errors.selectedET0Manual" style="color: red; font-size: 12px;">* Digite Valores acima de 0</p>
+        <p v-if="errors.selectedET0Manual" style="color: red; font-size: 12px;">* Digite Valores Númericos acima de 0</p>
       </div>
 
       <div class="form-group mb-4">
@@ -111,7 +111,7 @@
           placeholder="Digite o Valor da Precipitação Pluviométrica"
           @input="validateMinimum(selectedPrecipitationManual, 'selectedPrecipitationManual')"
         />
-        <p v-if="errors.selectedPrecipitationManual" style="color: red; font-size: 12px;">* Digite Valores acima de 0</p>
+        <p v-if="errors.selectedPrecipitationManual" style="color: red; font-size: 12px;">* Digite Valores Númericos acima de 0</p>
       </div>
 
         <div class="form-group mb-4">
@@ -231,7 +231,7 @@
               v-if="errors.PrecipitationSprinkler"
               style="color: red; font-size: 12px"
             >
-              * Digite Valores acima de 0
+              * Digite Valores Númericos acima de 0
             </p>
           </div>
         </div>
@@ -251,7 +251,7 @@
               @input="validateMinimum(FlowSystem, 'FlowSystem')"
             />
             <p v-if="errors.FlowSystem" style="color: red; font-size: 12px">
-              * Digite Valores acima de 0
+              * Digite Valores Númericos acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -266,7 +266,7 @@
               @input="validateMinimum(PlantedArea, 'PlantedArea')"
             />
             <p v-if="errors.PlantedArea" style="color: red; font-size: 12px">
-              * Digite Valores acima de 0
+              * Digite Valores Númericos acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -281,7 +281,7 @@
               @input="validateMinimum(EffectiveArea, 'EffectiveArea')"
             />
             <p v-if="errors.EffectiveArea" style="color: red; font-size: 12px">
-              * Digite Valores acima de 0
+              * Digite Valores Númericos acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -296,7 +296,7 @@
               @input="validateMinimum(NumberPlants, 'NumberPlants')"
             />
             <p v-if="errors.NumberPlants" style="color: red; font-size: 12px">
-              * Digite Valores acima de 0
+              * Digite Valores Númericos acima de 0
             </p>
           </div>
         </div>
@@ -316,7 +316,7 @@
               @input="validateMinimum(FlowSystem, 'FlowSystem')"
             />
             <p v-if="errors.FlowSystem" style="color: red; font-size: 12px">
-              * Digite Valores acima de 0
+              * Digite Valores Númericos acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -331,7 +331,7 @@
               @input="validateMinimum(PlantedArea, 'PlantedArea')"
             />
             <p v-if="errors.PlantedArea" style="color: red; font-size: 12px">
-              * Digite Valores acima de 0
+              * Digite Valores Númericos acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -346,7 +346,7 @@
               @input="validateMinimum(EffectiveArea, 'EffectiveArea')"
             />
             <p v-if="errors.EffectiveArea" style="color: red; font-size: 12px">
-              * Digite Valores acima de 0
+              * Digite Valores Númericos acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -361,7 +361,7 @@
               @input="validateMinimum(NumberPlants, 'NumberPlants')"
             />
             <p v-if="errors.NumberPlants" style="color: red; font-size: 12px">
-              * Digite Valores acima de 0
+              * Digite Valores Númericos acima de 0
             </p>
           </div>
         </div>
@@ -386,7 +386,7 @@
               v-if="errors.PrecipitationAround"
               style="color: red; font-size: 12px"
             >
-              * Digite Valores acima de 0
+              * Digite Valores Númericos acima de 0
             </p>
           </div>
         </div>
@@ -403,7 +403,7 @@
               @input="validateMinimum(FurrowLength, 'FurrowLength')"
             />
             <p v-if="errors.FurrowLength" style="color: red; font-size: 12px">
-              * Digite Valores acima de 0
+              * Digite Valores Númericos acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -418,7 +418,7 @@
               @input="validateMinimum(GrooveSpacing, 'GrooveSpacing')"
             />
             <p v-if="errors.GrooveSpacing" style="color: red; font-size: 12px">
-              * Digite Valores acima de 0
+              * Digite Valores Númericos acima de 0
             </p>
           </div>
           <div class="form-group mb-4">
@@ -433,7 +433,7 @@
               @input="validateMinimum(FlowGrooves, 'FlowGrooves')"
             />
             <p v-if="errors.FlowGrooves" style="color: red; font-size: 12px">
-              * Digite Valores acima de 0
+              * Digite Valores Númericos acima de 0
             </p>
           </div>
         </div>
