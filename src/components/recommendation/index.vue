@@ -111,7 +111,7 @@
           placeholder="Digite o Valor da Precipitação Pluviométrica"
           @input="validateMinimum(selectedPrecipitationManual, 'selectedPrecipitationManual')"
         />
-        <p v-if="errors.selectedPrecipitationManual" style="color: red; font-size: 12px;">* Digite Valores Númericos acima de 0</p>
+        <p v-if="errors.selectedPrecipitationManual" style="color: red; font-size: 12px;">* Digite Valores Númericos positivos</p>
       </div>
 
         <div class="form-group mb-4">
@@ -575,7 +575,7 @@ export default {
         PrecipitationAround: false,
         FurrowLength: false,
         GrooveSpacing: false,
-        FlowGrooves: false,
+        FlowGrooves: false,  
       },
       saveBlade: false,
       generics: new Generics(),
@@ -815,6 +815,7 @@ async calculateRecomendation() {
         }
       }
     },
+
     formatDate(date) {
       if (!date) return "";
       const [year, month, day] = date.split("-");
@@ -855,7 +856,6 @@ async calculateRecomendation() {
       this.results = null;
       this.resultsVisible = false;
       this.errors.selectedStation = false;
-      this.errors.selectedET0Manual = false;
       this.errors.selectedET0Manual = false;
       this.errors.selectedPluviometer = false;
       this.errors.selectedPrecipitationManual = false;
