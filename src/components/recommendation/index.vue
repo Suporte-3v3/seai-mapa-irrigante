@@ -22,7 +22,7 @@
               class="form-control"
               :disabled="!isStationDisabled"
             >
-              <option value="">Selecione a Estação</option>
+              <option value="">Clique para selecionar a Estação</option>
               <option
                 v-for="equipment in filteredStations"
                 :key="equipment.Id"
@@ -75,7 +75,7 @@
             class="form-control"
             :disabled="!isPluviometerDisabled"
           >
-            <option value="">Selecione o Pluviômetro</option>
+            <option value="">Clique para selecionar o Pluviômetro</option>
             <option
               v-for="equipment in filteredPluviometer"
               :key="equipment.Id"
@@ -118,7 +118,7 @@
           <label for="option3" class="tab-label">Cultura</label>
           <div class="input-group">
             <select id="option3" v-model="selectedCulture" class="form-control">
-              <option value="">Selecione a Cultura</option>
+              <option value="">Clique para selecionar a Cultura</option>
               <option v-for="crop in crops" :key="crop.Id" :value="crop.Id">
                 {{ crop.Name }}
               </option>
@@ -159,7 +159,7 @@
                 class="form-control"
                 @change="toggleAdditionalFields"
               >
-                <option value="">Selecione o Sistema de Irrigação</option>
+                <option value="">Clique para selecionar o Sistema de Irrigação</option>
                 <option value="Aspersão">Aspersão</option>
                 <option value="Microaspersão">Microaspersão</option>
                 <option value="Gotejamento">Gotejamento</option>
