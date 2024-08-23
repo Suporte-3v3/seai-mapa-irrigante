@@ -493,7 +493,7 @@
                 </li>
                 <li class="list-group-item">
                   <strong>Lâmina de Reposição:</strong>
-                  {{ results.data.RepositionBlade }}
+                  {{ results.data.RepositionBlade }} {{ "mm" }}
                 </li>
                 <li class="list-group-item">
                   <strong>Tempo de Irrigação:</strong>
