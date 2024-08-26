@@ -63,8 +63,9 @@ export default {
       console.log('Dados dos Pluviômetros:', this.pluviometers);
 
       const responseUpdate = await axios.get(`http://seai.3v3.farm/api/v2/equipments/last-updated-at`);
-      this.lastUpdatedAt = responseUpdate.data.data;
-      console.log('Última atualização:', this.lastUpdatedAt);
+      const lastUpdateTime = responseUpdate.data.data[0].Time;
+      this.lastUpdatedAt = this.formatDateTime(lastUpdateTime);
+      console.log('Última atualização:', this.lastUpdatedAt)
 
       this.addMarkers();
     } catch (error) {
@@ -84,6 +85,22 @@ export default {
     }
   },
   methods: {
+    formatDateTime(dateString) {
+      if (!dateString) {
+        return 'Data não disponível';
+      }
+
+      const date = new Date(dateString);
+      if (isNaN(date)) {
+        return 'Data inválida';
+      }
+
+      const day = String(date.getUTCDate()).padStart(2, '0');
+      const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+      const year = date.getUTCFullYear();
+      const hours = String(date.getUTCHours()).padStart(2, '0');
+      return `${day}/${month}/${year} ${hours}:00 horas`;
+    },
     setupMap() {
       
       this.map = L.map(this.$refs.map, {
@@ -99,11 +116,6 @@ export default {
     attribution: false, 
   }
 ).addTo(this.map);
-
-L.control.attribution({
-  prefix: false, 
-}).addAttribution(`Dados atualizados em: ${this.lastUpdatedAt}`).addTo(this.map);
-
 
       const geojsonLayer = L.geoJSON(ceara_data, {
         onEachFeature: this.onEachFeature,
@@ -216,6 +228,10 @@ L.control.attribution({
       this.pluviometerMarkers.addTo(this.map);
       this.stationInactiveMarkers.addTo(this.map);
       this.pluviometerInactiveMarkers.addTo(this.map);
+
+      L.control.attribution({
+      prefix: false,
+    }).addAttribution(`Dados atualizados em: ${this.lastUpdatedAt}`).addTo(this.map);
 },
     addLegend() {
       const legend = L.control({ position: 'topright' });
