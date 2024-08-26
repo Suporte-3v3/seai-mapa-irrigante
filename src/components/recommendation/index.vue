@@ -873,26 +873,43 @@ async calculateRecomendation() {
       this.errors.NumberPlants = false;
     },
     toggleAdditionalFields() {
-      const validSelections = [
-        "Aspersão",
-        "Microaspersão",
-        "Gotejamento",
-        "Pivô Central",
-        "Sulcos",
-      ];
+  const validSelections = [
+    "Aspersão",
+    "Microaspersão",
+    "Gotejamento",
+    "Pivô Central",
+    "Sulcos",
+  ];
 
-      this.showAdditionalFields = validSelections.includes(
-        this.selectedSystemIrrigation
-      );
+  this.showAdditionalFields = validSelections.includes(
+    this.selectedSystemIrrigation
+  );
 
-      this.$nextTick(() => {
-        if (this.showAdditionalFields && this.$refs.additionalFields) {
-          setTimeout(() => {
-            this.$refs.additionalFields.scrollIntoView({ behavior: "smooth" });
-          }, 100);
-        }
-      });
-    },
+  switch (this.selectedSystemIrrigation) {
+    case 'Sulcos':
+      this.IrrigationEfficiency = 60;
+      break;
+    case 'Pivô Central':
+    case 'Aspersão':
+    case 'Gotejamento':
+      this.IrrigationEfficiency = 82.5;
+      break;
+    case 'Microaspersão':
+      this.IrrigationEfficiency = 77.5;
+      break;
+    default:
+      this.IrrigationEfficiency = '';
+      break;
+  }
+
+  this.$nextTick(() => {
+    if (this.showAdditionalFields && this.$refs.additionalFields) {
+      setTimeout(() => {
+        this.$refs.additionalFields.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+  });
+},
   },
 };
 </script>
