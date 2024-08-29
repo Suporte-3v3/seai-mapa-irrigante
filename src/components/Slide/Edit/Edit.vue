@@ -361,11 +361,28 @@ export default {
       );
       this.cards.CropId = this.selectedCrop.Id;
       this.cards.System.Type = this.selectedSystem.name;
+      if (this.selectedSystem.id != 1 || this.selectedSystem.id != 4) {
+        delete this.cards.System.Measurements.Precipitation;
+      }
       this.$emit("onSaveItem", this.cards);
       this.resetForm();
     },
     onCloseEditMode() {
       this.$emit("onCloseEditMode");
+    },
+    resetForm() {
+      // Reseta os valores do formulário para os valores iniciais
+      this.card = {
+        Id: null,
+        Name: "",
+        PlantingDate: null,
+        System: { Measurements: {} },
+      };
+      this.selectedCrop = null;
+      this.selectedSystem = {
+        id: 1,
+        name: "Aspersão",
+      };
     },
   },
 };

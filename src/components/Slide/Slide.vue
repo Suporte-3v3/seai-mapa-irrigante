@@ -197,6 +197,7 @@ export default {
             this.openEditMode(null, false);
           });
       } else {
+        console.log(editedCard);
         this.service
           .create(editedCard)
           .then(() => {

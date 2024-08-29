@@ -119,11 +119,15 @@ export default {
       this.submitted = true;
       this.btnLoading = true;
       if (this.isValid()) {
+
+        
         this.service
           .create(this.profile)
           .then((res) => {
             toast.success("Conta criada com sucesso!");
             this.success = true;
+            setTimeout(()=> this.$router.push('/login/login'), 500)
+            setTimeout(() => window.location.reload(), 1000)
           })
           .finally(() => {
             this.btnLoading = false;
