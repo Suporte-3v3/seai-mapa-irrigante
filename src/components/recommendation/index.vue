@@ -109,7 +109,7 @@
           class="form-control"
           type="number"
           placeholder="Digite o Valor da Precipitação Pluviométrica"
-          @input="validateMinimum(selectedPrecipitationManual, 'selectedPrecipitationManual')"
+          @input="validateNonNegative(selectedPrecipitationManual, 'selectedPrecipitationManual')"
         />
         <p v-if="errors.selectedPrecipitationManual" style="color: red; font-size: 12px;">* Digite Valores Númericos positivos</p>
       </div>
@@ -648,7 +648,7 @@ export default {
   this.errors.selectedStation = !this.selectedStation && this.isStationDisabled;
   this.errors.selectedET0Manual = !this.selectedET0Manual && !this.isStationDisabled;
   this.errors.selectedPluviometer = !this.selectedPluviometer && this.isPluviometerDisabled;
-  this.errors.selectedPrecipitationManual = !this.selectedPrecipitationManual && !this.isPluviometerDisabled;
+  this.errors.selectedPrecipitationManual = this.selectedPrecipitationManual === null || this.selectedPrecipitationManual === undefined || this.selectedPrecipitationManual === "";
   this.errors.selectedCulture = !this.selectedCulture;
   this.errors.dateplanting = !this.dateplanting;
   this.errors.selectedSystemIrrigation = !this.selectedSystemIrrigation;
@@ -815,6 +815,19 @@ async calculateRecomendation() {
         }
       }
     },
+
+    validateNonNegative(value, field) {
+  if (value === "" || value === null || value === undefined) {
+    this[field] = value;
+  } else {
+    const parsedValue = parseFloat(value);
+    if (!isNaN(parsedValue) && parsedValue >= 0) {
+      this[field] = parsedValue;
+    } else {
+      this[field] = 0;
+    }
+  }
+},
 
     formatDate(date) {
       if (!date) return "";
