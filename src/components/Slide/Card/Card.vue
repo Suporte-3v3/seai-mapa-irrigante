@@ -10,8 +10,11 @@
         class="d-flex justify-content-between"
       >
         <p>{{ body.title }}</p>
-        <p>
+        <p v-if="body.item">
           <strong>{{ body.item }}</strong>
+        </p>
+        <p v-else class="error">
+          Nulo (Ação necessária: Edite os valores para corrigir)
         </p>
       </div>
     </div>
@@ -103,6 +106,11 @@ export default {
       margin-top: -10px;
       font-size: 14px;
     }
+  }
+  .error {
+    color: rgb(97, 2, 2);
+    font-size: 12px !important;
+    text-align: end;
   }
 }
 @media (max-width: 1400px) {

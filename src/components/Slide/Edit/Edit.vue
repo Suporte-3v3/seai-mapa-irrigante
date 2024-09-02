@@ -81,7 +81,6 @@
             <label
               for="flowSystem"
               class="font-weight-bold"
-              style="color: #bb4430"
               >Vazão do Sistema (l/h)</label
             >
           </div>
@@ -97,7 +96,6 @@
             <label
               for="plantedArea"
               class="font-weight-bold"
-              style="color: #bb4430"
               >Área Plantada (m²)</label
             >
           </div>
@@ -113,7 +111,6 @@
             <label
               for="effectiveArea"
               class="font-weight-bold"
-              style="color: #bb4430"
               >Área efetiva de cada planta (m²/planta)</label
             >
           </div>
@@ -129,7 +126,6 @@
             <label
               for="numberPlants"
               class="font-weight-bold"
-              style="color: #bb4430"
               >Número de Plantas por Área (plantas/m²)</label
             >
           </div>
@@ -150,7 +146,6 @@
             <label
               for="precipitationAround"
               class="font-weight-bold"
-              style="color: #bb4430"
             >
               {{
                 selectedSystem.id === 1
@@ -173,7 +168,6 @@
             <label
               for="furrowLength"
               class="font-weight-bold"
-              style="color: #bb4430"
               >Comprimento dos Sulcos (m)</label
             >
           </div>
@@ -189,7 +183,6 @@
             <label
               for="grooveSpacing"
               class="font-weight-bold"
-              style="color: #bb4430"
               >Espaçamento entre os Sulcos (m)</label
             >
           </div>
@@ -205,7 +198,6 @@
             <label
               for="flowGrooves"
               class="font-weight-bold"
-              style="color: #bb4430"
               >Vazão por Sulco (l/h)</label
             >
           </div>
