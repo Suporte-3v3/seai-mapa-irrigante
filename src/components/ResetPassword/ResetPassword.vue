@@ -145,7 +145,7 @@ export default {
 
     newPassword() {
       this.service
-        .savePassword(this.profile, this.code)
+        .savePassword(this.profile, this.route.params.code)
         .then((res) => {
           location.href = "/login";
         })

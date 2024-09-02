@@ -13,7 +13,7 @@ export class UserRest {
     return result.data;
   }
   async savePassword(data, code) {
-    const result = await http.post(`v1/user/irrigant/forgot-password/${code}`, data);
+    const result = await http.post(`v1/user/irrigant/reset-password/${code}`, data);
     return result.data;
   }
   async confirmRegister(code) {
