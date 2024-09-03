@@ -9,111 +9,116 @@
       </router-link>
     </div>
     <div class="row mt-3">
-      <div class="col-md-12">
-        <div class="mb-4">
-          <h5 style="color: #1b3f82; text-align: left;">Simulação de Áreas de Plantio</h5>
-        </div>
+  <div class="col-md-12">
+    <div class="mb-4">
+      <h5 style="color: #1b3f82; text-align: left;">Simulação de Áreas de Plantio</h5>
+    </div>
+    <div class="mb-4">
+      <h6 style="color: #1b3f82; text-align: left;">Deseja Utilizar Dados Automáticos?</h6>
+      <div class="automatic-data-options mb-4">
         <div class="form-group mb-4">
-          <h6 for="option1" class="tab-label" style="color: #1b3f82">Estação</h6>
           <div class="input-group">
-            <select
-              id="option1"
-              v-model="selectedStation"
-              class="form-control"
-              :disabled="!isStationDisabled"
-            >
-              <option value="">Clique para selecionar a Estação</option>
-              <option
-                v-for="equipment in filteredStations"
-                :key="equipment.Id"
-                :value="equipment.Id"
-              >
-                ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Et0: {{ equipment.Et0 }}]
-              </option>
-            </select>
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <input
-                  id="toggleSwitchStation"
-                  v-model="toggleSwitchStation"
-                  class="form-check-input2"
-                  type="checkbox"
-                />
-                <label class="form-check-label" for="toggleSwitchStation">
-                  Dados Automáticos
-                </label>
-              </div>
-            </div>
-          </div>
-          <p
-            v-if="errors.selectedStation && toggleSwitchStation"
-            style="color: red; font-size: 12px;"
-          >
-            * Campo Obrigatório
-          </p>
-      </div>
-
-      <div v-if="!isStationDisabled" class="form-group mb-4">
-        <h6 for="newFormET0" class="tab-label" style="color: #9023a1" >Et0 Manual (mm)</h6>
-        <input
-          id="newFormET0"
-          v-model="selectedET0Manual"
-          class="form-control"
-          type="number"
-          placeholder="Digite o Valor da ET0"
-          @input="validateMinimum(selectedET0Manual, 'selectedET0Manual')"
-        />
-        <p v-if="errors.selectedET0Manual" style="color: red; font-size: 12px;">* Digite Valores Númericos acima de 0</p>
-      </div>
-
-      <div class="form-group mb-4">
-        <h6 for="option2" class="tab-label" style="color: #1b3f82">Pluviômetro</h6>
-        <div class="input-group">
-          <select
-            id="option2"
-            v-model="selectedPluviometer"
-            class="form-control"
-            :disabled="!isPluviometerDisabled"
-          >
-            <option value="">Clique para selecionar o Pluviômetro</option>
-            <option
-              v-for="equipment in filteredPluviometer"
-              :key="equipment.Id"
-              :value="equipment.Id"
-            >
-              ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Precipitação Pluviométrica: {{ equipment.Precipitation }} mm]
-            </option>
-          </select>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <input
-                id="toggleSwitchPluviometer"
-                v-model="toggleSwitchPluviometer"
-                class="form-check-input2"
-                type="checkbox"
-              />
-              <label class="form-check-label" for="toggleSwitchPluviometer">
-                Dados Automáticos
-              </label>
-            </div>
+            <input
+              id="toggleSwitchStation"
+              v-model="toggleSwitchStation"
+              class="form-check-input2"
+              type="checkbox"
+              checked
+            />
+            <label class="form-check-label" for="toggleSwitchStation">
+              Dados Automáticos para Estação
+            </label>
           </div>
         </div>
-        <p v-if="errors.selectedPluviometer && toggleSwitchPluviometer" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+        <div class="input-group mt-2">
+          <input
+            id="toggleSwitchPluviometer"
+            v-model="toggleSwitchPluviometer"
+            class="form-check-input2"
+            type="checkbox"
+            checked
+          />
+          <label class="form-check-label" for="toggleSwitchPluviometer">
+            Dados Automáticos para Pluviômetro
+          </label>
+        </div>
       </div>
+    </div>
 
-      <div v-if="!isPluviometerDisabled" class="form-group mb-4">
-        <h6 for="newFormPrecipitation" class="tab-label" style="color: #9023a1">Precipitação Pluviométrica Manual (mm)</h6>
-        <input
-          id="newFormPrecipitation"
-          v-model="selectedPrecipitationManual"
+    <div v-if="!toggleSwitchStation" class="form-group mb-4">
+      <h6 for="newFormET0" class="tab-label" style="color: #9023a1">Et0 Manual (mm)</h6>
+      <input
+        id="newFormET0"
+        v-model="selectedET0Manual"
+        class="form-control"
+        type="number"
+        placeholder="Digite o Valor da ET0"
+        @input="validateMinimum(selectedET0Manual, 'selectedET0Manual')"
+      />
+      <p v-if="errors.selectedET0Manual" style="color: red; font-size: 12px;">* Digite Valores Númericos acima de 0</p>
+    </div>
+
+    <div v-if="toggleSwitchStation" class="form-group mb-4">
+      <h6 for="option1" class="tab-label" style="color: #1b3f82">Estação</h6>
+      <div class="input-group">
+        <select
+          id="option1"
+          v-model="selectedStation"
           class="form-control"
-          type="number"
-          placeholder="Digite o Valor da Precipitação Pluviométrica"
-          @input="validateNonNegative(selectedPrecipitationManual, 'selectedPrecipitationManual')"
-        />
-        <p v-if="errors.selectedPrecipitationManual" style="color: red; font-size: 12px;">* Digite Valores Númericos positivos</p>
+          :disabled="!isStationDisabled"
+        >
+          <option value="">Clique para selecionar a Estação</option>
+          <option
+            v-for="equipment in filteredStations"
+            :key="equipment.Id"
+            :value="equipment.Id"
+          >
+            ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Et0: {{ equipment.Et0 }}]
+          </option>
+        </select>
       </div>
+      <p
+        v-if="errors.selectedStation && toggleSwitchStation"
+        style="color: red; font-size: 12px;"
+      >
+        * Campo Obrigatório
+      </p>
+    </div>
 
+    <div v-if="!toggleSwitchPluviometer" class="form-group mb-4">
+      <h6 for="newFormPrecipitation" class="tab-label" style="color: #9023a1">Precipitação Pluviométrica Manual (mm)</h6>
+      <input
+        id="newFormPrecipitation"
+        v-model="selectedPrecipitationManual"
+        class="form-control"
+        type="number"
+        placeholder="Digite o Valor da Precipitação Pluviométrica"
+        @input="validateNonNegative(selectedPrecipitationManual, 'selectedPrecipitationManual')"
+      />
+      <p v-if="errors.selectedPrecipitationManual" style="color: red; font-size: 12px;">* Digite Valores Númericos positivos</p>
+    </div>
+
+    <div v-if="toggleSwitchPluviometer" class="form-group mb-4">
+      <h6 for="option2" class="tab-label" style="color: #1b3f82">Pluviômetro</h6>
+      <div class="input-group">
+        <select
+          id="option2"
+          v-model="selectedPluviometer"
+          class="form-control"
+          :disabled="!isPluviometerDisabled"
+        >
+          <option value="">Clique para selecionar o Pluviômetro</option>
+          <option
+            v-for="equipment in filteredPluviometer"
+            :key="equipment.Id"
+            :value="equipment.Id"
+          >
+            ({{ equipment.Organ.Name }}) - {{ equipment.Name }} - [Precipitação Pluviométrica: {{ equipment.Precipitation }} mm]
+          </option>
+        </select>
+      </div>
+      <p v-if="errors.selectedPluviometer && toggleSwitchPluviometer" style="color: red; font-size: 12px;">* Campo Obrigatório</p>
+    </div>
         <div class="form-group mb-4">
           <h6 for="option3" class="tab-label" style="color: #1b3f82">Cultura</h6>
           <div class="input-group">
@@ -960,6 +965,13 @@ async calculateRecomendation() {
 <style>
 body {
   background-color: #eff4f7;
+}
+
+.automatic-data-options {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .text-danger {
