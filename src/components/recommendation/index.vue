@@ -648,7 +648,11 @@ export default {
   this.errors.selectedStation = !this.selectedStation && this.isStationDisabled;
   this.errors.selectedET0Manual = !this.selectedET0Manual && !this.isStationDisabled;
   this.errors.selectedPluviometer = !this.selectedPluviometer && this.isPluviometerDisabled;
-  this.errors.selectedPrecipitationManual = this.selectedPrecipitationManual === null || this.selectedPrecipitationManual === undefined || this.selectedPrecipitationManual === "";
+  if (!this.isPluviometerDisabled) {
+    this.errors.selectedPrecipitationManual = this.selectedPrecipitationManual === null || this.selectedPrecipitationManual === undefined || this.selectedPrecipitationManual === "";
+  } else {
+    this.errors.selectedPrecipitationManual = false;
+  }
   this.errors.selectedCulture = !this.selectedCulture;
   this.errors.dateplanting = !this.dateplanting;
   this.errors.selectedSystemIrrigation = !this.selectedSystemIrrigation;
