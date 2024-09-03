@@ -463,42 +463,42 @@
               class="card-header text-white text-center"
               :style="{ backgroundColor: '#1b3f82' }"
             >
-              <h3>Simulação de Áreas de Plantio</h3>
-            </div>
-            <div v-if="isLoading" class="loading">Carregando...</div>
-            <div class="card-body">
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                  <strong>ET0:</strong> {{ results.data.Et0 }} {{ "mm" }}
-                </li>
-                <li class="list-group-item">
-                  <strong>Precipitação Pluviométrica:</strong>
-                  {{ results.data.Precipitation }} {{ "mm" }}
-                </li>
-                <li class="list-group-item">
-                  <strong>Eficiência de Irrigação:</strong>
-                  {{ results.data.IrrigationEfficiency * 100 }} {{ "%" }}
-                </li>
-                <li class="list-group-item">
-                  <strong>Dias da Cultura:</strong> {{ results.data.CropDays }}
-                </li>
-                <li class="list-group-item">
-                  <strong>Estágio Fenológico:</strong> {{ results.data.Stage }}
-                </li>
-                <li class="list-group-item">
-                  <strong>Kc:</strong> {{ results.data.Kc }}
-                </li>
-                <li class="list-group-item">
-                  <strong>Etc:</strong> {{ results.data.Etc }} {{ "mm" }}
-                </li>
-                <li class="list-group-item">
-                  <strong>Lâmina de Reposição:</strong>
-                  {{ results.data.RepositionBlade }} {{ "mm" }}
-                </li>
-                <li class="list-group-item">
-                  <strong>Tempo de Irrigação:</strong>
-                  {{ results.data.IrrigationTime }}
-                </li>
+            <h3>Simulação de Áreas de Plantio</h3>
+</div>
+<div v-if="isLoading" class="loading">Carregando...</div>
+<div class="card-body">
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <strong>ET0:</strong> {{ results.data.Et0 }} mm
+    </li>
+    <li class="list-group-item">
+      <strong>Precipitação Pluviométrica:</strong>
+      {{ results.data.Precipitation }} mm
+    </li>
+    <li class="list-group-item">
+      <strong>Eficiência de Irrigação:</strong>
+      {{ results.data.IrrigationEfficiency * 100 }} %
+    </li>
+    <li class="list-group-item">
+      <strong>Dias da Cultura:</strong> {{ results.data.CropDays }}
+    </li>
+    <li class="list-group-item">
+      <strong>Estágio Fenológico:</strong> {{ results.data.Stage }}
+    </li>
+    <li class="list-group-item">
+      <strong>Kc:</strong> {{ results.data.Kc }}
+    </li>
+    <li class="list-group-item">
+      <strong>Etc:</strong> {{ results.data.Etc }} mm
+    </li>
+    <li class="list-group-item">
+      <strong>Lâmina de Reposição:</strong>
+      {{ this.selectedSystemIrrigation === 'Pivô Central' ? results.data.blade : results.data.RepositionBlade }}
+    </li>
+    <li class="list-group-item">
+      <strong>Tempo de Irrigação:</strong>
+      {{ results.data.IrrigationTime }}
+    </li>
               </ul>
             </div>
           </div>
@@ -779,6 +779,32 @@ async calculateRecomendation() {
 
     console.log("Resposta da API:", responseBladeSuggestion);
     this.results = responseBladeSuggestion.data;
+
+    console.log("Valor original da lâmina:", this.results.data.RepositionBlade);
+
+    if (this.selectedSystemIrrigation === "Pivô Central") {
+      const bladeValue = parseFloat(this.results.data.RepositionBlade);
+
+      if (isNaN(bladeValue)) {
+        console.error("Valor inválido detectado:", this.results.data.blade);
+        this.results.data.blade = "Valor inválido";
+      } else {
+        this.results.data.blade = `${Math.ceil(bladeValue)} voltas`;
+      }
+    }
+
+    if (this.results && this.results.data && this.results.data.RepositionBlade !== undefined) {
+      const repositionBladeValue = parseFloat(this.results.data.RepositionBlade);
+      console.log("Valor convertido para RepositionBlade:", repositionBladeValue);
+      
+      if (isNaN(repositionBladeValue)) {
+        console.error("Valor inválido para RepositionBlade:", this.results.data.RepositionBlade);
+        this.results.data.RepositionBlade = "Valor inválido";
+      } else {
+        this.results.data.RepositionBlade = `${repositionBladeValue.toFixed(2)} mm`;
+      }
+    }
+
     this.resultsVisible = true;
     console.log("Resultados Atualizados:", this.results);
     console.log("Resultados Visíveis:", this.resultsVisible);
