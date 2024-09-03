@@ -26,7 +26,7 @@
               checked
             />
             <label class="form-check-label" for="toggleSwitchStation">
-              Dados Automáticos para Estação
+              Estação
             </label>
           </div>
         </div>
@@ -39,7 +39,7 @@
             checked
           />
           <label class="form-check-label" for="toggleSwitchPluviometer">
-            Dados Automáticos para Pluviômetro
+            Pluviômetro
           </label>
         </div>
       </div>
