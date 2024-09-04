@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <span v-if="items">
+    <div v-if="items">
       <h4 class="mt-4" v-if="!loading">Todas as notícias</h4>
       <div
         class="d-flex w-100 flex-column content-cards scroll-style"
@@ -46,7 +46,7 @@
         @onHandlePageChange="handlePageChange"
         v-if="!loading"
       />
-    </span>
+    </div>
     <div v-else>Nenhuma notícia encontrada</div>
   </div>
 </template>
@@ -130,41 +130,41 @@ export default {
 .content {
   margin-top: 100px;
   color: #1b3f82;
+  height: 800px;
 }
-.card {
-  cursor: pointer;
-  background-color: white;
-  width: 100%;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  height: 100px;
-  border-radius: 5px;
-  margin-top: 15px;
 
-  padding: 20px;
-  padding-bottom: 100px;
-  transition: 0.5s;
-  &:hover {
-    background-color: rgb(241, 241, 241);
-  }
-  h6 {
-    color: #1b3f82;
-    cursor: pointer;
-    &:hover {
-      color: #2556b1;
-    }
-  }
-  p {
-    font-size: 14px;
-  }
-  small {
-    font-size: 10px;
-    color: rgb(172, 172, 172);
-  }
-}
 .content-cards {
   height: 68vh;
   max-height: 1000px;
   overflow: auto;
   padding-right: 20px;
+
 }
+.card {
+    cursor: pointer;
+    background-color: white;
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    border-radius: 5px;
+    margin-top: 15px;
+    padding: 20px;
+    transition: 0.5s;
+    &:hover {
+      background-color: rgb(241, 241, 241);
+    }
+    h6 {
+      color: #1b3f82;
+      cursor: pointer;
+      &:hover {
+        color: #2556b1;
+      }
+    }
+    p {
+      font-size: 12px;
+    }
+    small {
+      font-size: 10px;
+      color: rgb(172, 172, 172);
+    }
+  }
 </style>
