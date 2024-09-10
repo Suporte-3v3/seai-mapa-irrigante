@@ -11,7 +11,7 @@
     <h1 v-else>
       Não foi possível finalizar o cadastro, entre em contato com o suporte.
     </h1>
-    <router-link to="/#/login">
+    <router-link to="#/login">
       <Button
         class="btn-primary w-100 d-flex justify-content-center align-items-center"
       >

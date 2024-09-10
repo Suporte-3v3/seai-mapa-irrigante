@@ -147,7 +147,7 @@ export default {
       this.service
         .savePassword(this.profile, this.route.params.code)
         .then((res) => {
-          location.href = "/login";
+          location.href = "#/login";
         })
         .finally(() => {
           this.disabledBtn = false;

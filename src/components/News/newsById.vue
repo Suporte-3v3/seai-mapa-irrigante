@@ -9,10 +9,7 @@
     >
       <h4>Notícias</h4>
     </div>
-    <div
-      class="d-flex w-100 flex-column news-text"
-      v-if="!loading"
-    >
+    <div class="d-flex w-100 flex-column news-text" v-if="!loading">
       <div class="mt-4">
         <h4>{{ news.Title }}</h4>
         <hr />
@@ -51,17 +48,15 @@ export default {
   },
   methods: {
     getNewsById() {
-      this.service.getById(this.currentId).then((res) => {
-        this.news = res.data;
-        this.convertBuffer(this.news.Data.data);
-      });
-    },
-    convertBuffer(preBuffer) {
-      const buffer = new Uint8Array(preBuffer);
-      const decoder = new TextDecoder("utf-8");
-      const result = decoder.decode(buffer);
-      this.news.Data = result;
-      this.loading = false;
+      this.service
+        .getById(this.currentId)
+        .then((res) => {
+          this.news = res.data;
+          console.log(res);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
     goTo() {
       this.router.push({ name: "News" });
@@ -102,11 +97,11 @@ button {
   gap: 8px;
   font-size: 14px;
   transition: 0.5s;
-  &:hover{
+  &:hover {
     color: #1b3f82;
   }
 }
-.news-text{
-    min-height: 75vh;
+.news-text {
+  min-height: 75vh;
 }
 </style>
