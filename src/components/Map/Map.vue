@@ -54,11 +54,11 @@ export default {
     try {
       const baseUrl = API_BASE_URL;
 
-      const responseStation = await axios.get(`${baseUrl}/equipments/activated?type=station`);
+      const responseStation = await axios.get(`${baseUrl}/equipments/synchronized?type=station`);
       this.stations = responseStation.data.data || [];
       console.log('Dados das Estações:', this.stations);
 
-      const responsePluviometer = await axios.get(`${baseUrl}/equipments/activated?type=pluviometer`);
+      const responsePluviometer = await axios.get(`${baseUrl}/equipments/synchronized?type=pluviometer`);
       this.pluviometers = responsePluviometer.data ? responsePluviometer.data.data : [];
       console.log('Dados dos Pluviômetros:', this.pluviometers);
 
@@ -108,6 +108,7 @@ export default {
         attributionControl: false,
         zoomControl: false,
         minZoom: 6,
+        maxBounds: [-180, 180] [180, -180],
       });
 
       L.tileLayer(
