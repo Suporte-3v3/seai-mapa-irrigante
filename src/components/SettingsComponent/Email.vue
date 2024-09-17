@@ -66,7 +66,7 @@ export default {
         .getNotifications()
         .then((response) => {
           this.notification = response.data;
-          if (!this.notification0) {
+          if (!this.notification[0]) {
             this.setDefaultNotification();
           }
         })
