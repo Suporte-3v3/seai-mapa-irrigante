@@ -14,7 +14,9 @@
         class="w-100 d-flex flex-column"
       >
         <div class="w-100 d-flex justify-content-center">
-          <h5>{{ card.Id ? `Editando ${card.Name}` : "Criando Área de Plantio" }}</h5>
+          <h5>
+            {{ card.Id ? `Editando ${card.Name}` : "Criando Área de Plantio" }}
+          </h5>
         </div>
 
         <div
@@ -25,7 +27,9 @@
             v-model="cards.Name"
             class="w-full"
           />
-          <label for="login" class="font-weight-bold">Nome da Área de Plantio </label>
+          <label for="login" class="font-weight-bold"
+            >Nome da Área de Plantio
+          </label>
         </div>
         <div
           class="form-group form-group-text text-left p-float-label w-100 mt-4"
@@ -78,9 +82,7 @@
               type="number"
               class="w-full"
             />
-            <label
-              for="flowSystem"
-              class="font-weight-bold"
+            <label for="flowSystem" class="font-weight-bold"
               >Vazão do Sistema (l/h)</label
             >
           </div>
@@ -93,9 +95,7 @@
               type="number"
               class="w-full"
             />
-            <label
-              for="plantedArea"
-              class="font-weight-bold"
+            <label for="plantedArea" class="font-weight-bold"
               >Área Plantada (m²)</label
             >
           </div>
@@ -108,9 +108,7 @@
               type="number"
               class="w-full"
             />
-            <label
-              for="effectiveArea"
-              class="font-weight-bold"
+            <label for="effectiveArea" class="font-weight-bold"
               >Área efetiva de cada planta (m²/planta)</label
             >
           </div>
@@ -123,9 +121,7 @@
               type="number"
               class="w-full"
             />
-            <label
-              for="numberPlants"
-              class="font-weight-bold"
+            <label for="numberPlants" class="font-weight-bold"
               >Número de Plantas por Área (plantas/m²)</label
             >
           </div>
@@ -143,10 +139,7 @@
               type="number"
               class="w-full"
             />
-            <label
-              for="precipitationAround"
-              class="font-weight-bold"
-            >
+            <label for="precipitationAround" class="font-weight-bold">
               {{
                 selectedSystem.id === 1
                   ? "Precipitação por Aspersor (mm/h)"
@@ -165,9 +158,7 @@
               type="number"
               class="w-full"
             />
-            <label
-              for="furrowLength"
-              class="font-weight-bold"
+            <label for="furrowLength" class="font-weight-bold"
               >Comprimento dos Sulcos (m)</label
             >
           </div>
@@ -180,9 +171,7 @@
               type="number"
               class="w-full"
             />
-            <label
-              for="grooveSpacing"
-              class="font-weight-bold"
+            <label for="grooveSpacing" class="font-weight-bold"
               >Espaçamento entre os Sulcos (m)</label
             >
           </div>
@@ -195,9 +184,7 @@
               type="number"
               class="w-full"
             />
-            <label
-              for="flowGrooves"
-              class="font-weight-bold"
+            <label for="flowGrooves" class="font-weight-bold"
               >Vazão por Sulco (l/h)</label
             >
           </div>
@@ -338,10 +325,12 @@ export default {
           this.crops = response.data;
           this.selectedCrop.Name = this.cards.Crop;
           this.selectedCrop.Id = this.cards.CropId;
-          const crop = this.crops.find((c) => c.Id === this.cards.CropId);
+          const crop = this.crops.find((c) => {
+            console.log(c);
+            return c.Id === this.cards.CropId;
+          });
           if (crop) {
-            this.selectedCrop.Name = crop.Name;
-            this.selectedCrop.Id = crop.Id;
+            this.selectedCrop = crop;
           }
         })
         .finally(() => (this.loading = false));
