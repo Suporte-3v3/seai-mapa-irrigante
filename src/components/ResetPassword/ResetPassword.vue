@@ -8,10 +8,15 @@
         class="form-group form-group-text text-left p-float-label w-full"
       >
         <InputText id="login" v-model="profile.email" class="w-100" required />
-        <label for="login" class="font-weight-bold">Email ou Username*</label>
+        <label for="login" class="font-weight-bold">E-mail*</label>
         <small v-if="submitted && !profile.email" class="p-error">{{
           requiredField
         }}</small>
+        <small
+          v-if="submitted && !this.validateEmail(this.profile.email)"
+          class="p-error"
+          >E-mail inválido</small
+        >
       </div>
 
       <div v-else>
@@ -109,8 +114,6 @@ export default {
   methods: {
     handleSubmit() {
       this.submitted = true;
-      this.disabledBtn = true;
-
       if (this.isValid()) {
         if (this.code) {
           this.newPassword();
@@ -119,7 +122,10 @@ export default {
         }
       }
     },
-
+    validateEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    },
     isValid() {
       if (this.code) {
         return (
@@ -128,11 +134,12 @@ export default {
           this.profile.password === this.profile.confirmPassword
         );
       } else {
-        return this.profile.email;
+        return this.profile.email && this.validateEmail(this.profile.email);
       }
     },
 
     login() {
+      this.disabledBtn = true;
       this.service
         .sendLink(this.profile)
         .then((res) => {
@@ -144,6 +151,7 @@ export default {
     },
 
     newPassword() {
+      this.disabledBtn = true;
       this.service
         .savePassword(this.profile, this.route.params.code)
         .then((res) => {
