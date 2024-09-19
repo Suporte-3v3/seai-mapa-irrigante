@@ -5,7 +5,7 @@
     <form @submit.prevent="login" class="w-50 d-flex flex-column">
       <div class="form-group form-group-text text-left p-float-label w-full">
         <InputText id="login" v-model="profile.login" class="w-100" required />
-        <label for="login" class="font-weight-bold">Email ou Username*</label>
+        <label for="login" class="font-weight-bold">Email*</label>
         <small v-if="submitted && !profile.login" class="p-error">{{
           requiredField
         }}</small>
