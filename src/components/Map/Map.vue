@@ -25,22 +25,27 @@ export default {
       stationIcon: L.icon({
         iconUrl: '/icon-station.png',
         iconSize: [25, 25],
+        className: 'station-icon',
       }),
       pluviometerIcon: L.icon({
         iconUrl: '/icon-pluviometer.png',
         iconSize: [25, 25],
+        className: 'pluviometer-icon',
       }),
       userIcon: L.icon({
         iconUrl: '/icon-user.png',
         iconSize: [25, 25],
+        className: 'user-icon',
       }),
       stationDisableIcon: L.icon({
         iconUrl: '/icon-stationdisable.png',
-        iconSize: [25,25],
+        iconSize: [25, 25],
+        className: 'station-disable-icon',
       }),
       pluviometerDisableIcon: L.icon({
         iconUrl: '/icon-pluviometerdisable.png',
-        iconSize: [25,25],
+        iconSize: [25, 25],
+        className: 'pluviometer-disable-icon',
       }),
       showStations: true,
       showPluviometers: true,
@@ -54,18 +59,15 @@ export default {
     try {
       const baseUrl = API_BASE_URL;
 
-      const responseStation = await axios.get(`${baseUrl}/equipments/synchronized?type=station`);
+      const [responseStation, responsePluviometer, responseUpdate] = await Promise.all([
+        axios.get(`${baseUrl}/equipments/synchronized?type=station`),
+        axios.get(`${baseUrl}/equipments/synchronized?type=pluviometer`),
+        axios.get(`http://seai.3v3.farm/api/v2/equipments/last-updated-at`)
+      ]);
+
       this.stations = responseStation.data.data || [];
-      console.log('Dados das Estações:', this.stations);
-
-      const responsePluviometer = await axios.get(`${baseUrl}/equipments/synchronized?type=pluviometer`);
       this.pluviometers = responsePluviometer.data ? responsePluviometer.data.data : [];
-      console.log('Dados dos Pluviômetros:', this.pluviometers);
-
-      const responseUpdate = await axios.get(`http://seai.3v3.farm/api/v2/equipments/last-updated-at`);
-      const lastUpdateTime = responseUpdate.data.data[0].Time;
-      this.lastUpdatedAt = this.formatDateTime(lastUpdateTime);
-      console.log('Última atualização:', this.lastUpdatedAt)
+      this.lastUpdatedAt = this.formatDateTime(responseUpdate.data.data[0].Time);
 
       this.addMarkers();
     } catch (error) {
@@ -86,14 +88,10 @@ export default {
   },
   methods: {
     formatDateTime(dateString) {
-      if (!dateString) {
-        return 'Data não disponível';
-      }
+      if (!dateString) return 'Data não disponível';
 
       const date = new Date(dateString);
-      if (isNaN(date)) {
-        return 'Data inválida';
-      }
+      if (isNaN(date)) return 'Data inválida';
 
       const day = String(date.getUTCDate()).padStart(2, '0');
       const month = String(date.getUTCMonth() + 1).padStart(2, '0');
@@ -102,7 +100,6 @@ export default {
       return `${day}/${month}/${year}`;
     },
     setupMap() {
-      
       this.map = L.map(this.$refs.map, {
         scrollWheelZoom: true,
         attributionControl: false,
@@ -112,11 +109,9 @@ export default {
       });
 
       L.tileLayer(
-  "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-  {
-    attribution: false, 
-  }
-).addTo(this.map);
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        { attribution: false }
+      ).addTo(this.map);
 
       const geojsonLayer = L.geoJSON(ceara_data, {
         onEachFeature: this.onEachFeature,
@@ -135,24 +130,18 @@ export default {
       this.handleResize();
 
       this.$refs.map.addEventListener('touchstart', () => {
-        if (this.map) {
-          this.map.scrollWheelZoom.disable();
-        }
+        if (this.map) this.map.scrollWheelZoom.disable();
       });
 
       this.$refs.map.addEventListener('touchend', () => {
-        if (this.map) {
-          this.map.scrollWheelZoom.enable();
-        }
+        if (this.map) this.map.scrollWheelZoom.enable();
       });
 
       this.addLegend();
       L.control.zoom({ position: 'topleft' }).addTo(this.map);
     },
     handleResize() {
-      if (this.map) {
-        this.map.invalidateSize();
-      }
+      if (this.map) this.map.invalidateSize();
     },
     onEachFeature(feature, layer) {
       layer.on({
@@ -160,36 +149,34 @@ export default {
         mouseout: this.resetHighlight,
       });
     },
-    highlightFeature(e) {
-    },
+    highlightFeature(e) {},
     resetHighlight(e) {
       const geojsonLayer = e.target;
       geojsonLayer.resetStyle(e.target);
     },
-
     addMarkers() {
-    const addMarker = (item, icon, popupContent) => {
-      const coordinates = item.Location.Coordinates;
-      if (coordinates && coordinates.length === 2) {
-        const marker = L.marker([coordinates[0], coordinates[1]], { icon });
-        marker.bindPopup(popupContent);
+      const addMarker = (item, icon, popupContent) => {
+        const coordinates = item.Location.Coordinates;
+        if (coordinates && coordinates.length === 2) {
+          const marker = L.marker([coordinates[0], coordinates[1]], { icon });
+          marker.bindPopup(popupContent);
 
-        marker.on('click', () => {
-          this.$emit('station-selected', item);
-        });
+          marker.on('click', () => {
+            this.$emit('station-selected', item);
+          });
 
-        return marker;
-      } else {
-        console.error('Coordenadas inválidas:', item);
-        return null;
-      }
-    };
+          return marker;
+        } else {
+          console.error('Coordenadas inválidas:', item);
+          return null;
+        }
+      };
 
-  const createPopupContent = (name, organName, code, dataText) => {
-    return `<b>Nome:</b> ${name}<br><b>Orgão:</b> ${organName} [${code}]<br><b>Dados:</b> ${dataText}`;
-  };
+      const createPopupContent = (name, organName, code, dataText) => {
+        return `<b>Nome:</b> ${name}<br><b>Orgão:</b> ${organName} [${code}]<br><b>Dados:</b> ${dataText}`;
+      };
 
-  if (this.stations && Array.isArray(this.stations)) {
+      if (this.stations && Array.isArray(this.stations)) {
         this.stations.forEach((station) => {
           const et0Text = (station.Et0 === null || station.Et0 === undefined) ? 'Sem Dados Coletados' : `${station.Et0} mm`;
           const icon = (station.Enable === false || station.Et0 === null || station.Et0 === undefined) ? this.stationDisableIcon : this.stationIcon;
@@ -203,11 +190,9 @@ export default {
             }
           }
         });
-      } else {
-        console.error('Dados das estações são inválidos');
-  }
+      }
 
-  if (this.pluviometers && Array.isArray(this.pluviometers)) {
+      if (this.pluviometers && Array.isArray(this.pluviometers)) {
         this.pluviometers.forEach((pluviometer) => {
           const precipitationText = (pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) ? 'Sem Dados Coletados' : `${pluviometer.Precipitation} mm`;
           const icon = (pluviometer.Enable === false || pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) ? this.pluviometerDisableIcon : this.pluviometerIcon;
@@ -221,9 +206,7 @@ export default {
             }
           }
         });
-      } else {
-        console.error('Dados dos pluviômetros são inválidos');
-  }
+      }
 
       this.stationMarkers.addTo(this.map);
       this.pluviometerMarkers.addTo(this.map);
@@ -231,177 +214,104 @@ export default {
       this.pluviometerInactiveMarkers.addTo(this.map);
 
       L.control.attribution({
-      prefix: false,
-    }).addAttribution(`Dados atualizados em: ${this.lastUpdatedAt}`).addTo(this.map);
-},
+        prefix: false,
+      }).addAttribution(`Dados atualizados em: ${this.lastUpdatedAt}`).addTo(this.map);
+    },
     addLegend() {
       const legend = L.control({ position: 'topright' });
 
       legend.onAdd = () => {
         const div = L.DomUtil.create('div', 'info legend');
-        div.innerHTML += '<div><i id="stationenable-legend" style="background: #EF760F; width: 20px; height: 18px; display: inline-block;"></i> <b>Estações</b></div>';
-        div.innerHTML += '<div><i id="pluviometerenable-legend" style="background: #9023A1; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetros</b></div>';
-        div.innerHTML += '<div><i id="stationdisabled-legend" style="background: #d8ab88; width: 20px; height: 18px; display: inline-block;"></i> <b>Estações Inativas</b></div>';
-        div.innerHTML += '<div><i id="pluviometerdisabled-legend" style="background: #bcaacf; width: 20px; height: 18px; display: inline-block;"></i> <b>Pluviômetros Inativos</b></div>';
+
+        // Estação Ativa
+        div.innerHTML += `<div id="legend-station-enable" style="cursor: pointer;">
+          <i id="stationenable-legend" style="background: #EF760F; width: 20px; height: 18px; display: inline-block;"></i>
+          <b>Estações Ativas</b>
+        </div>`;
+
+        // Pluviômetro Ativo
+        div.innerHTML += `<div id="legend-pluviometer-enable" style="cursor: pointer;">
+          <i id="pluviometerenable-legend" style="background: #9023A1; width: 20px; height: 18px; display: inline-block;"></i>
+          <b>Pluviômetros Ativos</b>
+        </div>`;
+
+        // Estação Desativada
+        div.innerHTML += `<div id="legend-station-disable" style="cursor: pointer;">
+          <i id="stationdisabled-legend" style="background: #d8ab88; width: 20px; height: 18px; display: inline-block;"></i>
+          <b>Estações Desativadas</b>
+        </div>`;
+
+        // Pluviômetro Desativado
+        div.innerHTML += `<div id="legend-pluviometer-disable" style="cursor: pointer;">
+          <i id="pluviometerdisabled-legend" style="background: #bcaacf; width: 20px; height: 18px; display: inline-block;"></i>
+          <b>Pluviômetros Desativados</b>
+        </div>`;
+
         return div;
       };
 
       legend.addTo(this.map);
 
-      setTimeout(() => {
-        document.getElementById('stationenable-legend').addEventListener('click', this.toggleStations);
-        document.getElementById('pluviometerenable-legend').addEventListener('click', this.togglePluviometers);
-        document.getElementById('stationdisabled-legend').addEventListener('click', this.toggleInactiveStations);
-        document.getElementById('pluviometerdisabled-legend').addEventListener('click', this.toggleInactivePluviometers);
-      }, 500);
+      // Click events for legend
+      L.DomEvent.on(L.DomUtil.get('legend-station-enable'), 'click', () => {
+        this.toggleLayer(this.stationMarkers, 'Estação Ativa');
+      });
+      L.DomEvent.on(L.DomUtil.get('legend-pluviometer-enable'), 'click', () => {
+        this.toggleLayer(this.pluviometerMarkers, 'Pluviômetro Ativo');
+      });
+      L.DomEvent.on(L.DomUtil.get('legend-station-disable'), 'click', () => {
+        this.toggleLayer(this.stationInactiveMarkers, 'Estação Desativada');
+      });
+      L.DomEvent.on(L.DomUtil.get('legend-pluviometer-disable'), 'click', () => {
+        this.toggleLayer(this.pluviometerInactiveMarkers, 'Pluviômetro Desativado');
+      });
     },
-    updateLegendOpacity() {
-    const stationLegend = document.getElementById('stationenable-legend');
-    const pluviometerLegend = document.getElementById('pluviometerenable-legend');
-    const stationInactiveLegend = document.getElementById('stationdisabled-legend');
-    const pluviometerInactiveLegend = document.getElementById('pluviometerdisabled-legend');
-
-    stationLegend.style.opacity = this.showStations ? '1' : '0.5';
-    pluviometerLegend.style.opacity = this.showPluviometers ? '1' : '0.5';
-    stationInactiveLegend.style.opacity = this.showInactiveStations ? '1' : '0.5';
-    pluviometerInactiveLegend.style.opacity = this.showInactivePluviometers ? '1' : '0.5';
-  },
-  toggleStations() {
-    this.showStations = !this.showStations;
-    if (this.showStations) {
-      this.map.addLayer(this.stationMarkers);
-      if (this.stationPolyline) {
-        this.map.addLayer(this.stationPolyline);
+    toggleLayer(layerGroup, layerName) {
+      if (this.map.hasLayer(layerGroup)) {
+        this.map.removeLayer(layerGroup);
+        toast.info(`${layerName} ocultado.`);
+      } else {
+        this.map.addLayer(layerGroup);
+        toast.info(`${layerName} mostrado.`);
       }
-    } else {
-      this.map.removeLayer(this.stationMarkers);
-      if (this.stationPolyline) {
-        this.map.removeLayer(this.stationPolyline);
-      }
-    }
-    this.updateLegendOpacity();
-  },
-  togglePluviometers() {
-    this.showPluviometers = !this.showPluviometers;
-    if (this.showPluviometers) {
-      this.map.addLayer(this.pluviometerMarkers);
-      if (this.pluviometerPolyline) {
-        this.map.addLayer(this.pluviometerPolyline);
-      }
-    } else {
-      this.map.removeLayer(this.pluviometerMarkers);
-      if (this.pluviometerPolyline) {
-        this.map.removeLayer(this.pluviometerPolyline);
-      }
-    }
-    this.updateLegendOpacity();
-  },
-  toggleInactiveStations() {
-    this.showInactiveStations = !this.showInactiveStations;
-    if (this.showInactiveStations) {
-      this.map.addLayer(this.stationInactiveMarkers);
-    } else {
-      this.map.removeLayer(this.stationInactiveMarkers);
-    }
-    this.updateLegendOpacity();
-  },
-  toggleInactivePluviometers() {
-    this.showInactivePluviometers = !this.showInactivePluviometers;
-    if (this.showInactivePluviometers) {
-      this.map.addLayer(this.pluviometerInactiveMarkers);
-    } else {
-      this.map.removeLayer(this.pluviometerInactiveMarkers);
-    }
-    this.updateLegendOpacity();
-  },
+    },
+    debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    },
     getUserLocation() {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            this.userLocation = [latitude, longitude];
-            console.log('Localização do usuário:', this.userLocation);
-            if (this.map) {
-              this.map.setView(this.userLocation, 12);
-              const userMarker = L.marker(this.userLocation, { icon: this.userIcon }).addTo(this.map)
-                .bindPopup("<b>Usuário</b><br>Localização Aproximada");
-
-              setTimeout(() => {
-                this.addPolylines();
-              }, 3000);
-            }
-          },
-          (error) => {
-            console.error('Erro ao obter a localização do usuário:', error);
-          }
-        );
+        navigator.geolocation.getCurrentPosition((position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          this.userLocation = L.marker([lat, lng], { icon: this.userIcon }).addTo(this.map);
+          this.map.setView([lat, lng], 10);
+        });
       } else {
-        console.error("Geolocalização não é suportada por este navegador.");
+        toast.error('Geolocalização não suportada pelo navegador.');
       }
-    },
-    addPolylines() {
-    if (!this.userLocation) {
-      console.error('Localização do usuário não definida');
-      return;
-    }
-
-    let closestStation = null;
-    let minStationDistance = Number.MAX_SAFE_INTEGER;
-    this.stations.forEach((station) => {
-      const stationCoords = station.Location.Coordinates;
-      if (stationCoords && stationCoords.length === 2 && station.Enable && station.Et0 !== null && station.Et0 !== undefined) {
-        const distance = L.latLng(this.userLocation[0], this.userLocation[1]).distanceTo(L.latLng(stationCoords[0], stationCoords[1]));
-        if (distance < minStationDistance) {
-          minStationDistance = distance;
-          closestStation = stationCoords;
-        }
-      } else {
-      }
-    });
-
-    let closestPluviometer = null;
-    let minPluviometerDistance = Number.MAX_SAFE_INTEGER;
-    this.pluviometers.forEach((pluviometer) => {
-      const pluviometerCoords = pluviometer.Location.Coordinates;
-      if (pluviometerCoords && pluviometerCoords.length === 2 && pluviometer.Enable && pluviometer.Precipitation !== null && pluviometer.Precipitation !== undefined) {
-        const distance = L.latLng(this.userLocation[0], this.userLocation[1]).distanceTo(L.latLng(pluviometerCoords[0], pluviometerCoords[1]));
-        if (distance < minPluviometerDistance) {
-          minPluviometerDistance = distance;
-          closestPluviometer = pluviometerCoords;
-        }
-      } else {
-      }
-    });
-
-    if (closestStation) {
-      this.stationPolyline = L.polyline([this.userLocation, closestStation], {
-        color: '#EF760F',
-        weight: 1,
-        dashArray: '4,4',
-      }).addTo(this.map);
-      console.log('Polyline traçada para a estação mais próxima:', closestStation);
-    } else {
-      console.log('Nenhuma estação próxima encontrada');
-    }
-
-    setTimeout(() => {
-      if (closestPluviometer) {
-        this.pluviometerPolyline = L.polyline([this.userLocation, closestPluviometer], {
-          color: '#9023A1',
-          weight: 1,
-          dashArray: '4,4',
-        }).addTo(this.map);
-        console.log('Polyline traçada para o pluviômetro mais próximo:', closestPluviometer);
-      } else {
-        console.log('Nenhum pluviômetro próximo encontrado');
-      }
-    }, 500);
     }
   }
 };
 </script>
 
 <style>
+
+#map {
+    height: 100%;
+  }
+  .station-icon, .pluviometer-icon, .station-disable-icon, .pluviometer-disable-icon, .user-icon {
+    width: 25px;
+    height: 25px;
+  }
+
 .map-container {
   height: 60vh;
 }
