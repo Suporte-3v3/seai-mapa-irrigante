@@ -246,13 +246,13 @@
         >
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Vazão do Sistema (l/h)</h6
+              >Vazão dos Aspersores (l/h)</h6
             >
             <input
               v-model.number="FlowSystem"
               type="number"
               class="form-control"
-              placeholder="Digite o valor da Vazão do Sistema"
+              placeholder="Digite o valor da Vazão dos Aspersores"
               @input="validateMinimum(FlowSystem, 'FlowSystem')"
             />
             <p v-if="errors.FlowSystem" style="color: red; font-size: 12px">
@@ -261,19 +261,20 @@
           </div>
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Área Plantada (m²)</h6
+              >Área irrigada (m²)</h6
             >
             <input
               v-model.number="PlantedArea"
               type="number"
               class="form-control"
-              placeholder="Digite o valor da Área Plantada"
+              placeholder="Digite o valor da Área Irrigada"
               @input="validateMinimum(PlantedArea, 'PlantedArea')"
             />
             <p v-if="errors.PlantedArea" style="color: red; font-size: 12px">
               * Digite Valores Númericos acima de 0
             </p>
           </div>
+          <!--
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
               >Área efetiva de cada planta (m²/planta)</h6
@@ -289,15 +290,16 @@
               * Digite Valores Númericos acima de 0
             </p>
           </div>
+          -->
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Número de Plantas por Área (plantas/m²)</h6
+              >Quantidade de Aspersores</h6
             >
             <input
               v-model.number="NumberPlants"
               type="number"
               class="form-control"
-              placeholder="Digite o valor de Número de Plantas por Área"
+              placeholder="Digite o valor de Quantidade de Aspersores"
               @input="validateMinimum(NumberPlants, 'NumberPlants')"
             />
             <p v-if="errors.NumberPlants" style="color: red; font-size: 12px">
@@ -311,13 +313,13 @@
         >
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Vazão do Sistema (l/h)</h6
+              >Vazão dos Aspersores (l/h)</h6
             >
             <input
               v-model.number="FlowSystem"
               type="number"
               class="form-control"
-              placeholder="Digite o valor da Vazão do Sistema"
+              placeholder="Digite o valor da Vazão dos Aspersores"
               @input="validateMinimum(FlowSystem, 'FlowSystem')"
             />
             <p v-if="errors.FlowSystem" style="color: red; font-size: 12px">
@@ -326,19 +328,20 @@
           </div>
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Área Plantada (m²)</h6
+              >Área irrigada (m²)</h6
             >
             <input
               v-model.number="PlantedArea"
               type="number"
               class="form-control"
-              placeholder="Digite o valor da Área Plantada"
+              placeholder="Digite o valor da Área Irrigada"
               @input="validateMinimum(PlantedArea, 'PlantedArea')"
             />
             <p v-if="errors.PlantedArea" style="color: red; font-size: 12px">
               * Digite Valores Númericos acima de 0
             </p>
           </div>
+          <!--
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
               >Área efetiva de cada planta (m²/planta)</h6
@@ -354,15 +357,16 @@
               * Digite Valores Númericos acima de 0
             </p>
           </div>
+          -->
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Número de Plantas por Área (plantas/m²)</h6
+              >Quantidade de Aspersores</h6
             >
             <input
               v-model.number="NumberPlants"
               type="number"
               class="form-control"
-              placeholder="Digite o valor do Número de Plantas por Área"
+              placeholder="Digite o valor de Quantidade de Aspersores"
               @input="validateMinimum(NumberPlants, 'NumberPlants')"
             />
             <p v-if="errors.NumberPlants" style="color: red; font-size: 12px">
@@ -371,30 +375,52 @@
           </div>
         </div>
         <div
-          v-if="selectedSystemIrrigation === 'Pivô Central'"
-          class="col-md-12"
-        >
-          <div class="form-group mb-4">
-            <h6 class="tab-label" style="color: #9023a1"
-              >Precipitação por Volta (mm/volta)</h6
-            >
-            <input
-              v-model.number="PrecipitationAround"
-              type="number"
-              class="form-control"
-              placeholder="Digite o valor da Precipitação por Volta"
-              @input="
-                validateMinimum(PrecipitationAround, 'PrecipitationAround')
-              "
-            />
-            <p
-              v-if="errors.PrecipitationAround"
-              style="color: red; font-size: 12px"
-            >
-              * Digite Valores Númericos acima de 0
-            </p>
-          </div>
-        </div>
+  v-if="selectedSystemIrrigation === 'Pivô Central'"
+  class="col-md-12"
+>
+  <div class="form-group mb-4">
+    <h6 class="tab-label" style="color: #9023a1">
+      Lâmina Irrigada em uma volta
+    </h6>
+    <input
+      v-model.number="Area"
+      type="number"
+      class="form-control"
+      placeholder="Digite o valor da Lâmina Irrigada em uma volta"
+      @input="
+        validateMinimum(Area, 'Area')
+      "
+    />
+    <p
+      v-if="errors.Area"
+      style="color: red; font-size: 12px"
+    >
+      * Digite Valores Númericos acima de 0
+    </p>
+  </div>
+
+  <!-- Novo campo de Precipitação por Volta abaixo -->
+  <div class="form-group mb-4">
+    <h6 class="tab-label" style="color: #9023a1">
+      Tempo para uma volta (mm/volta)
+    </h6>
+    <input
+      v-model.number="Time"
+      type="number"
+      class="form-control"
+      placeholder="Digite o valor do Tempo para uma volta"
+      @input="
+        validateMinimum(Time, 'Time')
+      "
+    />
+    <p
+      v-if="errors.Time"
+      style="color: red; font-size: 12px"
+    >
+      * Digite Valores Númericos acima de 0
+    </p>
+  </div>
+</div>
         <div v-if="selectedSystemIrrigation === 'Sulcos'" class="col-md-12">
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
@@ -552,9 +578,11 @@ export default {
       PrecipitationSprinkler: "",
       FlowSystem: "",
       PlantedArea: "",
-      EffectiveArea: "",
+      /*EffectiveArea: "", */
       NumberPlants: "",
-      PrecipitationAround: "",
+      /*PrecipitationAround: "", */
+      Time: "",
+      Area: "",
       FurrowLength: "",
       GrooveSpacing: "",
       FlowGrooves: "",
@@ -575,7 +603,7 @@ export default {
         PrecipitationSprinkler: false,
         FlowSystem: false,
         PlantedArea: false,
-        EffectiveArea: false,
+        /*EffectiveArea: false,*/
         NumberPlants: false,
         PrecipitationAround: false,
         FurrowLength: false,
@@ -668,8 +696,12 @@ export default {
         !this.PrecipitationSprinkler || this.PrecipitationSprinkler === 0;
       break;
     case "Pivô Central":
-      this.errors.PrecipitationAround =
-        !this.PrecipitationAround || this.PrecipitationAround === 0;
+      /*this.errors.PrecipitationAround =
+        !this.PrecipitationAround || this.PrecipitationAround === 0;*/
+          this.errors.Time =
+        !this.Time || this.Time === 0;
+        this.errors.Area =
+        !this.Area || this.Area === 0;
       break;
     case "Sulcos":
       this.errors.FurrowLength =
@@ -682,8 +714,8 @@ export default {
     case "Microaspersão":
       this.errors.FlowSystem = !this.FlowSystem || this.FlowSystem === 0;
       this.errors.PlantedArea = !this.PlantedArea || this.PlantedArea === 0;
-      this.errors.EffectiveArea =
-        !this.EffectiveArea || this.EffectiveArea === 0;
+      /*this.errors.EffectiveArea =
+        !this.EffectiveArea || this.EffectiveArea === 0;*/
       this.errors.NumberPlants =
         !this.NumberPlants || this.NumberPlants === 0;
       break;
@@ -726,15 +758,17 @@ async calculateRecomendation() {
     if (this.selectedSystemIrrigation === "Aspersão") {
       measurements.Precipitation = parseFloat(this.PrecipitationSprinkler);
     } else if (this.selectedSystemIrrigation === "Pivô Central") {
-      measurements.Precipitation = parseFloat(this.PrecipitationAround);
+      /*measurements.Precipitation = parseFloat(this.PrecipitationAround);*/
+      measurements.Time = parseFloat(this.Time);
+      measurements.Area = parseFloat(this.Area);
     } else if (
       this.selectedSystemIrrigation === "Microaspersão" ||
       this.selectedSystemIrrigation === "Gotejamento"
     ) {
       measurements.Flow = parseFloat(this.FlowSystem);
       measurements.Area = parseFloat(this.PlantedArea);
-      measurements.EfectiveArea = parseFloat(this.EffectiveArea);
-      measurements.PlantsQtd = parseFloat(this.NumberPlants);
+      /*measurements.EfectiveArea = parseFloat(this.EffectiveArea);*/
+      measurements.Quantity = parseFloat(this.NumberPlants);
     } else if (this.selectedSystemIrrigation === "Sulcos") {
       measurements.Flow = parseFloat(this.FlowGrooves);
       measurements.Length = parseFloat(this.FurrowLength);
@@ -893,9 +927,11 @@ async calculateRecomendation() {
       this.PrecipitationSprinkler = "";
       this.FlowSystem = "";
       this.PlantedArea = "";
-      this.EffectiveArea = "";
+      /*this.EffectiveArea = "";*/
       this.NumberPlants = "";
-      this.PrecipitationAround = "";
+      /*this.PrecipitationAround = "";*/
+      this.Time = "";
+      this.Area = "";
       this.FurrowLength = "";
       this.GrooveSpacing = "";
       this.FlowGrooves = "";
@@ -911,7 +947,9 @@ async calculateRecomendation() {
       this.errors.dateplanting = false;
       this.errors.selectedSystemIrrigation = false;
       this.errors.PrecipitationSprinkler = false;
-      this.errors.PrecipitationAround = false;
+     /* this.errors.PrecipitationAround = false;*/
+      this.errors.Time = false;
+      this.errors.Area = false;
       this.errors.FurrowLength = false;
       this.errors.GrooveSpacing = false;
       this.errors.FlowGrooves = false;
