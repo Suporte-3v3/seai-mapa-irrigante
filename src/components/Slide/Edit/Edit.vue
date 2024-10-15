@@ -69,6 +69,7 @@
             >Sistema de irrigação
           </label>
         </div>
+
         <div
           v-if="selectedSystem.id === 2 || selectedSystem.id === 3"
           class="col-md-12"
@@ -82,9 +83,16 @@
               type="number"
               class="w-full"
             />
-            <label for="flowSystem" class="font-weight-bold"
-              >Vazão do Sistema (l/h)</label
+            <label
+              for="flowSystem"
+              class="font-weight-bold"
+              v-if="selectedSystem.id === 3"
             >
+              Vazão dos emissores
+            </label>
+            <label for="flowSystem" class="font-weight-bold" v-else>
+              Vazão dos micro aspersores
+            </label>
           </div>
           <div
             class="form-group form-group-text text-left p-float-label w-100 mt-4"
@@ -95,39 +103,33 @@
               type="number"
               class="w-full"
             />
-            <label for="plantedArea" class="font-weight-bold"
-              >Área Plantada (m²)</label
-            >
-          </div>
-          <div
-            class="form-group form-group-text text-left p-float-label w-100 mt-4"
-          >
-            <InputText
-              id="effectiveArea"
-              v-model="cards.System.Measurements.EfectiveArea"
-              type="number"
-              class="w-full"
-            />
-            <label for="effectiveArea" class="font-weight-bold"
-              >Área efetiva de cada planta (m²/planta)</label
-            >
+            <label for="plantedArea" class="font-weight-bold">
+              Área Irrigada (m²)
+            </label>
           </div>
           <div
             class="form-group form-group-text text-left p-float-label w-100 mt-4"
           >
             <InputText
               id="numberPlants"
-              v-model="cards.System.Measurements.PlantsQtd"
+              v-model="cards.System.Measurements.Quantity"
               type="number"
               class="w-full"
             />
-            <label for="numberPlants" class="font-weight-bold"
-              >Número de Plantas por Área (plantas/m²)</label
+            <label
+              for="numberPlants"
+              class="font-weight-bold"
+              v-if="selectedSystem.id === 3"
             >
+              Quantidade de emissores
+            </label>
+            <label for="numberPlants" class="font-weight-bold" v-else>
+              Quantidade de micro aspersores
+            </label>
           </div>
         </div>
         <div
-          v-if="selectedSystem.id === 1 || selectedSystem.id === 4"
+          v-if="selectedSystem.id === 1"
           class="col-md-12"
         >
           <div
@@ -145,6 +147,37 @@
                   ? "Precipitação por Aspersor (mm/h)"
                   : "Precipitação por Volta (mm/volta)"
               }}
+            </label>
+          </div>
+        </div>
+        <div
+          v-if="selectedSystem.id === 4"
+          class="col-md-12"
+        >
+          <div
+            class="form-group form-group-text text-left p-float-label w-100 mt-4"
+          >
+            <InputText
+              id="precipitationAround"
+              v-model="cards.System.Measurements.Time"
+              type="number"
+              class="w-full"
+            />
+            <label for="precipitationAround" class="font-weight-bold">
+              Tempo para uma volta (Velocidade 100%)
+            </label>
+          </div>
+          <div
+            class="form-group form-group-text text-left p-float-label w-100 mt-4"
+          >
+            <InputText
+              id="precipitationAround"
+              v-model="cards.System.Measurements.Area"
+              type="number"
+              class="w-full"
+            />
+            <label for="precipitationAround" class="font-weight-bold">
+              Lâmina irrigada em uma volta (Velocidade 100%)
             </label>
           </div>
         </div>
@@ -326,7 +359,6 @@ export default {
           this.selectedCrop.Name = this.cards.Crop;
           this.selectedCrop.Id = this.cards.CropId;
           const crop = this.crops.find((c) => {
-            console.log(c);
             return c.Id === this.cards.CropId;
           });
           if (crop) {
