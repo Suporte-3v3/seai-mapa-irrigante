@@ -26,6 +26,8 @@ export default defineConfig(({ mode }) => {
           secure: false
         },
       },
+      host: true,
+      port: 8080,
     },
   }
 });
