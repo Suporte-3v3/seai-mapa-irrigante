@@ -2,7 +2,7 @@ services:
   seai-irrigant:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: "seai-irrigant"
     restart: always
     ports:
@@ -20,3 +20,4 @@ networks:
   seai_api:
     external: true
     name: seai_api
+
