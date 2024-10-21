@@ -7,17 +7,19 @@ export const API_BASE_URL2 = import.meta.env.VITE_API_BASE_URL_V2;
 const extractBaseUrl = () => {
   const urlObj = new URL(import.meta.env.VITE_API_BASE_URL);
 
+
   return [
     urlObj.protocol,
     urlObj.hostname,
     `${urlObj.protocol}//${urlObj.hostname}`,
+    urlObj.port,
   ];
 };
 
 const urlBase = extractBaseUrl();
 const serverUrlBase = urlBase[2];
 
-const serverPort = 80;
+const serverPort = urlBase[3];
 // const serverPort = 4201;
 const baseURL = `${serverUrlBase}:${serverPort}/api/`;
 
