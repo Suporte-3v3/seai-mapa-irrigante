@@ -1,25 +1,25 @@
 import axios from "axios";
 import { toast } from "vue3-toastify";
 
-export const API_BASE_URL = "http://seai.3v3.farm/api/v1";
-export const API_BASE_URL2 = "http://seai.3v3.farm/api/v2";
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL_V1;
+export const API_BASE_URL2 = import.meta.env.VITE_API_BASE_URL_V2;
 
 const extractBaseUrl = () => {
-  // const urlObj = new URL(window.location.href);
-  const urlObj = new URL("http://seai.3v3.farm");
-  // const urlObj = new URL("http://localhost");
+  const urlObj = new URL(import.meta.env.VITE_API_BASE_URL);
+
 
   return [
     urlObj.protocol,
     urlObj.hostname,
     `${urlObj.protocol}//${urlObj.hostname}`,
+    urlObj.port,
   ];
 };
 
 const urlBase = extractBaseUrl();
 const serverUrlBase = urlBase[2];
 
-const serverPort = 80;
+const serverPort = urlBase[3];
 // const serverPort = 4201;
 const baseURL = `${serverUrlBase}:${serverPort}/api/`;
 

@@ -1,0 +1,19 @@
+FROM node:lts-bullseye-slim
+
+
+RUN apt-get update -y && apt-get install -y iputils-ping
+
+# faz da pasta 'app' o diretório atual de trabalho
+WORKDIR /usr/src/frontend
+
+# copia os arquivos 'package.json' e 'package-lock.json' (se disponível)
+COPY package*.json ./
+
+# instala dependências do projeto
+RUN npm ci
+
+# copia arquivos e pastas para o diretório atual de trabalho (pasta 'app')
+COPY . .
+
+EXPOSE 8080
+CMD [ "npm", "run", "start" ]
