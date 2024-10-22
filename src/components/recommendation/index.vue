@@ -246,13 +246,13 @@
         >
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Vazão dos Aspersores (l/h)</h6
+              >Vazão dos Emissores (l/h)</h6
             >
             <input
               v-model.number="FlowSystem"
               type="number"
               class="form-control"
-              placeholder="Digite o valor da Vazão dos Aspersores"
+              placeholder="Digite o valor da Vazão dos Emissores"
               @input="validateMinimum(FlowSystem, 'FlowSystem')"
             />
             <p v-if="errors.FlowSystem" style="color: red; font-size: 12px">
@@ -261,7 +261,7 @@
           </div>
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Área irrigada (m²)</h6
+              >Área Irrigada (ha)</h6
             >
             <input
               v-model.number="PlantedArea"
@@ -293,13 +293,13 @@
           -->
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Quantidade de Aspersores</h6
+              >Quantidade de Emissores</h6
             >
             <input
               v-model.number="NumberPlants"
               type="number"
               class="form-control"
-              placeholder="Digite o valor de Quantidade de Aspersores"
+              placeholder="Digite o valor de Quantidade de Emissores"
               @input="validateMinimum(NumberPlants, 'NumberPlants')"
             />
             <p v-if="errors.NumberPlants" style="color: red; font-size: 12px">
@@ -313,13 +313,13 @@
         >
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Vazão dos Aspersores (l/h)</h6
+              >Vazão dos Emissores (l/h)</h6
             >
             <input
               v-model.number="FlowSystem"
               type="number"
               class="form-control"
-              placeholder="Digite o valor da Vazão dos Aspersores"
+              placeholder="Digite o valor da Vazão dos Emissores"
               @input="validateMinimum(FlowSystem, 'FlowSystem')"
             />
             <p v-if="errors.FlowSystem" style="color: red; font-size: 12px">
@@ -328,7 +328,7 @@
           </div>
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Área irrigada (m²)</h6
+              >Área Irrigada (ha)</h6
             >
             <input
               v-model.number="PlantedArea"
@@ -360,13 +360,13 @@
           -->
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Quantidade de Aspersores</h6
+              >Quantidade de Emissores</h6
             >
             <input
               v-model.number="NumberPlants"
               type="number"
               class="form-control"
-              placeholder="Digite o valor de Quantidade de Aspersores"
+              placeholder="Digite o valor de Quantidade de Emissores"
               @input="validateMinimum(NumberPlants, 'NumberPlants')"
             />
             <p v-if="errors.NumberPlants" style="color: red; font-size: 12px">
@@ -380,7 +380,7 @@
 >
   <div class="form-group mb-4">
     <h6 class="tab-label" style="color: #9023a1">
-      Lâmina Irrigada em uma volta
+      Lâmina irrigada em uma volta a 100% de velocidade (mm)
     </h6>
     <input
       v-model.number="Area"
@@ -402,7 +402,7 @@
   <!-- Novo campo de Precipitação por Volta abaixo -->
   <div class="form-group mb-4">
     <h6 class="tab-label" style="color: #9023a1">
-      Tempo para uma volta (mm/volta)
+      Tempo para uma volta (minutos)
     </h6>
     <input
       v-model.number="Time"

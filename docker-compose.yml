@@ -1,0 +1,22 @@
+services:
+  seai-irrigant:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: "seai-irrigant"
+    restart: always
+    ports:
+      - "3000:8080"
+    volumes:
+      - .:/usr/src/frontend
+      - node_modules:/usr/src/frontend/node_modules
+    networks:
+      - seai_api
+
+volumes:
+  node_modules: {}
+
+networks:
+  seai_api:
+    external: true
+    name: seai_api
