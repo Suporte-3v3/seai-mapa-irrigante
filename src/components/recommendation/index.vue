@@ -399,27 +399,21 @@
     </p>
   </div>
 
-  <!-- Novo campo de Precipitação por Volta abaixo -->
   <div class="form-group mb-4">
-    <h6 class="tab-label" style="color: #9023a1">
-      Tempo para uma volta (minutos)
-    </h6>
-    <input
-      v-model.number="Time"
-      type="number"
-      class="form-control"
-      placeholder="Digite o valor do Tempo para uma volta"
-      @input="
-        validateMinimum(Time, 'Time')
-      "
-    />
-    <p
-      v-if="errors.Time"
-      style="color: red; font-size: 12px"
-    >
-      * Digite Valores Númericos acima de 0
-    </p>
-  </div>
+  <h6 class="tab-label" style="color: #9023a1">
+    Tempo para uma volta (minutos)
+  </h6>
+  <input
+    v-model="Time"
+    type="number"
+    class="form-control"
+    placeholder="Digite o valor do Tempo para uma volta"
+    @input="validateInteger(Time, 'Time')"
+  />
+  <p v-if="errors.Time" style="color: red; font-size: 12px">
+    * Digite valores numéricos inteiros acima de 0
+  </p>
+</div>
 </div>
         <div v-if="selectedSystemIrrigation === 'Sulcos'" class="col-md-12">
           <div class="form-group mb-4">
@@ -888,6 +882,20 @@ async calculateRecomendation() {
       }
     },
 
+    validateInteger(value, field) {
+  if (value === "" || value === null || value === undefined) {
+    this[field] = value;
+  } else {
+    const parsedValue = parseInt(value, 10);
+    if (!isNaN(parsedValue) && parsedValue > 0 && Number.isInteger(parsedValue)) {
+      this[field] = parsedValue;
+      this.errors[field] = false;
+    } else {
+      this[field] = null;
+      this.errors[field] = true; 
+    }
+  }
+},
     validateNonNegative(value, field) {
   if (value === "" || value === null || value === undefined) {
     this[field] = value;
