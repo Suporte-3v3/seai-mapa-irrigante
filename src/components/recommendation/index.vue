@@ -526,6 +526,9 @@
       <strong>Lâmina de Reposição:</strong>
       {{ this.selectedSystemIrrigation === 'Pivô Central' ? results.data.blade : results.data.RepositionBlade }}
     </li>
+    <li v-if="this.selectedSystemIrrigation === 'Pivô Central'" class="list-group-item">
+      <strong>Velocidade:</strong> {{ (results.data.Velocity * 100).toFixed(2) }} %
+    </li>
     <li class="list-group-item">
       <strong>Tempo de Irrigação:</strong>
       {{ results.data.IrrigationTime }}
