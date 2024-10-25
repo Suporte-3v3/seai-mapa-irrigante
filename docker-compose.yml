@@ -6,7 +6,7 @@ services:
     container_name: "seai-irrigant"
     restart: always
     ports:
-      - "3000:8080"
+      - "3333:8080"
     volumes:
       - .:/usr/src/frontend
       - node_modules:/usr/src/frontend/node_modules
@@ -20,3 +20,4 @@ networks:
   seai_api:
     external: true
     name: seai_api
+
