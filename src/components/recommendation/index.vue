@@ -246,13 +246,13 @@
         >
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Vazão dos Emissores (l/h)</h6
+              >Vazão dos Aspersores (l/h)</h6
             >
             <input
               v-model.number="FlowSystem"
               type="number"
               class="form-control"
-              placeholder="Digite o valor da Vazão dos Emissores"
+              placeholder="Digite o valor da Vazão dos Aspersores"
               @input="validateMinimum(FlowSystem, 'FlowSystem')"
             />
             <p v-if="errors.FlowSystem" style="color: red; font-size: 12px">
@@ -518,7 +518,7 @@
     </li>
     <li class="list-group-item">
       <strong>Lâmina de Reposição:</strong>
-      {{ this.selectedSystemIrrigation === 'Pivô Central' ? results.data.blade : results.data.RepositionBlade }}
+      {{ results.data.RepositionBlade }}
     </li>
     <li v-if="this.selectedSystemIrrigation === 'Pivô Central'" class="list-group-item">
       <strong>Velocidade:</strong> {{ (results.data.Velocity * 100).toFixed(2) }} %
@@ -725,9 +725,9 @@ export default {
   const hasError = Object.values(this.errors).some((error) => error);
 
   if (!hasError) {
-    console.log(
+    /*console.log(
       "Sem erros nos campos, Começando cálculo da Lâmina de Irrigação..."
-    );
+    );*/
     this.results = null;
     this.resultsVisible = false;
     this.calculateRecomendation();
@@ -820,7 +820,7 @@ async calculateRecomendation() {
     console.log("Resposta da API:", responseBladeSuggestion);
     this.results = responseBladeSuggestion.data;
 
-    console.log("Valor original da lâmina:", this.results.data.RepositionBlade);
+    /*console.log("Valor original da lâmina:", this.results.data.RepositionBlade); */
 
     if (this.selectedSystemIrrigation === "Pivô Central") {
       const bladeValue = parseFloat(this.results.data.RepositionBlade);
@@ -835,7 +835,7 @@ async calculateRecomendation() {
 
     if (this.results && this.results.data && this.results.data.RepositionBlade !== undefined) {
       const repositionBladeValue = parseFloat(this.results.data.RepositionBlade);
-      console.log("Valor convertido para RepositionBlade:", repositionBladeValue);
+      /*console.log("Valor convertido para RepositionBlade:", repositionBladeValue);*/
       
       if (isNaN(repositionBladeValue)) {
         console.error("Valor inválido para RepositionBlade:", this.results.data.RepositionBlade);
@@ -846,8 +846,8 @@ async calculateRecomendation() {
     }
 
     this.resultsVisible = true;
-    console.log("Resultados Atualizados:", this.results);
-    console.log("Resultados Visíveis:", this.resultsVisible);
+    /*console.log("Resultados Atualizados:", this.results);
+    console.log("Resultados Visíveis:", this.resultsVisible);*/
   } catch (error) {
     const errorMessage = error.response && error.response.data && error.response.data.error 
       ? error.response.data.error 
