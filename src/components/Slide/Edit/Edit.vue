@@ -128,10 +128,7 @@
             </label>
           </div>
         </div>
-        <div
-          v-if="selectedSystem.id === 1"
-          class="col-md-12"
-        >
+        <div v-if="selectedSystem.id === 1" class="col-md-12">
           <div
             class="form-group form-group-text text-left p-float-label w-100 mt-4"
           >
@@ -150,10 +147,7 @@
             </label>
           </div>
         </div>
-        <div
-          v-if="selectedSystem.id === 4"
-          class="col-md-12"
-        >
+        <div v-if="selectedSystem.id === 4" class="col-md-12">
           <div
             class="form-group form-group-text text-left p-float-label w-100 mt-4"
           >
@@ -321,7 +315,14 @@ export default {
       createUserMode: false,
     };
   },
-
+  watch: {
+    selectedSystem(newValue, _) {
+      // WARNING: reset irrigation system measurements when irrigation type is changed
+      if (this.cards.System.Type !== newValue.name) {
+        this.cards.System.Measurements = {};
+      }
+    },
+  },
   mounted() {
     this.cards = this.card;
     if (typeof this.cards.PlantingDate === "string") {
