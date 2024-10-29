@@ -293,13 +293,13 @@
           -->
           <div class="form-group mb-4">
             <h6 class="tab-label" style="color: #9023a1"
-              >Quantidade de Emissores</h6
+              >Quantidade de Aspersores</h6
             >
             <input
               v-model.number="NumberPlants"
               type="number"
               class="form-control"
-              placeholder="Digite o valor de Quantidade de Emissores"
+              placeholder="Digite o valor de Quantidade de Aspersores"
               @input="validateMinimum(NumberPlants, 'NumberPlants')"
             />
             <p v-if="errors.NumberPlants" style="color: red; font-size: 12px">
