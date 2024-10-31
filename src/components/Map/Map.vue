@@ -62,7 +62,7 @@ export default {
       const [responseStation, responsePluviometer, responseUpdate] = await Promise.all([
         axios.get(`${baseUrl}/equipments/synchronized?type=station`),
         axios.get(`${baseUrl}/equipments/synchronized?type=pluviometer`),
-        axios.get(`http://seai.3v3.farm/api/v2/equipments/last-updated-at`)
+        axios.get(`${baseUrl}/equipments/last-updated-at`)
       ]);
 
       this.stations = responseStation.data.data || [];
