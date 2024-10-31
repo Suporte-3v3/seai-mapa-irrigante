@@ -6,7 +6,8 @@
 import L from "leaflet";
 import axios from "axios";
 import { data as ceara_data } from "@/assets/leaflet/cearaGeojson.js";
-import { API_BASE_URL } from '../../services/config';
+import { API_BASE_URL } from '../../services/config.js';
+import { API_BASE_URL2 } from '../../services/config.js';
 import { toast } from "vue3-toastify";
 
 export default {
@@ -58,11 +59,12 @@ export default {
   async created() {
     try {
       const baseUrl = API_BASE_URL;
+      const baseUrl2 = API_BASE_URL2;
 
       const [responseStation, responsePluviometer, responseUpdate] = await Promise.all([
         axios.get(`${baseUrl}/equipments/synchronized?type=station`),
         axios.get(`${baseUrl}/equipments/synchronized?type=pluviometer`),
-        axios.get(`${baseUrl}/equipments/last-updated-at`)
+        axios.get(`${baseUrl2}/equipments/last-updated-at`)
       ]);
 
       this.stations = responseStation.data.data || [];
