@@ -68,6 +68,7 @@ export default {
 .background {
   height: 100vh;
   background: linear-gradient(180deg, #1b3f82 0%, #112549 100%);
+  min-height: 700px;
 }
 .login {
   justify-content: center;
