@@ -88,10 +88,10 @@
               class="font-weight-bold"
               v-if="selectedSystem.id === 3"
             >
-              Vazão dos emissores
+              Vazão dos emissores (l/h)
             </label>
             <label for="flowSystem" class="font-weight-bold" v-else>
-              Vazão dos micro aspersores
+              Vazão dos micro aspersores (l/h)
             </label>
           </div>
           <div
@@ -158,7 +158,7 @@
               class="w-full"
             />
             <label for="precipitationAround" class="font-weight-bold">
-              Tempo para uma volta (Velocidade 100%)
+              Tempo para uma volta (Velocidade 100%; minutos)
             </label>
           </div>
           <div
@@ -171,7 +171,7 @@
               class="w-full"
             />
             <label for="precipitationAround" class="font-weight-bold">
-              Lâmina irrigada em uma volta (Velocidade 100%)
+              Lâmina irrigada em uma volta (Velocidade 100%; mm)
             </label>
           </div>
         </div>
