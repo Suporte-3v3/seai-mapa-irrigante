@@ -180,8 +180,10 @@ export default {
       };
 
       const createPopupContent = (station, dataText, type) => {
-        const dataLabel = type === "pluv" ? "Precipitação" : "ET0";
-        return `<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} [${station.Code}]<br><b>${dataLabel}:</b> ${dataText}`;
+          const title = type === "pluv" ? "Pluviômetro" : "Estação";
+          const dataLabel = type === "pluv" ? "Precipitação" : "ET0";
+
+          return `<b>${title}</b><br><br><b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} [${station.Code}]<br><b>${dataLabel}:</b> ${dataText}`;
       };
 
       if (this.stations && Array.isArray(this.stations)) {
