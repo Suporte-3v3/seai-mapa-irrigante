@@ -395,13 +395,12 @@ export default {
   z-index: 100;
   display: flex;
   justify-content: end;
+  overflow: auto;
   .edit-form {
     background-color: white;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
+    overflow: auto;
     width: 380px;
     height: 100vh;
     padding: 10px;
@@ -432,8 +431,13 @@ export default {
     }
     form {
       height: 100vh;
+      min-height: 800px;
       display: flex;
       justify-content: center;
+      @media (max-height: 799px) {
+        padding-top: 120px;
+        padding-bottom: 5px;
+      }
     }
     h5 {
       color: #1b3f82;
