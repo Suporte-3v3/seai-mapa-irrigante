@@ -6,8 +6,8 @@
 import L from "leaflet";
 import axios from "axios";
 import { data as ceara_data } from "@/assets/leaflet/cearaGeojson.js";
-import { API_BASE_URL } from '../../services/config.js';
-import { API_BASE_URL2 } from '../../services/config.js';
+import { API_BASE_URL } from "../../services/config.js";
+import { API_BASE_URL2 } from "../../services/config.js";
 import { toast } from "vue3-toastify";
 
 export default {
@@ -17,36 +17,36 @@ export default {
       stations: [],
       pluviometers: [],
       map: null,
-      lastUpdatedAt: '',
+      lastUpdatedAt: "",
       userLocation: null,
       stationMarkers: L.layerGroup(),
       pluviometerMarkers: L.layerGroup(),
       stationInactiveMarkers: L.layerGroup(),
       pluviometerInactiveMarkers: L.layerGroup(),
       stationIcon: L.icon({
-        iconUrl: '/icon-station.png',
+        iconUrl: "/icon-station.png",
         iconSize: [25, 25],
-        className: 'station-icon',
+        className: "station-icon",
       }),
       pluviometerIcon: L.icon({
-        iconUrl: '/icon-pluviometer.png',
+        iconUrl: "/icon-pluviometer.png",
         iconSize: [25, 25],
-        className: 'pluviometer-icon',
+        className: "pluviometer-icon",
       }),
       userIcon: L.icon({
-        iconUrl: '/icon-user.png',
+        iconUrl: "/icon-user.png",
         iconSize: [25, 25],
-        className: 'user-icon',
+        className: "user-icon",
       }),
       stationDisableIcon: L.icon({
-        iconUrl: '/icon-stationdisable.png',
+        iconUrl: "/icon-stationdisable.png",
         iconSize: [25, 25],
-        className: 'station-disable-icon',
+        className: "station-disable-icon",
       }),
       pluviometerDisableIcon: L.icon({
-        iconUrl: '/icon-pluviometerdisable.png',
+        iconUrl: "/icon-pluviometerdisable.png",
         iconSize: [25, 25],
-        className: 'pluviometer-disable-icon',
+        className: "pluviometer-disable-icon",
       }),
       showStations: true,
       showPluviometers: true,
@@ -61,20 +61,25 @@ export default {
       const baseUrl = API_BASE_URL;
       const baseUrl2 = API_BASE_URL2;
 
-      const [responseStation, responsePluviometer, responseUpdate] = await Promise.all([
-        axios.get(`${baseUrl}/equipments/synchronized?type=station`),
-        axios.get(`${baseUrl}/equipments/synchronized?type=pluviometer`),
-        axios.get(`${baseUrl2}/equipments/last-updated-at`)
-      ]);
+      const [responseStation, responsePluviometer, responseUpdate] =
+        await Promise.all([
+          axios.get(`${baseUrl}/equipments/synchronized?type=station`),
+          axios.get(`${baseUrl}/equipments/synchronized?type=pluviometer`),
+          axios.get(`${baseUrl2}/equipments/last-updated-at`),
+        ]);
 
       this.stations = responseStation.data.data || [];
-      this.pluviometers = responsePluviometer.data ? responsePluviometer.data.data : [];
-      this.lastUpdatedAt = this.formatDateTime(responseUpdate.data.data[0].Time);
+      this.pluviometers = responsePluviometer.data
+        ? responsePluviometer.data.data
+        : [];
+      this.lastUpdatedAt = this.formatDateTime(
+        responseUpdate.data.data[0].Time
+      );
 
       this.addMarkers();
     } catch (error) {
-      toast.error('Erro ao mostrar dados de Estações e Pluviômetros');
-      console.error('Erro ao buscar dados da API:', error);
+      toast.error("Erro ao mostrar dados de Estações e Pluviômetros");
+      console.error("Erro ao buscar dados da API:", error);
     }
   },
   mounted() {
@@ -90,15 +95,15 @@ export default {
   },
   methods: {
     formatDateTime(dateString) {
-      if (!dateString) return 'Data não disponível';
+      if (!dateString) return "Data não disponível";
 
       const date = new Date(dateString);
-      if (isNaN(date)) return 'Data inválida';
+      if (isNaN(date)) return "Data inválida";
 
-      const day = String(date.getUTCDate()).padStart(2, '0');
-      const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+      const day = String(date.getUTCDate()).padStart(2, "0");
+      const month = String(date.getUTCMonth() + 1).padStart(2, "0");
       const year = date.getUTCFullYear();
-      const hours = String(date.getUTCHours()).padStart(2, '0');
+      const hours = String(date.getUTCHours()).padStart(2, "0");
       return `${day}/${month}/${year}`;
     },
     setupMap() {
@@ -107,7 +112,7 @@ export default {
         attributionControl: false,
         zoomControl: false,
         minZoom: 6,
-        maxBounds: [-180, 180] [180, -180],
+        maxBounds: [-180, 180][(180, -180)],
       });
 
       L.tileLayer(
@@ -119,11 +124,11 @@ export default {
         onEachFeature: this.onEachFeature,
         style: function (feature) {
           return {
-            color: '#1b3f82',
+            color: "#1b3f82",
             weight: 0.5,
             opacity: 1,
             fillOpacity: 0.2,
-            className: 'leaflet-interactive'
+            className: "leaflet-interactive",
           };
         },
       }).addTo(this.map);
@@ -131,16 +136,16 @@ export default {
       this.map.fitBounds(geojsonLayer.getBounds());
       this.handleResize();
 
-      this.$refs.map.addEventListener('touchstart', () => {
+      this.$refs.map.addEventListener("touchstart", () => {
         if (this.map) this.map.scrollWheelZoom.disable();
       });
 
-      this.$refs.map.addEventListener('touchend', () => {
+      this.$refs.map.addEventListener("touchend", () => {
         if (this.map) this.map.scrollWheelZoom.enable();
       });
 
       this.addLegend();
-      L.control.zoom({ position: 'topleft' }).addTo(this.map);
+      L.control.zoom({ position: "topleft" }).addTo(this.map);
     },
     handleResize() {
       if (this.map) this.map.invalidateSize();
@@ -163,29 +168,42 @@ export default {
           const marker = L.marker([coordinates[0], coordinates[1]], { icon });
           marker.bindPopup(popupContent);
 
-          marker.on('click', () => {
-            this.$emit('station-selected', item);
+          marker.on("click", () => {
+            this.$emit("station-selected", item);
           });
 
           return marker;
         } else {
-          console.error('Coordenadas inválidas:', item);
+          console.error("Coordenadas inválidas:", item);
           return null;
         }
       };
 
-      const createPopupContent = (name, organName, code, dataText) => {
-        return `<b>Nome:</b> ${name}<br><b>Orgão:</b> ${organName} [${code}]<br><b>Dados:</b> ${dataText}`;
+      const createPopupContent = (station, dataText, type) => {
+        const dataLabel = type === "pluv" ? "Precipitação" : "ET0";
+        return `<b>Nome:</b> ${station.Name}<br><b>Orgão:</b> ${station.Organ.Name} [${station.Code}]<br><b>${dataLabel}:</b> ${dataText}`;
       };
 
       if (this.stations && Array.isArray(this.stations)) {
         this.stations.forEach((station) => {
-          const et0Text = (station.Et0 === null || station.Et0 === undefined) ? 'Sem Dados Coletados' : `${station.Et0} mm`;
-          const icon = (station.Enable === false || station.Et0 === null || station.Et0 === undefined) ? this.stationDisableIcon : this.stationIcon;
-          const popupContent = createPopupContent(station.Name, station.Organ.Name, station.Code, et0Text);
+          const et0Text =
+            station.Et0 === null || station.Et0 === undefined
+              ? "Sem Dados Coletados"
+              : `${station.Et0} mm`;
+          const icon =
+            station.Enable === false ||
+            station.Et0 === null ||
+            station.Et0 === undefined
+              ? this.stationDisableIcon
+              : this.stationIcon;
+          const popupContent = createPopupContent(station, et0Text, "station");
           const marker = addMarker(station, icon, popupContent);
           if (marker) {
-            if (station.Enable === false || station.Et0 === null || station.Et0 === undefined) {
+            if (
+              station.Enable === false ||
+              station.Et0 === null ||
+              station.Et0 === undefined
+            ) {
               this.stationInactiveMarkers.addLayer(marker);
             } else {
               this.stationMarkers.addLayer(marker);
@@ -196,12 +214,29 @@ export default {
 
       if (this.pluviometers && Array.isArray(this.pluviometers)) {
         this.pluviometers.forEach((pluviometer) => {
-          const precipitationText = (pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) ? 'Sem Dados Coletados' : `${pluviometer.Precipitation} mm`;
-          const icon = (pluviometer.Enable === false || pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) ? this.pluviometerDisableIcon : this.pluviometerIcon;
-          const popupContent = createPopupContent(pluviometer.Name, pluviometer.Organ.Name, pluviometer.Code, precipitationText);
+          const precipitationText =
+            pluviometer.Precipitation === null ||
+            pluviometer.Precipitation === undefined
+              ? "Sem Dados Coletados"
+              : `${pluviometer.Precipitation} mm`;
+          const icon =
+            pluviometer.Enable === false ||
+            pluviometer.Precipitation === null ||
+            pluviometer.Precipitation === undefined
+              ? this.pluviometerDisableIcon
+              : this.pluviometerIcon;
+          const popupContent = createPopupContent(
+            pluviometer,
+            precipitationText,
+            "pluv"
+          );
           const marker = addMarker(pluviometer, icon, popupContent);
           if (marker) {
-            if (pluviometer.Enable === false || pluviometer.Precipitation === null || pluviometer.Precipitation === undefined) {
+            if (
+              pluviometer.Enable === false ||
+              pluviometer.Precipitation === null ||
+              pluviometer.Precipitation === undefined
+            ) {
               this.pluviometerInactiveMarkers.addLayer(marker);
             } else {
               this.pluviometerMarkers.addLayer(marker);
@@ -215,15 +250,18 @@ export default {
       this.stationInactiveMarkers.addTo(this.map);
       this.pluviometerInactiveMarkers.addTo(this.map);
 
-      L.control.attribution({
-        prefix: false,
-      }).addAttribution(`Dados atualizados em: ${this.lastUpdatedAt}`).addTo(this.map);
+      L.control
+        .attribution({
+          prefix: false,
+        })
+        .addAttribution(`Dados atualizados em: ${this.lastUpdatedAt}`)
+        .addTo(this.map);
     },
     addLegend() {
-      const legend = L.control({ position: 'topright' });
+      const legend = L.control({ position: "topright" });
 
       legend.onAdd = () => {
-        const div = L.DomUtil.create('div', 'info legend');
+        const div = L.DomUtil.create("div", "info legend");
 
         // Estação Ativa
         div.innerHTML += `<div id="legend-station-enable" style="cursor: pointer;">
@@ -255,18 +293,25 @@ export default {
       legend.addTo(this.map);
 
       // Click events for legend
-      L.DomEvent.on(L.DomUtil.get('legend-station-enable'), 'click', () => {
-        this.toggleLayer(this.stationMarkers, 'Estação Ativa');
+      L.DomEvent.on(L.DomUtil.get("legend-station-enable"), "click", () => {
+        this.toggleLayer(this.stationMarkers, "Estação Ativa");
       });
-      L.DomEvent.on(L.DomUtil.get('legend-pluviometer-enable'), 'click', () => {
-        this.toggleLayer(this.pluviometerMarkers, 'Pluviômetro Ativo');
+      L.DomEvent.on(L.DomUtil.get("legend-pluviometer-enable"), "click", () => {
+        this.toggleLayer(this.pluviometerMarkers, "Pluviômetro Ativo");
       });
-      L.DomEvent.on(L.DomUtil.get('legend-station-disable'), 'click', () => {
-        this.toggleLayer(this.stationInactiveMarkers, 'Estação Desativada');
+      L.DomEvent.on(L.DomUtil.get("legend-station-disable"), "click", () => {
+        this.toggleLayer(this.stationInactiveMarkers, "Estação Desativada");
       });
-      L.DomEvent.on(L.DomUtil.get('legend-pluviometer-disable'), 'click', () => {
-        this.toggleLayer(this.pluviometerInactiveMarkers, 'Pluviômetro Desativado');
-      });
+      L.DomEvent.on(
+        L.DomUtil.get("legend-pluviometer-disable"),
+        "click",
+        () => {
+          this.toggleLayer(
+            this.pluviometerInactiveMarkers,
+            "Pluviômetro Desativado"
+          );
+        }
+      );
     },
     toggleLayer(layerGroup, layerName) {
       if (this.map.hasLayer(layerGroup)) {
@@ -293,26 +338,31 @@ export default {
         navigator.geolocation.getCurrentPosition((position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
-          this.userLocation = L.marker([lat, lng], { icon: this.userIcon }).addTo(this.map);
+          this.userLocation = L.marker([lat, lng], {
+            icon: this.userIcon,
+          }).addTo(this.map);
           this.map.setView([lat, lng], 10);
         });
       } else {
-        toast.error('Geolocalização não suportada pelo navegador.');
+        toast.error("Geolocalização não suportada pelo navegador.");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style>
-
 #map {
-    height: 100%;
-  }
-  .station-icon, .pluviometer-icon, .station-disable-icon, .pluviometer-disable-icon, .user-icon {
-    width: 25px;
-    height: 25px;
-  }
+  height: 100%;
+}
+.station-icon,
+.pluviometer-icon,
+.station-disable-icon,
+.pluviometer-disable-icon,
+.user-icon {
+  width: 25px;
+  height: 25px;
+}
 
 .map-container {
   height: 60vh;
