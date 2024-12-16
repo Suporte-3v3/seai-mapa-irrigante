@@ -228,25 +228,25 @@ export default {
         // Estação Ativa
         div.innerHTML += `<div id="legend-station-enable" style="cursor: pointer;">
           <i id="stationenable-legend" style="background: #EF760F; width: 20px; height: 18px; display: inline-block;"></i>
-          <b>Estações Ativas</b>
+          <b>Estações com dados coletados</b>
         </div>`;
 
         // Pluviômetro Ativo
         div.innerHTML += `<div id="legend-pluviometer-enable" style="cursor: pointer;">
           <i id="pluviometerenable-legend" style="background: #9023A1; width: 20px; height: 18px; display: inline-block;"></i>
-          <b>Pluviômetros Ativos</b>
+          <b>Pluviômetros com dados coletados</b>
         </div>`;
 
         // Estação Desativada
         div.innerHTML += `<div id="legend-station-disable" style="cursor: pointer;">
           <i id="stationdisabled-legend" style="background: #d8ab88; width: 20px; height: 18px; display: inline-block;"></i>
-          <b>Estações Desativadas</b>
+          <b>Estações sem dados coletados</b>
         </div>`;
 
         // Pluviômetro Desativado
         div.innerHTML += `<div id="legend-pluviometer-disable" style="cursor: pointer;">
           <i id="pluviometerdisabled-legend" style="background: #bcaacf; width: 20px; height: 18px; display: inline-block;"></i>
-          <b>Pluviômetros Desativados</b>
+          <b>Pluviômetros sem dados coletados</b>
         </div>`;
 
         return div;
