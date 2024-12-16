@@ -2,7 +2,14 @@
   <div
     class="login w-100 d-flex justify-content-center align-items-center flex-column"
   >
-    <form @submit.prevent="handleSubmit" class="w-50 d-flex flex-column">
+    <div class="d-flex w-100 flex-column content-cards" v-if="loading">
+      <ProgressSpinner />
+    </div>
+    <form
+      v-if="!loading && !success"
+      @submit.prevent="handleSubmit"
+      class="w-50 d-flex flex-column"
+    >
       <div
         v-if="!code"
         class="form-group form-group-text text-left p-float-label w-full"
@@ -75,6 +82,17 @@
         <router-link to="/login">Sair</router-link>
       </div>
     </form>
+    <div
+      v-if="success && !loading"
+      class="w-100 d-flex justify-content-center align-items-center flex-column"
+      style="height: 300px"
+    >
+      <h4 v-if="!code" style="text-align: center">Link para recuperação de senha foi enviado para seu e-mail</h4>
+      <h1 v-else style="text-align: center">Senha alterada com sucesso!</h1>
+      <router-link :to="{ name: 'login' }">
+        <button class="btn btn-primary mt-3">Login</button>
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -94,10 +112,12 @@ export default {
       requiredField: "Campo obrigatório",
       submitted: false,
       disabledBtn: false,
+      loading: false,
       service: new UserRest(),
       router: useRouter(),
       route: useRoute(),
       code: false,
+      success: false,
     };
   },
   computed: {
@@ -115,6 +135,7 @@ export default {
     handleSubmit() {
       this.submitted = true;
       if (this.isValid()) {
+        this.loading = true;
         if (this.code) {
           this.newPassword();
         } else {
@@ -143,10 +164,11 @@ export default {
       this.service
         .sendLink(this.profile)
         .then((res) => {
-          location.href = "/login";
+          this.success = true;
         })
         .finally(() => {
           this.disabledBtn = false;
+          this.loading = false;
         });
     },
 
@@ -155,10 +177,11 @@ export default {
       this.service
         .savePassword(this.profile, this.route.params.code)
         .then((res) => {
-          location.href = "#/login";
+          this.success = true;
         })
         .finally(() => {
           this.disabledBtn = false;
+          this.loading = false;
         });
       this.disabledBtn = false;
     },
