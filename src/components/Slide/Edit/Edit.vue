@@ -365,6 +365,9 @@ export default {
           if (crop) {
             this.selectedCrop = crop;
           }
+          else{
+            this.selectedCrop = null;
+          }
         })
         .finally(() => (this.loading = false));
     },
